@@ -22,8 +22,17 @@ export default function RootLayout({ children }) {
         <NavBar />
         <main className="max-w-2xl mx-auto p-4">{children}</main>
         <footer className="w-full p-4 mt-8 border-t border-gray-200 text-center text-sm text-gray-500">
-          &copy; {new Date().getFullYear()} Vino Pairings
-        </footer>
+  &copy; {new Date().getFullYear()} Vino Pairings · Created by{' '}
+  <a
+    href="https://pamelajterrell.com"
+    target="_blank"
+    rel="noopener noreferrer"
+    className="underline hover:text-gray-700"
+  >
+    Pamela J. Terrell
+  </a>
+</footer>
+
         <Analytics />
       </body>
     </html>

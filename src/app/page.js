@@ -1,6 +1,8 @@
 'use client';
 
 import { useState } from 'react';
+import Image from 'next/image';
+
 
 export default function Home() {
   const [input, setInput] = useState('');
@@ -46,6 +48,9 @@ export default function Home() {
     'veal': 'Nebbiolo',
     'foie gras': 'Sauternes',
     'truffle': 'Barolo',
+    'baked ziti': 'Montepulciano',
+    'eggplant parmesan': 'Montepulciano',
+    'spaghetti bolognese': 'Montepulciano',
     'tuna fish': 'Albariño'
   };
 
@@ -107,6 +112,7 @@ export default function Home() {
     >
       Unsplash
     </a>
+
   </div>
 </div>
 
@@ -180,6 +186,20 @@ export default function Home() {
           font-family: Georgia, serif;
         }
       `}</style>
+
+      <div className="mt-10 w-full max-w-2xl px-4">
+  <h2 className="text-xl font-bold text-center mb-4">Wine Pairing Basics</h2>
+  <p className="text-center text-[#4b3f2f] mb-6 italic text-lg">
+    🍷✨ <strong>Not sure where to start?</strong> This beautifully simple chart highlights timeless wine pairings to help you plan ahead and sip with confidence.
+  </p>
+  <img
+    src="/winebasics.png"
+    alt="Wine pairing chart"
+    className="w-full h-auto border border-[#d8cfc4] shadow-md rounded"
+  />
+</div>
+
+
     </div>
   );
 }
