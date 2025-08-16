@@ -10,16 +10,43 @@ export default function Contact() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // For now, just simulate form submission success
-    setStatus('Thank you! Your message has been received.');
-    setFormData({ name: '', email: '', message: '' });
+    setStatus(''); // reset status
+
+    try {
+      const response = await fetch('https://formspree.io/f/manbzwgp', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (response.ok) {
+        setStatus('✅ Thank you! Your message has been received.');
+        setFormData({ name: '', email: '', message: '' });
+      } else {
+        setStatus('⚠️ Oops, something went wrong. Please try again later.');
+      }
+    } catch (error) {
+      setStatus('⚠️ Error sending message. Please try again later.');
+    }
   };
 
   return (
     <main className="max-w-3xl mx-auto px-6 py-12">
-      <h1 className="text-4xl font-heading text-burgundy mb-8 text-center">Contact Us</h1>
+      <h1 className="text-4xl font-heading text-burgundy mb-6 text-center">Contact Us</h1>
+
+      {/* Under construction message */}
+      <div className="mb-6 p-4 bg-yellow-100 border-l-4 border-yellow-500 rounded text-yellow-800">
+        <p>
+          If you tried to contact us earlier while the site was under construction, 
+          the form may not have worked. We apologize for the inconvenience — 
+          everything is working now!
+        </p>
+      </div>
 
       <div className="bg-cream p-8 rounded-lg shadow-lg">
         <div className="mb-8 text-charcoal font-body text-lg space-y-2">
@@ -103,7 +130,7 @@ export default function Contact() {
             Send Message
           </button>
 
-          {status && <p className="mt-4 text-green-600 font-semibold">{status}</p>}
+          {status && <p className="mt-4 font-semibold">{status}</p>}
         </form>
       </div>
     </main>
