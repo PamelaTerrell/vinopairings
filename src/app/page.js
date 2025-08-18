@@ -1,8 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import Image from 'next/image';
-
+import Link from 'next/link';
 
 export default function Home() {
   const [input, setInput] = useState('');
@@ -48,7 +47,6 @@ export default function Home() {
     'veal': 'Nebbiolo',
     'foie gras': 'Sauternes',
     'truffle': 'Barolo',
-    'baked ziti': 'Montepulciano',
     'eggplant parmesan': 'Montepulciano',
     'spaghetti bolognese': 'Montepulciano',
     'tuna fish': 'Albariño'
@@ -92,32 +90,30 @@ export default function Home() {
     <div className="min-h-screen bg-[#f9f6ef] text-[#4b3f2f] font-serif">
       {/* Hero Image */}
       <div className="relative w-full h-72 md:h-96 mb-8 shadow-lg overflow-hidden">
-  <img
-    src="/picnicwine.png"
-    alt="Picnic with wine and bread"
-    className="object-cover w-full h-full brightness-90"
-  />
-  <div className="absolute bottom-0 left-0 right-0 bg-black/50 text-white text-xs p-2 text-center">
-    Photo by{' '}
-    <a
-      href="https://unsplash.com/@juliesdfg?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash"
-      className="underline hover:text-gray-300"
-    >
-      Julie Sd
-    </a>{' '}
-    on{' '}
-    <a
-      href="https://unsplash.com/photos/a-group-of-wine-glasses-sitting-on-top-of-a-table-fDTv0BqaiFw?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash"
-      className="underline hover:text-gray-300"
-    >
-      Unsplash
-    </a>
+        <img
+          src="/picnicwine.png"
+          alt="Picnic with wine and bread"
+          className="object-cover w-full h-full brightness-90"
+        />
+        <div className="absolute bottom-0 left-0 right-0 bg-black/50 text-white text-xs p-2 text-center">
+          Photo by{' '}
+          <a
+            href="https://unsplash.com/@juliesdfg?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash"
+            className="underline hover:text-gray-300"
+          >
+            Julie Sd
+          </a>{' '}
+          on{' '}
+          <a
+            href="https://unsplash.com/photos/a-group-of-wine-glasses-sitting-on-top-of-a-table-fDTv0BqaiFw?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash"
+            className="underline hover:text-gray-300"
+          >
+            Unsplash
+          </a>
+        </div>
+      </div>
 
-  </div>
-</div>
-
-      
-
+      {/* Pairing Finder */}
       <div className="max-w-3xl mx-auto p-6 flex flex-col items-center">
         <form
           onSubmit={handleSubmit}
@@ -168,6 +164,47 @@ export default function Home() {
         )}
       </div>
 
+      {/* Wine Basics Section */}
+      <div className="mt-10 w-full max-w-2xl px-4 mx-auto">
+        <h2 className="text-xl font-bold text-center mb-4">Wine Pairing Basics</h2>
+        <p className="text-center text-[#4b3f2f] mb-6 italic text-lg">
+          🍷✨ <strong>Not sure where to start?</strong> This beautifully simple chart highlights timeless wine pairings to help you plan ahead and sip with confidence.
+        </p>
+        <img
+          src="/winebasics.png"
+          alt="Wine pairing chart"
+          className="w-full h-auto border border-[#d8cfc4] shadow-md rounded"
+        />
+      </div>
+
+      {/* Featured Wine Section */}
+      <div className="mt-16 w-full max-w-3xl mx-auto px-4">
+        <div className="bg-white border border-[#d8cfc4] shadow-lg rounded-xl overflow-hidden">
+          <img
+            src="/frontera-cabernet-merlot.png"
+            alt="Frontera Cabernet Merlot"
+            className="w-full h-64 object-contain bg-[#f9f6ef] p-4"
+          />
+          <div className="p-6 text-center">
+            <h2 className="text-2xl font-bold text-[#4b3f2f] mb-2">
+              Featured Wine of the Week
+            </h2>
+            <p className="text-lg text-[#4b3f2f] mb-4">
+              <strong>Frontera Cabernet Merlot</strong> <br />
+              Available at Sam’s Club for only{' '}
+              <span className="font-bold text-burgundy">$6.99</span>
+            </p>
+            <Link
+              href="/featured-wine"
+              className="inline-block bg-[#a37c58] text-white font-semibold py-2 px-6 rounded hover:bg-[#8b684a] transition"
+            >
+              Learn More
+            </Link>
+          </div>
+        </div>
+      </div>
+
+      {/* Animations */}
       <style jsx global>{`
         @keyframes fadeIn {
           from {
@@ -186,20 +223,6 @@ export default function Home() {
           font-family: Georgia, serif;
         }
       `}</style>
-
-      <div className="mt-10 w-full max-w-2xl px-4">
-  <h2 className="text-xl font-bold text-center mb-4">Wine Pairing Basics</h2>
-  <p className="text-center text-[#4b3f2f] mb-6 italic text-lg">
-    🍷✨ <strong>Not sure where to start?</strong> This beautifully simple chart highlights timeless wine pairings to help you plan ahead and sip with confidence.
-  </p>
-  <img
-    src="/winebasics.png"
-    alt="Wine pairing chart"
-    className="w-full h-auto border border-[#d8cfc4] shadow-md rounded"
-  />
-</div>
-
-
     </div>
   );
 }
