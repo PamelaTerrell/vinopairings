@@ -3,7 +3,7 @@
 import { useState } from 'react';
 
 export default function Contact() {
-  const [formData, setFormData] = useState({ name: '', email: '', message: '' });
+  const [formData, setFormData] = useState({ name: '', email: '', message: '', _gotcha: '' });
   const [status, setStatus] = useState('');
 
   const handleChange = (e) => {
@@ -13,6 +13,12 @@ export default function Contact() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setStatus(''); // reset status
+
+    // If the honeypot field is filled, it's a bot → ignore submission
+    if (formData._gotcha) {
+      setStatus('⚠️ Submission blocked as spam.');
+      return;
+    }
 
     try {
       const response = await fetch('https://formspree.io/f/manbzwgp', {
@@ -26,7 +32,7 @@ export default function Contact() {
 
       if (response.ok) {
         setStatus('✅ Thank you! Your message has been received.');
-        setFormData({ name: '', email: '', message: '' });
+        setFormData({ name: '', email: '', message: '', _gotcha: '' });
       } else {
         setStatus('⚠️ Oops, something went wrong. Please try again later.');
       }
@@ -75,6 +81,17 @@ export default function Contact() {
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">
+          {/* Honeypot field (hidden from users) */}
+          <input
+            type="text"
+            name="_gotcha"
+            value={formData._gotcha}
+            onChange={handleChange}
+            style={{ display: 'none' }}
+            tabIndex="-1"
+            autoComplete="off"
+          />
+
           <div>
             <label htmlFor="name" className="block mb-2 font-semibold text-charcoal">
               Name
