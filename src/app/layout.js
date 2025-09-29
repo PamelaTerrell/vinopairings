@@ -3,8 +3,11 @@ import './globals.css';
 import { Inter } from 'next/font/google';
 import NavBar from './components/NavBar';
 import { Analytics } from '@vercel/analytics/react';
+import Script from 'next/script';
+import GtagPageView from './GtagPageView';
 
 const inter = Inter({ subsets: ['latin'] });
+const GA_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID; // G-SRJRLWGF89
 
 export const metadata = {
   metadataBase: new URL('https://vinopairings.com'),
@@ -26,7 +29,7 @@ export const metadata = {
   },
 
   manifest: '/site.webmanifest',
-  themeColor: '#ffffff',
+  themeColor: '#ffffff', // keep or change to '#800020' to match your manifest brand color
 
   alternates: {
     canonical: 'https://vinopairings.com',
@@ -40,7 +43,7 @@ export const metadata = {
     siteName: 'Vino Pairings',
     images: [
       {
-        url: '/wineog.png', // ✅ matches your file in /public
+        url: '/wineog.png',
         width: 1200,
         height: 630,
         alt: 'Vino Pairings Wine Glass',
@@ -57,6 +60,7 @@ export const metadata = {
   },
 
   other: {
+    // keeping your JSON-LD as-is
     'application/ld+json': JSON.stringify({
       '@context': 'https://schema.org',
       '@type': 'WebSite',
@@ -75,8 +79,29 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={`${inter.className} bg-white text-gray-800`}>
+        {/* GA4 script (only if GA_ID is set) */}
+        {GA_ID && (
+          <>
+            <Script
+              src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
+              strategy="afterInteractive"
+            />
+            <Script id="gtag-init" strategy="afterInteractive">
+              {`
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                window.gtag = window.gtag || gtag;
+                gtag('js', new Date());
+                // We'll send page_view manually for initial + route changes
+                gtag('config', '${GA_ID}', { send_page_view: false });
+              `}
+            </Script>
+          </>
+        )}
+
         <NavBar />
         <main className="max-w-2xl mx-auto p-4">{children}</main>
+
         <footer className="w-full p-4 mt-8 border-t border-gray-200 text-center text-sm text-gray-500">
           &copy; {new Date().getFullYear()} Vino Pairings · Created by{' '}
           <a
@@ -88,6 +113,10 @@ export default function RootLayout({ children }) {
             Pamela J. Terrell
           </a>
         </footer>
+
+        {/* Track pageviews on SPA navigations */}
+        {GA_ID && <GtagPageView />}
+
         <Analytics />
       </body>
     </html>
