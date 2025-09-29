@@ -7,14 +7,15 @@ import Script from 'next/script';
 import GtagPageView from './GtagPageView';
 
 const inter = Inter({ subsets: ['latin'] });
-const GA_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID; // G-SRJRLWGF89
+
+// Fallback to literal ID so the tag loads even if env is missing during testing.
+// You can remove the fallback once Vercel env is set.
+const GA_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || 'G-SRJRLWGF89';
 
 export const metadata = {
   metadataBase: new URL('https://vinopairings.com'),
   title: 'Vino Pairings',
   description: 'Find the perfect wine and dish pairing.',
-
-  // ✅ Favicon & icons
   icons: {
     icon: [
       { url: '/favicon.ico' },
@@ -27,40 +28,25 @@ export const metadata = {
     apple: [{ url: '/apple-touch-icon.png', sizes: '180x180' }],
     shortcut: ['/favicon.ico']
   },
-
   manifest: '/site.webmanifest',
-  themeColor: '#ffffff', // keep or change to '#800020' to match your manifest brand color
-
-  alternates: {
-    canonical: 'https://vinopairings.com',
-  },
-
+  themeColor: '#ffffff',
+  alternates: { canonical: 'https://vinopairings.com' },
   openGraph: {
     type: 'website',
     url: 'https://vinopairings.com',
     title: 'Vino Pairings',
     description: 'Find the perfect wine and dish pairing.',
     siteName: 'Vino Pairings',
-    images: [
-      {
-        url: '/wineog.png',
-        width: 1200,
-        height: 630,
-        alt: 'Vino Pairings Wine Glass',
-      }
-    ],
+    images: [{ url: '/wineog.png', width: 1200, height: 630, alt: 'Vino Pairings Wine Glass' }]
   },
-
   twitter: {
     card: 'summary_large_image',
     title: 'Vino Pairings',
     description: 'Find the perfect wine and dish pairing.',
     images: ['/wineog.png'],
-    creator: '@yourhandle',
+    creator: '@yourhandle'
   },
-
   other: {
-    // keeping your JSON-LD as-is
     'application/ld+json': JSON.stringify({
       '@context': 'https://schema.org',
       '@type': 'WebSite',
@@ -79,7 +65,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={`${inter.className} bg-white text-gray-800`}>
-        {/* GA4 script (only if GA_ID is set) */}
+        {/* GA4 loader + init */}
         {GA_ID && (
           <>
             <Script
@@ -92,8 +78,8 @@ export default function RootLayout({ children }) {
                 function gtag(){dataLayer.push(arguments);}
                 window.gtag = window.gtag || gtag;
                 gtag('js', new Date());
-                // We'll send page_view manually for initial + route changes
-                gtag('config', '${GA_ID}', { send_page_view: false });
+                // Send initial page_view automatically so GA detects the tag immediately.
+                gtag('config', '${GA_ID}', { send_page_view: true });
               `}
             </Script>
           </>
@@ -114,7 +100,7 @@ export default function RootLayout({ children }) {
           </a>
         </footer>
 
-        {/* Track pageviews on SPA navigations */}
+        {/* SPA route-change pageviews (kept) */}
         {GA_ID && <GtagPageView />}
 
         <Analytics />
