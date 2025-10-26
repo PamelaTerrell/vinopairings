@@ -17,7 +17,6 @@ export default function Home() {
   const escapeRegExp = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
   // ---------------- Matching helpers ----------------
-  // Ignore common words so "salmon with lemon" ~ "salmon lemon"
   const STOP = new Set([
     'and','with','the','a','an','of','in','on','to','for','style',
     'cooked','grilled','baked','roasted','pan','seared'
@@ -76,7 +75,7 @@ export default function Home() {
       }
     });
 
-    // unique coverage (favor candidates that hit more query tokens)
+    // unique coverage (favor candidates that hit more distinct query tokens)
     const uniqueCoverage = Math.min(qTok.length, exactOverlap + prefixOverlap);
 
     // substring bonus (either direction)
@@ -98,6 +97,15 @@ export default function Home() {
       invDist * 1.0 +
       lenBonus * 0.25
     );
+  };
+
+  // shared signal checker (used by suggestions AND results)
+  const hasAnyTokenSignal = (query, candidate) => {
+    const qTok = tokenize(query);
+    const cTok = tokenize(candidate);
+    const cSet = new Set(cTok);
+    if (qTok.some((t) => cSet.has(t))) return true; // exact token
+    return qTok.some((qt) => qt.length >= 2 && cTok.some((ct) => ct.startsWith(qt))); // prefix
   };
 
   // ---------------- Pairing dictionary: dish -> wine ----------------
@@ -326,41 +334,60 @@ export default function Home() {
     return acc;
   }, [pairings]);
 
-  // ---------------- Compute result (token-aware for all items) ----------------
+  // ---------------- Compute result (mode-guarded) ----------------
   const computeResult = (q, mode) => {
     const nq = normalize(q);
     if (!nq || nq.length < 2) return { found: false, text: '' };
 
+    const anyHasSignal = (items) => items.some((x) => hasAnyTokenSignal(q, x));
+
     if (mode === 'dish') {
-      // exact
+      const dishes = Object.keys(pairings);
+
+      // If the query doesn't look like any dish, don't show a result.
+      if (!anyHasSignal(dishes)) return { found: false, text: '' };
+
+      // exact dish
       if (pairings[nq]) {
         return { found: true, text: `🍷 A perfect wine pairing for "${q}" is **${pairings[nq]}**.` };
       }
-      // best candidate
-      const best = Object.keys(pairings)
+
+      // best-scored dish among those with a real signal
+      const best = dishes
+        .filter((k) => hasAnyTokenSignal(q, k))
         .map((k) => ({ k, s: scoreCandidate(q, k) }))
         .sort((a, b) => b.s - a.s)[0];
+
       if (best && best.s > 0) {
         return { found: true, text: `🍷 A perfect wine pairing for "${q}" is **${pairings[best.k]}**.` };
       }
-    } else {
-      // wine mode
-      if (reversePairings[nq]) {
-        const dishes = reversePairings[nq].map((d) => `**${d}**`).join(', ');
-        return { found: true, text: `🍽️ Delicious dishes to enjoy with "${q}" include: ${dishes}.` };
-      }
-      const bestWine = Object.keys(reversePairings)
-        .map((w) => ({ w, s: scoreCandidate(q, w) }))
-        .sort((a, b) => b.s - a.s)[0];
-      if (bestWine && bestWine.s > 0) {
-        const dishes = reversePairings[bestWine.w].map((d) => `**${d}**`).join(', ');
-        return { found: true, text: `🍽️ Delicious dishes to enjoy with "${q}" include: ${dishes}.` };
-      }
+      return { found: false, text: '' };
     }
-    return { found: false, text: `❌ Sorry, I don't have a ${mode === 'dish' ? 'pairing' : 'dish suggestion'} for "${q}" yet.` };
+
+    // mode === 'wine'
+    const wines = Object.keys(reversePairings);
+    if (!anyHasSignal(wines)) return { found: false, text: '' };
+
+    // exact wine
+    if (reversePairings[nq]) {
+      const dishes = reversePairings[nq].map((d) => `**${d}**`).join(', ');
+      return { found: true, text: `🍽️ Delicious dishes to enjoy with "${q}" include: ${dishes}.` };
+    }
+
+    // best-scored wine among wines with a signal
+    const bestWine = wines
+      .filter((w) => hasAnyTokenSignal(q, w))
+      .map((w) => ({ w, s: scoreCandidate(q, w) }))
+      .sort((a, b) => b.s - a.s)[0];
+
+    if (bestWine && bestWine.s > 0) {
+      const dishes = reversePairings[bestWine.w].map((d) => `**${d}**`).join(', ');
+      return { found: true, text: `🍽️ Delicious dishes to enjoy with "${q}" include: ${dishes}.` };
+    }
+    return { found: false, text: '' };
   };
 
-  // ---------------- Suggestions (same scoring so dropdown agrees) ----------------
+  // ---------------- Suggestions (reuse shared helper) ----------------
   const getCandidates = (mode) =>
     mode === 'dish' ? Object.keys(pairings) : Object.keys(reversePairings);
 
@@ -369,18 +396,10 @@ export default function Home() {
     if (!nq || nq.length < 2) return [];
     const candidates = getCandidates(mode);
 
-    const hasAnyTokenSignal = (query, candidate) => {
-      const qTok = tokenize(query);
-      const cTok = tokenize(candidate);
-      const cSet = new Set(cTok);
-      if (qTok.some((t) => cSet.has(t))) return true; // exact token hit
-      return qTok.some((qt) => qt.length >= 2 && cTok.some((ct) => ct.startsWith(qt))); // prefix hit
-    };
-
     return candidates
-      .map((c) => ({ c, s: scoreCandidate(q, c) }))
-      .filter(({ c }) => hasAnyTokenSignal(q, c))
-      .sort((a, b) => b.s - a.s)
+      .filter((c) => hasAnyTokenSignal(q, c))           // only items with a real signal
+      .map((c) => ({ c, s: scoreCandidate(q, c) }))     // score them
+      .sort((a, b) => b.s - a.s)                        // best first
       .slice(0, limit)
       .map(({ c }) => c);
   };
@@ -400,7 +419,7 @@ export default function Home() {
     const toks = tokenize(q);
     if (!toks.length) return <span>{s}</span>;
 
-    // Build regex that matches tokens as whole words OR as prefixes
+    // Build regex that matches tokens as whole words OR as prefixes (last token often partial)
     const lastIdx = toks.length - 1;
     const parts = toks.map((t, i) => {
       const esc = escapeRegExp(t);
@@ -408,7 +427,6 @@ export default function Home() {
     });
     const re = new RegExp(`(${parts.join('|')})`, 'gi');
 
-    // Split by regex and bold the matches
     const split = s.split(re);
     return (
       <span>
@@ -467,7 +485,7 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Pairing Finder (live results; no submit button) */}
+      {/* Pairing Finder */}
       <div className="max-w-3xl mx-auto p-6 flex flex-col items-center">
         <form
           onSubmit={(e) => e.preventDefault()}
@@ -479,9 +497,7 @@ export default function Home() {
           </h1>
 
           <div className="flex flex-col gap-2">
-            <label className="font-medium" htmlFor="type">
-              What would you like to enter?
-            </label>
+            <label className="font-medium" htmlFor="type">What would you like to enter?</label>
             <select
               id="type"
               value={type}
@@ -512,7 +528,7 @@ export default function Home() {
                 updateLive(v, type);
               }}
               onFocus={() => setSuggestions(buildSuggestions(input, type))}
-              onBlur={() => setTimeout(() => setSuggestions([]), 120)} // allow click
+              onBlur={() => setTimeout(() => setSuggestions([]), 120)}
               className="border border-[#D8CFC4] p-2 rounded focus:outline-none focus:ring-2 focus:ring-[#C59B5F]"
               inputMode="search"
               autoComplete="off"
@@ -534,13 +550,8 @@ export default function Home() {
                     role="option"
                     tabIndex={0}
                     className="px-3 py-2 hover:bg-[#f4ede4] cursor-pointer"
-                    onMouseDown={(e) => {
-                      e.preventDefault();
-                      commitSelection(s);
-                    }}
-                    onKeyDown={(e) => {
-                      if (e.key === 'Enter') commitSelection(s);
-                    }}
+                    onMouseDown={(e) => { e.preventDefault(); commitSelection(s); }}
+                    onKeyDown={(e) => { if (e.key === 'Enter') commitSelection(s); }}
                   >
                     {highlight(s, input)}
                   </li>
@@ -603,9 +614,7 @@ export default function Home() {
             />
           </div>
           <div className="p-6 text-center">
-            <h2 className="text-2xl font-heading font-bold mb-2">
-              Featured Wine of the Week
-            </h2>
+            <h2 className="text-2xl font-heading font-bold mb-2">Featured Wine of the Week</h2>
             <p className="text-lg mb-4">
               <strong>Frontera Cabernet Merlot</strong> <br />
               Available at Sam’s Club for only{' '}
