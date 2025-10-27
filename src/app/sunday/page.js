@@ -19,6 +19,7 @@ function CTA({ href, children }) {
 function MealCard({ item }) {
   return (
     <article className="group bg-white border border-[#D8CFC4] rounded-xl shadow-md overflow-hidden hover:shadow-lg transition">
+      {/* Slightly taller crop on mobile for nicer framing; wider on larger screens */}
       <div className="relative w-full aspect-[4/5] sm:aspect-[4/3] bg-cream">
         <Image
           src={item.src}
@@ -28,8 +29,11 @@ function MealCard({ item }) {
           className="object-cover object-[50%_40%]"
           sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
           priority
-          style={{ filter: 'saturate(2.0) contrast(1.6) brightness(1.02)' }}
+          // Balanced, cross-device-friendly pop
+          style={{ filter: 'saturate(1.18) contrast(1.08) brightness(1.02)' }}
         />
+
+        {/* Wine badge */}
         <span className="absolute top-3 left-3 bg-burgundy text-white text-xs font-semibold px-3 py-1 rounded-full shadow">
           {item.wine}
         </span>
@@ -89,10 +93,7 @@ export default function SundayPage() {
       alt: 'Griddle cooked salmon with asparagus and a rice and quinoa blend plated for dinner',
       links: [
         { label: 'Join Costco', href: 'https://www.costco.com/join-costco.html' },
-        {
-          label: 'Shop GEN5 Wines',
-          href: 'https://www.costco.com/wine.html',
-        },
+        { label: 'Shop GEN5 Wines', href: 'https://www.costco.com/wine.html' },
         {
           label: 'Blackstone 36" Griddle',
           href: 'https://www.costco.com/blackstone-36-in.-griddle-with-hinged-hood%2C-front-shelf-and-soft-cover.product.1713585.html',
@@ -103,7 +104,7 @@ export default function SundayPage() {
 
   return (
     <main className="min-h-screen bg-cream text-charcoal">
-      {/* HERO */}
+      {/* HERO (no overlay; tuned filter for vibrancy without clipping) */}
       <section className="relative w-full">
         <div className="relative w-full h-[48vh] sm:h-[56vh] lg:h-[64vh]">
           <Image
@@ -114,7 +115,7 @@ export default function SundayPage() {
             placeholder="blur"
             className="object-cover object-[50%_40%]"
             sizes="100vw"
-            style={{ filter: 'saturate(1.6) contrast(1.3) brightness(1.8)' }}
+            style={{ filter: 'saturate(1.22) contrast(1.10) brightness(1.03)' }}
           />
         </div>
       </section>
