@@ -114,7 +114,7 @@ export default function SundayPage() {
             placeholder="blur"
             className="object-cover object-[50%_40%]"
             sizes="100vw"
-            style={{ filter: 'saturate(2.0) contrast(1.6) brightness(1.2)' }}
+            style={{ filter: 'saturate(1.6) contrast(1.6) brightness(1.2)' }}
           />
         </div>
       </section>
