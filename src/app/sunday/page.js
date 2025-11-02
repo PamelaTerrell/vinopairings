@@ -20,30 +20,31 @@ function CTA({ href, children }) {
 }
 
 function MealCard({ item }) {
-  const imgClass =
-    item.fit === 'contain'
-      ? 'object-contain object-center p-2 sm:p-3 lg:p-4'
-      : 'object-cover object-[50%_40%]';
-
   return (
     <article className="group bg-white border border-[#D8CFC4] rounded-xl shadow-md overflow-hidden hover:shadow-lg transition">
-      <div className="relative w-full aspect-[4/5] sm:aspect-[4/3] bg-cream">
+      {/* Image container */}
+      <div className="relative w-full aspect-[4/5] sm:aspect-[4/3] bg-cream overflow-hidden">
         <Image
           src={item.src}
           alt={item.alt || item.dish}
           fill
           placeholder="blur"
-          className={imgClass}
-          sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
           priority
-          style={{ filter: 'saturate(1.1) contrast(1.06) brightness(1.02)' }}
+          sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+          // ✅ Fill the available card space fully
+          className="object-cover object-center w-full h-full transition-transform duration-300 group-hover:scale-[1.02]"
+          style={{
+            filter: 'saturate(1.1) contrast(1.06) brightness(1.02)',
+          }}
         />
 
+        {/* Wine badge */}
         <span className="absolute top-3 left-3 bg-burgundy text-white text-xs font-semibold px-3 py-1 rounded-full shadow">
           {item.wine}
         </span>
       </div>
 
+      {/* Text section */}
       <div className="p-4">
         <h3 className="text-lg font-heading font-bold text-charcoal">
           {item.dish}
@@ -68,6 +69,8 @@ function MealCard({ item }) {
     </article>
   );
 }
+
+ 
 
 export const metadata = {
   title: 'Sunday • VinoPairings',
