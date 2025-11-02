@@ -112,30 +112,31 @@ export default function SundayPage() {
 
   return (
     <main className="min-h-screen bg-cream text-charcoal">
-   {/* HERO */}
-<section className="relative w-full bg-cream flex flex-col items-center justify-center">
-  <div className="relative w-full h-[48vh] sm:h-[56vh] lg:h-[64vh] flex items-center justify-center">
+  {/* HERO */}
+<section className="relative w-full bg-cream flex flex-col items-center justify-center overflow-hidden">
+  <div className="relative w-full flex items-center justify-center">
+    {/* ✅ Use responsive width & auto height instead of 'fill' */}
     <Image
       src={clueImg}
       alt="CLUE Wine Lovers Edition board game and wine"
-      fill
+      className="w-full h-auto max-h-[64vh] object-contain"
       priority
       placeholder="blur"
-      className="object-contain p-2 sm:p-4 lg:p-6"
-      sizes="100vw"
       style={{
         filter: 'saturate(1.15) contrast(1.05) brightness(1.03)',
         objectPosition: 'center',
       }}
+      sizes="100vw"
     />
   </div>
 
-  {/* ✅ Caption moved outside image container so it sits underneath */}
-  <div className="mt-2 sm:mt-3 lg:mt-4 text-center text-xs sm:text-sm text-charcoal/90 max-w-[90%] leading-snug">
+  {/* Caption directly beneath */}
+  <div className="mt-3 text-center text-xs sm:text-sm text-charcoal/90 max-w-[90%] leading-snug">
     Limited Edition CLUE for Wine Lovers — starring Chef Chardonnay, Lady Rosé,
     Colonel Cabernet, Lord Malbec, Mayor Merlot, and Professor Prosecco.
   </div>
 </section>
+
 
 
 
