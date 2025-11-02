@@ -2,6 +2,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import salmonImg from '../../../public/salmon.png';
+import clueImg from '../../../public/clue.png';
 
 function CTA({ href, children }) {
   return (
@@ -17,23 +18,25 @@ function CTA({ href, children }) {
 }
 
 function MealCard({ item }) {
+  const imgClass =
+    item.fit === 'contain'
+      ? 'object-contain object-center p-2 sm:p-3 lg:p-4'
+      : 'object-cover object-[50%_40%]';
+
   return (
     <article className="group bg-white border border-[#D8CFC4] rounded-xl shadow-md overflow-hidden hover:shadow-lg transition">
-      {/* Slightly taller crop on mobile for nicer framing; wider on larger screens */}
       <div className="relative w-full aspect-[4/5] sm:aspect-[4/3] bg-cream">
         <Image
           src={item.src}
           alt={item.alt || item.dish}
           fill
           placeholder="blur"
-          className="object-cover object-[50%_40%]"
+          className={imgClass}
           sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
           priority
-          // Balanced, cross-device-friendly pop
-          style={{ filter: 'saturate(1.18) contrast(1.08) brightness(1.02)' }}
+          style={{ filter: 'saturate(1.1) contrast(1.06) brightness(1.02)' }}
         />
 
-        {/* Wine badge */}
         <span className="absolute top-3 left-3 bg-burgundy text-white text-xs font-semibold px-3 py-1 rounded-full shadow">
           {item.wine}
         </span>
@@ -44,23 +47,11 @@ function MealCard({ item }) {
           {item.dish}
         </h3>
         {item.date && <p className="text-xs opacity-70 mt-0.5">{item.date}</p>}
+        {item.notes && <p className="text-sm mt-2 text-charcoal/90">{item.notes}</p>}
 
-        {item.notes && (
-          <p className="text-sm mt-2 text-charcoal/90">{item.notes}</p>
+        {item.source && (
+          <p className="mt-2 text-sm italic text-charcoal/70">{item.source}</p>
         )}
-
-        <p className="mt-2 text-sm italic text-charcoal/70">
-          Ingredients and wine sourced from{' '}
-          <a
-            href="https://www.costco.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-burgundy font-semibold hover:underline"
-          >
-            Costco
-          </a>
-          .
-        </p>
 
         {item.links?.length > 0 && (
           <div className="mt-3 flex flex-wrap gap-2">
@@ -78,19 +69,35 @@ function MealCard({ item }) {
 
 export const metadata = {
   title: 'Sunday • VinoPairings',
-  description: 'Homemade meals from our kitchen — paired with wine.',
+  description: 'Homemade meals and inspired pairings — wine, food, and fun.',
 };
 
 export default function SundayPage() {
   const gallery = [
     {
+      src: clueImg,
+      dish: 'CLUE: Wine Lovers Edition',
+      wine: 'Cabernet Sauvignon',
+      date: 'This Sunday',
+      notes:
+        'Tonight we’re pairing a game instead of a meal — the limited edition “CLUE: Wine Lovers Edition,” matched with a smooth Cabernet Sauvignon. This playful take on the classic mystery features delightful characters like Chef Chardonnay, Lady Rosé, Colonel Cabernet, Lord Malbec, Mayor Merlot, and Professor Prosecco — each bringing their own vintage flair to the board. Pour a glass and let the fun unfold.',
+      alt: 'Clue Wine Lovers Edition board game beside a glass of Cabernet Sauvignon',
+      source:
+        'Found at World Market in Columbia, SC — an eclectic destination for gourmet finds, gifts, and wine accessories.',
+      fit: 'contain',
+      links: [
+        { label: 'Visit World Market', href: 'https://www.worldmarket.com/' },
+      ],
+    },
+    {
       src: salmonImg,
       dish: 'Griddle Cooked Salmon with Asparagus & Rice–Quinoa Blend',
       wine: 'GEN5 Pinot Noir',
-      date: 'Today',
+      date: 'Last Sunday',
       notes:
-        'This fresh, home-style meal features griddle-seared salmon served with tender asparagus and a blend of white rice and quinoa. The pairing — a juicy, bright GEN5 Pinot Noir from Costco — balances beautifully with the buttery grains and crisp vegetables. Serve the wine slightly chilled (55–58°F) for an extra layer of freshness.',
+        'Griddle-seared salmon with tender asparagus and a rice–quinoa blend. The pairing — a juicy, bright GEN5 Pinot Noir from Costco — balances beautifully with the buttery grains and crisp vegetables. Serve the wine slightly chilled (55–58°F) for an extra layer of freshness.',
       alt: 'Griddle cooked salmon with asparagus and a rice and quinoa blend plated for dinner',
+      source: 'Ingredients and wine sourced from Costco.',
       links: [
         { label: 'Join Costco', href: 'https://www.costco.com/join-costco.html' },
         { label: 'Shop GEN5 Wines', href: 'https://www.costco.com/wine.html' },
@@ -104,19 +111,26 @@ export default function SundayPage() {
 
   return (
     <main className="min-h-screen bg-cream text-charcoal">
-      {/* HERO (no overlay; tuned filter for vibrancy without clipping) */}
-      <section className="relative w-full">
-        <div className="relative w-full h-[48vh] sm:h-[56vh] lg:h-[64vh]">
+      {/* HERO */}
+      <section className="relative w-full bg-cream flex items-center justify-center">
+        <div className="relative w-full h-[48vh] sm:h-[56vh] lg:h-[64vh] flex items-center justify-center">
           <Image
-            src={salmonImg}
-            alt="Griddle cooked salmon plated with asparagus and rice–quinoa blend"
+            src={clueImg}
+            alt="CLUE Wine Lovers Edition board game and wine"
             fill
             priority
             placeholder="blur"
-            className="object-cover object-[50%_40%]"
+            className="object-contain p-2 sm:p-4 lg:p-6"
             sizes="100vw"
-            style={{ filter: 'saturate(1.22) contrast(1.10) brightness(1.03)' }}
+            style={{
+              filter: 'saturate(1.15) contrast(1.05) brightness(1.03)',
+              objectPosition: 'center',
+            }}
           />
+        </div>
+        {/* Caption */}
+        <div className="absolute bottom-4 w-full text-center text-sm text-charcoal/80 px-2">
+          Limited Edition CLUE for Wine Lovers — starring Chef Chardonnay, Lady Rosé, Colonel Cabernet, Lord Malbec, Mayor Merlot, and Professor Prosecco.
         </div>
       </section>
 
@@ -124,27 +138,15 @@ export default function SundayPage() {
       <section className="mx-auto max-w-5xl px-4 pt-8 pb-6 text-center">
         <h1 className="text-3xl md:text-4xl font-heading font-bold">Sunday</h1>
         <p className="mt-3 text-lg md:text-xl opacity-90">
-          Homemade meals from our kitchen — paired with wine.
+          This week: A mystery twist on wine pairing.
         </p>
         <p className="mt-2 text-base text-charcoal/80">
-          Featuring ingredients and wine from{' '}
-          <a
-            href="https://www.costco.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-burgundy font-semibold hover:underline"
-          >
-            Costco
-          </a>
-          .
+          The CLUE Wine Lovers Edition — where every pour holds a clue and each
+          character brings their own flavor to the mystery.
         </p>
 
         <div className="mt-5 flex items-center justify-center gap-3 flex-wrap">
-          <CTA href="https://www.costco.com/join-costco.html">Join Costco</CTA>
-          <CTA href="https://www.costco.com/wine.html">Shop GEN5 Wines</CTA>
-          <CTA href="https://www.costco.com/blackstone-36-in.-griddle-with-hinged-hood%2C-front-shelf-and-soft-cover.product.1713585.html">
-            View Blackstone 36&quot; Griddle
-          </CTA>
+          <CTA href="https://www.worldmarket.com/">Visit World Market</CTA>
         </div>
 
         <div className="mt-4 text-sm">
