@@ -113,26 +113,30 @@ export default function SundayPage() {
   return (
     <main className="min-h-screen bg-cream text-charcoal">
       {/* HERO */}
-      <section className="relative w-full bg-cream flex items-center justify-center">
-        <div className="relative w-full h-[48vh] sm:h-[56vh] lg:h-[64vh] flex items-center justify-center">
-          <Image
-            src={clueImg}
-            alt="CLUE Wine Lovers Edition board game and wine"
-            fill
-            priority
-            placeholder="blur"
-            className="object-contain p-2 sm:p-4 lg:p-6"
-            sizes="100vw"
-            style={{
-              filter: 'saturate(1.15) contrast(1.05) brightness(1.03)',
-              objectPosition: 'center',
-            }}
-          />
-        </div>
-        <div className="absolute bottom-4 w-full text-center text-sm text-charcoal/80 px-2">
-          Limited Edition CLUE for Wine Lovers — starring Chef Chardonnay, Lady Rosé, Colonel Cabernet, Lord Malbec, Mayor Merlot, and Professor Prosecco.
-        </div>
-      </section>
+<section className="relative w-full bg-cream flex items-center justify-center">
+  <div className="relative w-full h-[48vh] sm:h-[56vh] lg:h-[64vh] flex items-center justify-center">
+    <Image
+      src={clueImg}
+      alt="CLUE Wine Lovers Edition board game and wine"
+      fill
+      priority
+      placeholder="blur"
+      className="object-contain p-2 sm:p-4 lg:p-6"
+      sizes="100vw"
+      style={{
+        filter: 'saturate(1.15) contrast(1.05) brightness(1.03)',
+        objectPosition: 'center',
+      }}
+    />
+  </div>
+
+  {/* ✅ Lowered caption with soft backdrop for clarity */}
+  <div className="absolute bottom-2 sm:bottom-4 lg:bottom-6 left-1/2 -translate-x-1/2 bg-[#faf7f2]/80 backdrop-blur-sm px-3 py-1.5 rounded-md text-xs sm:text-sm text-charcoal/90 text-center max-w-[90%]">
+    Limited Edition CLUE for Wine Lovers — starring Chef Chardonnay, Lady Rosé,
+    Colonel Cabernet, Lord Malbec, Mayor Merlot, and Professor Prosecco.
+  </div>
+</section>
+
 
       {/* TITLE + CTAs */}
       <section className="mx-auto max-w-5xl px-4 pt-8 pb-6 text-center">
