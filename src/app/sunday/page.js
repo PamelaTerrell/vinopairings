@@ -112,8 +112,8 @@ export default function SundayPage() {
 
   return (
     <main className="min-h-screen bg-cream text-charcoal">
-      {/* HERO */}
-<section className="relative w-full bg-cream flex items-center justify-center">
+   {/* HERO */}
+<section className="relative w-full bg-cream flex flex-col items-center justify-center">
   <div className="relative w-full h-[48vh] sm:h-[56vh] lg:h-[64vh] flex items-center justify-center">
     <Image
       src={clueImg}
@@ -130,12 +130,13 @@ export default function SundayPage() {
     />
   </div>
 
-  {/* ✅ Lowered caption with soft backdrop for clarity */}
-  <div className="absolute bottom-2 sm:bottom-4 lg:bottom-6 left-1/2 -translate-x-1/2 bg-[#faf7f2]/80 backdrop-blur-sm px-3 py-1.5 rounded-md text-xs sm:text-sm text-charcoal/90 text-center max-w-[90%]">
+  {/* ✅ Caption moved outside image container so it sits underneath */}
+  <div className="mt-2 sm:mt-3 lg:mt-4 text-center text-xs sm:text-sm text-charcoal/90 max-w-[90%] leading-snug">
     Limited Edition CLUE for Wine Lovers — starring Chef Chardonnay, Lady Rosé,
     Colonel Cabernet, Lord Malbec, Mayor Merlot, and Professor Prosecco.
   </div>
 </section>
+
 
 
       {/* TITLE + CTAs */}
