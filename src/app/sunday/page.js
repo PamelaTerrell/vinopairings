@@ -1,8 +1,10 @@
 // src/app/sunday/page.js
 import Image from 'next/image';
 import Link from 'next/link';
-import salmonImg from '../../../public/salmon.png';
-import clueImg from '../../../public/clue.png';
+
+// ✅ Co-located, optimized images
+import salmonImg from './assets/salmon.png';
+import clueImg from './assets/clue.png';
 
 function CTA({ href, children }) {
   return (
@@ -85,9 +87,7 @@ export default function SundayPage() {
       source:
         'Found at World Market in Columbia, SC — an eclectic destination for gourmet finds, gifts, and wine accessories.',
       fit: 'contain',
-      links: [
-        { label: 'Visit World Market', href: 'https://www.worldmarket.com/' },
-      ],
+      links: [{ label: 'Visit World Market', href: 'https://www.worldmarket.com/' }],
     },
     {
       src: salmonImg,
@@ -103,7 +103,8 @@ export default function SundayPage() {
         { label: 'Shop GEN5 Wines', href: 'https://www.costco.com/wine.html' },
         {
           label: 'Blackstone 36" Griddle',
-          href: 'https://www.costco.com/blackstone-36-in.-griddle-with-hinged-hood%2C-front-shelf-and-soft-cover.product.1713585.html',
+          href:
+            'https://www.costco.com/blackstone-36-in.-griddle-with-hinged-hood%2C-front-shelf-and-soft-cover.product.1713585.html',
         },
       ],
     },
@@ -128,7 +129,6 @@ export default function SundayPage() {
             }}
           />
         </div>
-        {/* Caption */}
         <div className="absolute bottom-4 w-full text-center text-sm text-charcoal/80 px-2">
           Limited Edition CLUE for Wine Lovers — starring Chef Chardonnay, Lady Rosé, Colonel Cabernet, Lord Malbec, Mayor Merlot, and Professor Prosecco.
         </div>
@@ -140,7 +140,13 @@ export default function SundayPage() {
         <p className="mt-3 text-lg md:text-xl opacity-90">
           This week: A mystery twist on wine pairing.
         </p>
-        <p className="mt-2 text-base text-charcoal/80">
+
+        {/* 👇 New personal note */}
+        <p className="mt-3 italic text-charcoal/80">
+          No cooking tonight — just good company, a cozy dinner out, and a glass of red waiting for a round of CLUE: Wine Lovers Edition at home.
+        </p>
+
+        <p className="mt-3 text-base text-charcoal/80">
           The CLUE Wine Lovers Edition — where every pour holds a clue and each
           character brings their own flavor to the mystery.
         </p>
