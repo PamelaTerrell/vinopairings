@@ -620,12 +620,15 @@ export default function Home() {
               Available at Sam’s Club for only{' '}
               <span className="font-bold" style={{ color: '#7B1E3F' }}>$6.99</span>
             </p>
-            <Link
-              href="/featured-wine"
-              className="inline-block bg-[#C59B5F] text-white font-semibold py-2 px-6 rounded hover:brightness-95 transition"
-            >
-              Learn More
-            </Link>
+            <a
+  href="https://www.samsclub.com/ip/Concha-y-Toro-Frontera-Cabernet-Merlot-1-5-L/13809102300?classType=REGULAR&from=/search"
+  target="_blank"
+  rel="noopener noreferrer"
+  className="inline-block bg-[#C59B5F] text-white font-semibold py-2 px-6 rounded hover:brightness-95 transition"
+  data-analytics="cta_buy_frontera_samsclub"
+>
+  Buy at Sam’s Club
+</a>
           </div>
         </div>
       </div>
