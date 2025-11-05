@@ -23,15 +23,14 @@ function MealCard({ item }) {
   return (
     <article className="group bg-white border border-[#D8CFC4] rounded-xl shadow-md overflow-hidden hover:shadow-lg transition">
       {/* Image container */}
-      <div className="relative w-full aspect-[4/5] sm:aspect-[4/3] bg-cream overflow-hidden">
+      <div className="relative w-full aspect-[4/5] sm:aspect-[4/3] lg:aspect-[3/2] xl:aspect-[16/10] bg-cream overflow-hidden">
         <Image
           src={item.src}
           alt={item.alt || item.dish}
           fill
           placeholder="blur"
           priority
-          sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
-          // ✅ Fill the available card space fully
+          sizes="(min-width:1536px) 22vw, (min-width:1280px) 28vw, (min-width:1024px) 31vw, (min-width:640px) 45vw, 100vw"
           className="object-cover object-center w-full h-full transition-transform duration-300 group-hover:scale-[1.02]"
           style={{
             filter: 'saturate(1.1) contrast(1.06) brightness(1.02)',
@@ -51,11 +50,9 @@ function MealCard({ item }) {
         </h3>
         {item.date && <p className="text-xs opacity-70 mt-0.5">{item.date}</p>}
         {item.notes && <p className="text-sm mt-2 text-charcoal/90">{item.notes}</p>}
-
         {item.source && (
           <p className="mt-2 text-sm italic text-charcoal/70">{item.source}</p>
         )}
-
         {item.links?.length > 0 && (
           <div className="mt-3 flex flex-wrap gap-2">
             {item.links.map((l, i) => (
@@ -69,8 +66,6 @@ function MealCard({ item }) {
     </article>
   );
 }
-
- 
 
 export const metadata = {
   title: 'Sunday • VinoPairings',
@@ -115,33 +110,30 @@ export default function SundayPage() {
 
   return (
     <main className="min-h-screen bg-cream text-charcoal">
-  {/* HERO */}
-<section className="relative w-full bg-cream flex flex-col items-center justify-center overflow-hidden">
-  <div className="relative w-full flex items-center justify-center">
-    {/* ✅ Use responsive width & auto height instead of 'fill' */}
-    <Image
-      src={clueImg}
-      alt="CLUE Wine Lovers Edition board game and wine"
-      className="w-full h-auto max-h-[64vh] object-contain"
-      priority
-      placeholder="blur"
-      style={{
-        filter: 'saturate(1.15) contrast(1.05) brightness(1.03)',
-        objectPosition: 'center',
-      }}
-      sizes="100vw"
-    />
-  </div>
+      {/* HERO */}
+      <section className="relative w-full bg-cream flex flex-col items-center justify-center overflow-hidden">
+        <div className="relative w-full flex items-center justify-center">
+          {/* ✅ Use responsive width & auto height instead of 'fill' */}
+          <Image
+            src={clueImg}
+            alt="CLUE Wine Lovers Edition board game and wine"
+            className="w-full h-auto max-h-[64vh] object-contain"
+            priority
+            placeholder="blur"
+            style={{
+              filter: 'saturate(1.15) contrast(1.05) brightness(1.03)',
+              objectPosition: 'center',
+            }}
+            sizes="100vw"
+          />
+        </div>
 
-  {/* Caption directly beneath */}
-  <div className="mt-3 text-center text-xs sm:text-sm text-charcoal/90 max-w-[90%] leading-snug">
-    Limited Edition CLUE for Wine Lovers — starring Chef Chardonnay, Lady Rosé,
-    Colonel Cabernet, Lord Malbec, Mayor Merlot, and Professor Prosecco.
-  </div>
-</section>
-
-
-
+        {/* Caption directly beneath */}
+        <div className="mt-3 text-center text-xs sm:text-sm text-charcoal/90 max-w-[90%] leading-snug">
+          Limited Edition CLUE for Wine Lovers — starring Chef Chardonnay, Lady Rosé,
+          Colonel Cabernet, Lord Malbec, Mayor Merlot, and Professor Prosecco.
+        </div>
+      </section>
 
       {/* TITLE + CTAs */}
       <section className="mx-auto max-w-5xl px-4 pt-8 pb-6 text-center">
@@ -172,8 +164,8 @@ export default function SundayPage() {
       </section>
 
       {/* GALLERY */}
-      <section className="mx-auto max-w-6xl px-4 pb-20">
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      <section className="mx-auto max-w-screen-2xl px-4 pb-20">
+        <div className="grid gap-6 [grid-template-columns:repeat(auto-fit,minmax(320px,1fr))]">
           {gallery.map((item, i) => (
             <MealCard key={i} item={item} />
           ))}
