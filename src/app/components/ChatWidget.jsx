@@ -1,0 +1,324 @@
+'use client';
+import { useEffect, useRef, useState } from 'react';
+
+/**
+ * Floating AI chat widget for VinoPairings
+ * - Tries /api/ai/stream (SSE) first
+ * - Falls back to /api/ai (non-stream) if stream parsing/connection fails
+ * - Ultra-high z-index so nothing hides it
+ */
+export default function ChatWidget({
+  title = 'Ask VinoPairings',
+  subtitle = 'AI wine & food helper',
+  placeholder = 'Ask anything… e.g., “What pairs with jambalaya?”',
+  system, // optional system prompt forwarded to backend
+}) {
+  const [open, setOpen] = useState(false);
+  const [input, setInput] = useState('');
+  const [streamText, setStreamText] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [errorText, setErrorText] = useState('');
+
+  const abortRef = useRef(null);
+  const panelRef = useRef(null);
+
+  // Highest practical z-index
+  const Z = 2147483647;
+
+  // Auto-scroll body while content changes
+  useEffect(() => {
+    if (panelRef.current) {
+      panelRef.current.scrollTop = panelRef.current.scrollHeight;
+    }
+  }, [streamText, isLoading, open]);
+
+  // Optional GA/GTM events
+  const track = (action, params = {}) => {
+    if (typeof window !== 'undefined' && typeof window.gtag === 'function') {
+      window.gtag('event', action, { event_category: 'ai_widget', ...params });
+    }
+    if (typeof window !== 'undefined' && Array.isArray(window.dataLayer)) {
+      window.dataLayer.push({ event: action, event_category: 'ai_widget', ...params });
+    }
+  };
+
+  async function send(q) {
+    if (!q || q.trim().length < 2 || isLoading) return;
+
+    setIsLoading(true);
+    setStreamText('');
+    setErrorText('');
+    track('ai_widget_send', { q_preview: q.slice(0, 80) });
+
+    let gotAnyText = false;
+
+    try {
+      // Abort any prior in-flight request
+      if (abortRef.current) abortRef.current.abort();
+      const ac = new AbortController();
+      abortRef.current = ac;
+
+      // ---- 1) STREAM first
+      const res = await fetch('/api/ai/stream', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        signal: ac.signal,
+        body: JSON.stringify({
+          query: q,
+          system:
+            system ??
+            [
+              'You are the friendly sommelier for VinoPairings.com.',
+              'Answer concisely; include 1–3 good alternatives when helpful.',
+              'If off-topic, still be helpful but brief.'
+            ].join(' '),
+          temperature: 0.7,
+        }),
+      });
+
+      if (!res.ok || !res.body) {
+        throw new Error((await res.text()) || 'Streaming request failed');
+      }
+
+      const reader = res.body.getReader();
+      const decoder = new TextDecoder('utf-8');
+
+      // Hard timeout to force fallback if no text arrives
+      const timeout = setTimeout(() => {
+        if (!gotAnyText) {
+          try { ac.abort(); } catch {}
+        }
+      }, 3000);
+
+      let buffer = '';
+      while (true) {
+        const { value, done } = await reader.read();
+        if (done) break;
+
+        const chunk = decoder.decode(value, { stream: true });
+        buffer += chunk;
+
+        // Split into SSE events by blank line
+        const events = buffer.split('\n\n');
+        buffer = events.pop() || '';
+
+        for (const evt of events) {
+          let eventName = 'message';
+          let dataStr = '';
+
+          // Parse "event: ..." and "data: ..." lines
+          for (const line of evt.split('\n')) {
+            const i = line.indexOf(':');
+            if (i === -1) continue;
+            const key = line.slice(0, i).trim();
+            const val = line.slice(i + 1).trim();
+            if (key === 'event') eventName = val;
+            if (key === 'data') dataStr += (dataStr ? '\n' : '') + val;
+          }
+          if (!dataStr) continue;
+
+          // Server-forwarded error
+          if (eventName === 'error') {
+            try {
+              const parsed = JSON.parse(dataStr);
+              throw new Error(parsed?.error || 'Streaming error');
+            } catch {
+              throw new Error('Streaming error');
+            }
+          }
+
+          // ---- IMPORTANT: handle OpenAI namespaced events
+          try {
+            const parsed = JSON.parse(dataStr);
+
+            // "response.output_text.delta" => { delta: "..." }
+            if (eventName.includes('output_text.delta') && typeof parsed?.delta === 'string') {
+              gotAnyText = true;
+              setStreamText((t) => t + parsed.delta);
+              continue;
+            }
+
+            // "message.delta" => delta.content[].text
+            if (eventName.includes('message.delta') && parsed?.delta?.content?.length) {
+              for (const c of parsed.delta.content) {
+                if (c?.type === 'output_text' && typeof c?.text === 'string') {
+                  gotAnyText = true;
+                  setStreamText((t) => t + c.text);
+                }
+              }
+              continue;
+            }
+
+            // "response.completed" => { output_text } or { response: { output_text } }
+            if (eventName.includes('response.completed')) {
+              const finalText =
+                parsed?.output_text ||
+                parsed?.response?.output_text ||
+                '';
+              if (finalText) {
+                gotAnyText = true;
+                setStreamText((t) => t + finalText);
+              }
+              continue;
+            }
+          } catch {
+            // ignore keepalives / non-JSON data
+          }
+        }
+      }
+
+      clearTimeout(timeout);
+
+      if (!gotAnyText && !streamText) {
+        // Stream delivered nothing -> fallback
+        throw new Error('No stream chunks parsed');
+      }
+
+      track('ai_widget_done');
+    } catch (err) {
+      // ---- 2) Non-stream fallback
+      try {
+        const res = await fetch('/api/ai', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            query: q,
+            system:
+              system ??
+              'You are the friendly sommelier for VinoPairings.com. Be concise and practical. Offer 1–3 alternatives when helpful.',
+            temperature: 0.7,
+          }),
+        });
+        const json = await res.json();
+        if (!res.ok) throw new Error(json?.error || 'Non-streaming request failed');
+        setStreamText(json?.answer || 'Sorry, I could not generate a reply.');
+        track('ai_widget_done_fallback');
+      } catch (fallbackErr) {
+        setErrorText(fallbackErr.message || 'Something went wrong.');
+        track('ai_widget_error', { message: String(fallbackErr?.message || fallbackErr) });
+      }
+    } finally {
+      setIsLoading(false);
+      abortRef.current = null;
+    }
+  }
+
+  return (
+    <>
+      {/* Floating Action Button */}
+      <button
+        aria-label="Open AI chat"
+        onClick={() => {
+          const next = !open;
+          setOpen(next);
+          track('ai_widget_toggle', { open: next });
+        }}
+        style={{
+          position: 'fixed',
+          right: 16,
+          bottom: 16,
+          zIndex: Z,
+          width: 64,
+          height: 64,
+          borderRadius: 9999,
+          background: '#7B1E3F',
+          color: '#fff',
+          fontWeight: 800,
+          boxShadow: '0 10px 20px rgba(0,0,0,.25)',
+        }}
+      >
+        AI
+      </button>
+
+      {/* Slide-up Panel */}
+      <div
+        style={{
+          position: 'fixed',
+          right: 16,
+          bottom: open ? 96 : 80,
+          opacity: open ? 1 : 0,
+          pointerEvents: open ? 'auto' : 'none',
+          transform: `translateY(${open ? 0 : 6}px)`,
+          transition: 'all 160ms ease',
+          zIndex: Z,
+          width: 'min(92vw, 380px)',
+        }}
+      >
+        <div
+          ref={panelRef}
+          style={{
+            maxHeight: '50vh',
+            overflow: 'auto',
+            background: '#fff',
+            border: '1px solid #D8CFC4',
+            borderRadius: 16,
+            boxShadow: '0 20px 40px rgba(0,0,0,.25)',
+          }}
+        >
+          {/* Header */}
+          <div style={{ padding: '10px 12px', background: '#f7efe4', borderBottom: '1px solid #E8DFD3' }}>
+            <div style={{ fontSize: 13, fontWeight: 700, color: '#7B1E3F' }}>{title}</div>
+            <div style={{ fontSize: 11, color: '#6b7280' }}>{subtitle}</div>
+          </div>
+
+          {/* Body */}
+          <div style={{ padding: 12, fontSize: 14, color: '#374151', whiteSpace: 'pre-wrap', lineHeight: 1.6 }}>
+            {!streamText && !isLoading && !errorText && (
+              <em style={{ color: '#6b7280' }}>
+                Try: “What wine pairs with griddle-cooked salmon?” or “Build me a cozy fall menu with pairings.”
+              </em>
+            )}
+            {!!streamText && <div>{streamText}</div>}
+            {isLoading && <div style={{ color: '#6b7280' }}>thinking…</div>}
+            {!!errorText && <div style={{ color: '#b91c1c' }}>{errorText}</div>}
+          </div>
+
+          {/* Composer */}
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              const q = input.trim();
+              if (q.length >= 2) {
+                send(q);
+                setInput('');
+              }
+            }}
+            style={{ display: 'flex', gap: 8, padding: 12, borderTop: '1px solid #E8DFD3' }}
+          >
+            <input
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              placeholder={placeholder}
+              style={{
+                flex: 1,
+                border: '1px solid #D8CFC4',
+                borderRadius: 12,
+                padding: '8px 10px',
+                outline: 'none',
+              }}
+            />
+            <button
+              type="submit"
+              disabled={isLoading || input.trim().length < 2}
+              style={{
+                borderRadius: 12,
+                padding: '8px 14px',
+                fontWeight: 700,
+                color: '#fff',
+                background: '#C59B5F',
+                opacity: isLoading || input.trim().length < 2 ? 0.6 : 1,
+              }}
+            >
+              Send
+            </button>
+          </form>
+
+          {/* Footer note */}
+          <div style={{ padding: '6px 12px', fontSize: 11, color: '#6b7280', textAlign: 'center' }}>
+            AI suggestions may be imperfect. Verify availability/prices locally.
+          </div>
+        </div>
+      </div>
+    </>
+  );
+}
