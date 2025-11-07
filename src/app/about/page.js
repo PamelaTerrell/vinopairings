@@ -1,8 +1,10 @@
+// app/about/page.js
 import Image from 'next/image';
 
 export const metadata = {
   title: 'About • Vino Pairings',
-  description: 'Learn about Pamela Terrell, creator of Vino Pairings — where food and wine find their perfect match.',
+  description:
+    'Learn about Pamela Terrell, creator of Vino Pairings — where food and wine meet to bring people together.',
 };
 
 export default function AboutPage() {
@@ -17,7 +19,7 @@ export default function AboutPage() {
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: brand.cream, color: brand.cocoa }}>
-      {/* Soft vignette background */}
+      {/* Subtle vignette background */}
       <div
         aria-hidden="true"
         className="pointer-events-none fixed inset-0 -z-10 opacity-80"
@@ -28,34 +30,42 @@ export default function AboutPage() {
       />
 
       <main className="mx-auto w-full max-w-5xl px-6 py-12 md:py-16">
-        {/* --- HERO SECTION --- */}
+        {/* HERO — Portrait-centered */}
         <section className="relative flex flex-col items-center text-center">
-          <div className="relative">
-            {/* Glowing gold ring */}
+          <div className="relative fade-up">
+            {/* Gold glow behind portrait */}
             <div
-              className="absolute inset-0 rounded-full blur-3xl opacity-50"
-              style={{ background: 'radial-gradient(circle, rgba(163,124,88,0.4), transparent 70%)' }}
+              className="absolute inset-0 rounded-full blur-3xl opacity-50 glow-bloom shimmer-gold"
+              style={{
+                background:
+                  'radial-gradient(circle, rgba(163,124,88,0.4), transparent 70%)',
+              }}
             />
-            {/* Profile image */}
             <Image
               src="/Me.jpg"
               alt="Photo of Pamela Terrell, creator of Vino Pairings"
-              width={400}
-              height={400}
+              width={420}
+              height={420}
               priority
               className="relative z-10 rounded-full border-8 shadow-xl"
               style={{ borderColor: brand.line, objectFit: 'cover' }}
             />
           </div>
 
-          <h1 className="mt-8 text-4xl font-serif font-bold tracking-wide md:text-5xl">
+          <h1 className="mt-8 text-4xl font-serif font-bold tracking-wide md:text-5xl fade-up-delay">
             Pamela Terrell
           </h1>
-          <p className="mt-2 text-lg italic text-[#7a6b57]">Founder • Creator of Vino Pairings</p>
+          <p className="mt-2 text-lg italic text-[#7a6b57] fade-up-delay">
+            Founder • Creator of Vino Pairings
+          </p>
+          <p className="mt-3 max-w-md text-base text-[#7a6b57] fade-up-delay">
+            “I believe every shared meal is a chance to connect — to pause, laugh, and remember what matters.”
+          </p>
 
           <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed">
-            Welcome to <strong>Vino Pairings</strong> — a space born from curiosity, joy, and the simple belief that food and wine are better together.  
-            I wanted to make pairing approachable, intuitive, and beautiful. What began as a few notes at dinner has become a living collection of flavor stories.
+            Welcome to <strong>Vino Pairings</strong> — a space born from curiosity, joy, and the simple
+            belief that food and wine are better together. What began as a few dinner notes has become a
+            living collection of pairings you can trust, without fuss or jargon.
           </p>
 
           <div className="mt-8 flex flex-wrap justify-center gap-4">
@@ -76,23 +86,22 @@ export default function AboutPage() {
           </div>
         </section>
 
-        {/* --- STORY SECTION --- */}
+        {/* STORY */}
         <section
           className="mt-16 rounded-2xl border shadow-md md:mt-20"
           style={{ backgroundColor: brand.parchment, borderColor: brand.line }}
         >
           <div className="p-8 md:p-12">
-            <h2 className="text-3xl font-serif font-bold tracking-wide text-center">
-              My Story
-            </h2>
+            <h2 className="text-3xl font-serif font-bold tracking-wide text-center">My Story</h2>
             <div className="mx-auto mt-6 max-w-3xl text-lg leading-relaxed">
               <p>
-                For me, wine has never been about collecting bottles — it’s about connection.  
-                The moment you take a sip, share a meal, and discover that magical balance between food and wine, it tells a story.
+                For me, wine has never been about collecting bottles — it’s about connection. The moment you
+                take a sip, share a meal, and discover that balance between food and wine, it tells a story.
               </p>
               <p className="mt-4">
-                I began sharing pairings to help others find that same spark. Vino Pairings grew from a personal curiosity
-                into a welcoming guide — a place to learn, laugh, and taste along the way.
+                What I’ve loved most isn’t just discovering pairings — it’s hearing how others use them to bring
+                people together. Whether it’s dinner with friends, a quiet moment with a partner, or a new
+                tradition around a favorite bottle, connection is the thread that ties it all together.
               </p>
               <p className="mt-4">
                 I hope this site inspires you to explore confidently and pair joyfully, one dish and one glass at a time.
@@ -101,36 +110,46 @@ export default function AboutPage() {
           </div>
         </section>
 
-        {/* --- VALUES / HIGHLIGHTS --- */}
-        <section className="mt-12 grid gap-8 md:grid-cols-3">
-          {[
-            {
-              title: 'Approachable',
-              desc: 'Wine should feel inclusive and human — not intimidating.',
-            },
-            {
-              title: 'Authentic',
-              desc: 'Every pairing and photo comes from real kitchens and real curiosity.',
-            },
-            {
-              title: 'Beautiful',
-              desc: 'Design, flavor, and experience belong together in harmony.',
-            },
-          ].map(({ title, desc }) => (
-            <article
-              key={title}
-              className="rounded-2xl border bg-white p-6 text-center shadow-sm"
-              style={{ borderColor: brand.line }}
-            >
-              <h3 className="text-xl font-serif font-bold text-[#a37c58]">{title}</h3>
-              <p className="mt-2 text-base leading-relaxed opacity-80">{desc}</p>
-            </article>
-          ))}
+       {/* VALUES */}
+<section
+  className="mt-12 grid gap-6 sm:gap-8 grid-cols-[repeat(auto-fit,minmax(240px,1fr))]"
+>
+  {[
+    { title: 'Approachable', desc: 'Wine should feel inclusive and human — not intimidating.' },
+    { title: 'Connected',   desc: 'Food and wine mean more when they bring people together — every pairing is a story shared.' },
+    { title: 'Authentic',   desc: 'Every pairing and photo comes from real kitchens and real curiosity.' },
+    { title: 'Beautiful',   desc: 'Design, flavor, and experience belong together in harmony.' },
+  ].map(({ title, desc }) => (
+    <article
+      key={title}
+      className="rounded-2xl border bg-white p-6 text-center shadow-sm"
+      style={{ borderColor: '#d8cfc4' }}
+    >
+      <h3 className="text-xl font-serif font-bold text-[#a37c58]">{title}</h3>
+      <p className="mt-2 text-base leading-relaxed">{desc}</p>
+    </article>
+  ))}
+</section>
+
+
+        {/* COMMUNITY INVITE */}
+        <section
+          className="mt-12 rounded-2xl border p-5 text-center text-base opacity-95"
+          style={{ borderColor: brand.line, backgroundColor: '#fff' }}
+        >
+          <p>
+            I’d love to hear how food and wine bring joy to your table — your moments and your favorites.
+            <br className="hidden sm:block" />
+            <a href="/contact" className="underline decoration-dotted underline-offset-4 hover:opacity-90">
+              Reach out and say hello
+            </a>
+            .
+          </p>
         </section>
 
-        {/* --- FOOTER CTA --- */}
+        {/* FOOTER CTA */}
         <section
-          className="mt-16 rounded-2xl border p-8 text-center shadow-sm"
+          className="mt-12 rounded-2xl border p-8 text-center shadow-sm"
           style={{ borderColor: brand.line, background: '#fff' }}
         >
           <h3 className="text-2xl font-serif font-bold tracking-wide">
@@ -158,7 +177,7 @@ export default function AboutPage() {
         </section>
       </main>
 
-      {/* --- GA4 redirect tracker: if came from /history --- */}
+      {/* GA4: track redirected visits from /history -> /about (server component safe) */}
       <script
         dangerouslySetInnerHTML={{
           __html: `

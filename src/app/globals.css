@@ -23,3 +23,61 @@ a {
 button {
   @apply font-body;
 }
+
+/* --- Elegant fade and glow animations for About page --- */
+
+/* Fade-up entrance (for portrait and headings) */
+@keyframes fadeUp {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-up {
+  animation: fadeUp 1.2s ease-out both;
+}
+
+.fade-up-delay {
+  animation: fadeUp 1.2s ease-out 0.4s both;
+}
+
+/* Gentle gold glow bloom (behind portrait) */
+@keyframes glowFade {
+  0% {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  60% {
+    opacity: 0.4;
+    transform: scale(1.05);
+  }
+  100% {
+    opacity: 0.5;
+    transform: scale(1);
+  }
+}
+
+.glow-bloom {
+  animation: glowFade 2s ease-out 0.3s both;
+}
+
+/* Optional: continuous shimmer pulse for ambient warmth */
+@keyframes shimmerPulse {
+  0%, 100% {
+    opacity: 0.45;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.6;
+    transform: scale(1.02);
+  }
+}
+
+.shimmer-gold {
+  animation: shimmerPulse 6s ease-in-out 2s infinite alternate;
+}
