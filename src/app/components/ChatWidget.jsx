@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from 'react';
  * Viv — Your Virtual Sommelier (VinoPairings)
  * - Streams from /api/ai/stream (SSE)
  * - Falls back to /api/ai (non-stream) if streaming hiccups
- * - Ultra-high z-index; safe to portal into <body>
+ * - Ultra-high z-index; collapse/minimize support
  */
 
 // Single source of truth for Viv's persona (sent to both routes unless overridden)
@@ -25,6 +25,7 @@ export default function ChatWidget({
   system, // optional override for system prompt
 }) {
   const [open, setOpen] = useState(false);
+  const [collapsed, setCollapsed] = useState(false);
   const [input, setInput] = useState('');
   const [streamText, setStreamText] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -36,12 +37,27 @@ export default function ChatWidget({
   // Highest practical z-index
   const Z = 2147483647;
 
-  // Auto-scroll body while content changes
+  // Restore collapsed state
   useEffect(() => {
-    if (panelRef.current) {
+    try {
+      const saved = localStorage.getItem('vp_viv_collapsed');
+      if (saved != null) setCollapsed(saved === '1');
+    } catch {}
+  }, []);
+
+  // Save collapsed state
+  useEffect(() => {
+    try {
+      localStorage.setItem('vp_viv_collapsed', collapsed ? '1' : '0');
+    } catch {}
+  }, [collapsed]);
+
+  // Auto-scroll body while content changes (only when not collapsed)
+  useEffect(() => {
+    if (!collapsed && panelRef.current) {
       panelRef.current.scrollTop = panelRef.current.scrollHeight;
     }
-  }, [streamText, isLoading, open]);
+  }, [streamText, isLoading, open, collapsed]);
 
   // Optional GA/GTM events
   const track = (action, params = {}) => {
@@ -52,6 +68,23 @@ export default function ChatWidget({
       window.dataLayer.push({ event: action, event_category: 'ai_widget', ...params });
     }
   };
+
+  // Keyboard: press "m" to toggle collapse when panel is open
+  useEffect(() => {
+    const onKey = (e) => {
+      if (!open) return;
+      if (e.key.toLowerCase() === 'm') {
+        setCollapsed((c) => !c);
+        track('ai_widget_collapse_toggle', { via: 'key_m' });
+      }
+      if (e.key === 'Escape') {
+        setOpen(false);
+        track('ai_widget_toggle', { open: false, via: 'esc' });
+      }
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [open]);
 
   async function send(q) {
     if (!q || q.trim().length < 2 || isLoading) return;
@@ -208,40 +241,39 @@ export default function ChatWidget({
 
   return (
     <>
-    {/* Floating Action Button */}
-<button
-  aria-label="Open AI chat"
-  onClick={() => {
-    const next = !open;
-    setOpen(next);
-    track('ai_widget_toggle', { open: next });
-  }}
-  style={{
-    position: 'fixed',
-    right: 16,
-    bottom: 16,
-    zIndex: Z,
-    width: 70,
-    height: 70,
-    borderRadius: '50%',
-    background: 'linear-gradient(135deg, #7B1E3F, #C59B5F)',
-    color: '#fff',
-    fontSize: 36,        // ⬅️ increase emoji size
-    lineHeight: 1,
-    boxShadow: '0 10px 25px rgba(0,0,0,0.3)',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    cursor: 'pointer',
-    transition: 'transform 0.2s ease, box-shadow 0.2s ease',
-  }}
-  title="Chat with Viv"
-  onMouseEnter={(e) => (e.currentTarget.style.transform = 'scale(1.05)')}
-  onMouseLeave={(e) => (e.currentTarget.style.transform = 'scale(1.0)')}
->
-  🍷
-</button>
-
+      {/* Floating Action Button */}
+      <button
+        aria-label="Open AI chat"
+        onClick={() => {
+          const next = !open;
+          setOpen(next);
+          track('ai_widget_toggle', { open: next });
+        }}
+        style={{
+          position: 'fixed',
+          right: 16,
+          bottom: 16,
+          zIndex: Z,
+          width: 70,
+          height: 70,
+          borderRadius: '50%',
+          background: 'linear-gradient(135deg, #7B1E3F, #C59B5F)',
+          color: '#fff',
+          fontSize: 36, // larger 🍷
+          lineHeight: 1,
+          boxShadow: '0 10px 25px rgba(0,0,0,0.3)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          cursor: 'pointer',
+          transition: 'transform 0.2s ease, box-shadow 0.2s ease',
+        }}
+        title="Chat with Viv"
+        onMouseEnter={(e) => (e.currentTarget.style.transform = 'scale(1.05)')}
+        onMouseLeave={(e) => (e.currentTarget.style.transform = 'scale(1.0)')}
+      >
+        🍷
+      </button>
 
       {/* Slide-up Panel */}
       <div
@@ -258,83 +290,152 @@ export default function ChatWidget({
         }}
       >
         <div
-          ref={panelRef}
           style={{
-            maxHeight: '50vh',
-            overflow: 'auto',
+            overflow: 'hidden',
             background: '#fff',
             border: '1px solid #D8CFC4',
             borderRadius: 16,
             boxShadow: '0 20px 40px rgba(0,0,0,.25)',
+            transition: 'max-height 180ms ease',
+            maxHeight: collapsed ? 64 : '50vh', // collapsed shows header only
           }}
         >
-          {/* Header */}
-          <div style={{ padding: '10px 12px', background: '#f7efe4', borderBottom: '1px solid #E8DFD3' }}>
-            <div style={{ fontSize: 13, fontWeight: 700, color: '#7B1E3F' }}>
-              {title}
-            </div>
-            <div style={{ fontSize: 11, color: '#6b7280' }}>
-              {subtitle}
-            </div>
-          </div>
-
-          {/* Body */}
-          <div style={{ padding: 12, fontSize: 14, color: '#374151', whiteSpace: 'pre-wrap', lineHeight: 1.6 }}>
-            {!streamText && !isLoading && !errorText && (
-              <em style={{ color: '#6b7280' }}>
-                Bonjour! 🍷 I’m <strong>Viv</strong>, your sommelier. Ask me about pairings, wine styles, or what to serve tonight—
-                I’ll pour a perfect suggestion.
-              </em>
-            )}
-            {!!streamText && <div>{streamText}</div>}
-            {isLoading && <div style={{ color: '#6b7280' }}>thinking…</div>}
-            {!!errorText && <div style={{ color: '#b91c1c' }}>{errorText}</div>}
-          </div>
-
-          {/* Composer */}
-          <form
-            onSubmit={(e) => {
-              e.preventDefault();
-              const q = input.trim();
-              if (q.length >= 2) {
-                send(q);
-                setInput('');
-              }
+          {/* Header (double-click to collapse/expand) */}
+          <div
+            onDoubleClick={() => {
+              setCollapsed((c) => !c);
+              track('ai_widget_collapse_toggle', { via: 'dblclick' });
             }}
-            style={{ display: 'flex', gap: 8, padding: 12, borderTop: '1px solid #E8DFD3' }}
+            style={{
+              padding: '10px 12px',
+              background: '#f7efe4',
+              borderBottom: '1px solid #E8DFD3',
+              display: 'flex',
+              alignItems: 'center',
+              gap: 8,
+              userSelect: 'none',
+            }}
           >
-            <input
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              placeholder={placeholder}
-              style={{
-                flex: 1,
-                border: '1px solid #D8CFC4',
-                borderRadius: 12,
-                padding: '8px 10px',
-                outline: 'none',
-              }}
-            />
             <button
-              type="submit"
-              disabled={isLoading || input.trim().length < 2}
+              aria-label={collapsed ? 'Expand Viv' : 'Collapse Viv'}
+              onClick={(e) => {
+                e.stopPropagation();
+                setCollapsed((c) => !c);
+                track('ai_widget_collapse_toggle', { via: 'button' });
+              }}
+              title={collapsed ? 'Expand' : 'Collapse'}
               style={{
-                borderRadius: 12,
-                padding: '8px 14px',
-                fontWeight: 700,
-                color: '#fff',
-                background: '#C59B5F',
-                opacity: isLoading || input.trim().length < 2 ? 0.6 : 1,
+                border: 'none',
+                background: 'transparent',
+                cursor: 'pointer',
+                fontSize: 16,
+                lineHeight: 1,
+                transform: `rotate(${collapsed ? 180 : 0}deg)`,
+                transition: 'transform 160ms ease',
               }}
             >
-              Send
+              ▾
             </button>
-          </form>
 
-          {/* Footer note */}
-          <div style={{ padding: '6px 12px', fontSize: 11, color: '#6b7280', textAlign: 'center' }}>
-            AI suggestions may be imperfect. Verify availability/prices locally.
+            <div style={{ flex: 1 }}>
+              <div style={{ fontSize: 13, fontWeight: 700, color: '#7B1E3F' }}>{title}</div>
+              <div style={{ fontSize: 11, color: '#6b7280', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                {subtitle}
+              </div>
+            </div>
+
+            <button
+              aria-label="Close Viv"
+              title="Close"
+              onClick={() => {
+                setOpen(false);
+                track('ai_widget_toggle', { open: false, via: 'close_btn' });
+              }}
+              style={{
+                border: 'none',
+                background: 'transparent',
+                cursor: 'pointer',
+                fontSize: 16,
+                lineHeight: 1,
+              }}
+            >
+              ✕
+            </button>
           </div>
+
+          {/* Collapsible Content */}
+          {!collapsed && (
+            <>
+              {/* Body */}
+              <div
+                ref={panelRef}
+                style={{
+                  padding: 12,
+                  fontSize: 14,
+                  color: '#374151',
+                  whiteSpace: 'pre-wrap',
+                  lineHeight: 1.6,
+                  maxHeight: 'calc(50vh - 64px)',
+                  overflow: 'auto',
+                }}
+              >
+                {!streamText && !isLoading && !errorText && (
+                  <em style={{ color: '#6b7280' }}>
+                    Bonjour! 🍷 I’m <strong>Viv</strong>, your sommelier. Ask me about pairings, wine styles, or what to serve tonight—
+                    I’ll pour a perfect suggestion.
+                  </em>
+                )}
+                {!!streamText && <div>{streamText}</div>}
+                {isLoading && <div style={{ color: '#6b7280' }}>thinking…</div>}
+                {!!errorText && <div style={{ color: '#b91c1c' }}>{errorText}</div>}
+              </div>
+
+              {/* Composer */}
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  const q = input.trim();
+                  if (q.length >= 2) {
+                    send(q);
+                    setInput('');
+                  }
+                }}
+                style={{ display: 'flex', gap: 8, padding: 12, borderTop: '1px solid #E8DFD3' }}
+              >
+                <input
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                  placeholder={placeholder}
+                  style={{
+                    flex: 1,
+                    border: '1px solid #D8CFC4',
+                    borderRadius: 12,
+                    padding: '8px 10px',
+                    outline: 'none',
+                  }}
+                />
+                <button
+                  type="submit"
+                  disabled={isLoading || input.trim().length < 2}
+                  style={{
+                    borderRadius: 12,
+                    padding: '8px 14px',
+                    fontWeight: 700,
+                    color: '#fff',
+                    background: '#C59B5F',
+                    opacity: isLoading || input.trim().length < 2 ? 0.6 : 1,
+                  }}
+                >
+                  Send
+                </button>
+              </form>
+
+              {/* Footer note */}
+              <div style={{ padding: '6px 12px', fontSize: 11, color: '#6b7280', textAlign: 'center' }}>
+                AI suggestions may be imperfect. Verify availability/prices locally.
+              </div>
+            </>
+          )}
         </div>
       </div>
     </>
