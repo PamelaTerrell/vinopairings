@@ -2,16 +2,27 @@
 import { useEffect, useRef, useState } from 'react';
 
 /**
- * Floating AI chat widget for VinoPairings
- * - Tries /api/ai/stream (SSE) first
- * - Falls back to /api/ai (non-stream) if stream parsing/connection fails
- * - Ultra-high z-index so nothing hides it
+ * Viv — Your Virtual Sommelier (VinoPairings)
+ * - Streams from /api/ai/stream (SSE)
+ * - Falls back to /api/ai (non-stream) if streaming hiccups
+ * - Ultra-high z-index; safe to portal into <body>
  */
+
+// Single source of truth for Viv's persona (sent to both routes unless overridden)
+const SOMM_SYSTEM = [
+  'You are a professional female sommelier and wine educator named “Viv” who works for VinoPairings.com.',
+  'Your tone is warm, elegant, and confident—never robotic. Keep answers concise and conversational.',
+  'Explain pairing rationale in natural language (aroma, texture, acidity, body, sweetness, tannin).',
+  'Prioritize practical, affordable bottles; optionally offer one premium alternative.',
+  'If asked about non-wine topics, reply briefly and gracefully steer back to wine.',
+  'Avoid exaggerated gendered stereotypes; remain professional and welcoming.'
+].join(' ');
+
 export default function ChatWidget({
-  title = 'Ask VinoPairings',
-  subtitle = 'AI wine & food helper',
-  placeholder = 'Ask anything… e.g., “What pairs with jambalaya?”',
-  system, // optional system prompt forwarded to backend
+  title = 'Viv, Your Virtual Sommelier',
+  subtitle = 'Ask about pairings, tasting notes, regions, or budgets',
+  placeholder = 'Ask Viv… e.g., “Pinot Noir with salmon or duck?”',
+  system, // optional override for system prompt
 }) {
   const [open, setOpen] = useState(false);
   const [input, setInput] = useState('');
@@ -65,13 +76,7 @@ export default function ChatWidget({
         signal: ac.signal,
         body: JSON.stringify({
           query: q,
-          system:
-            system ??
-            [
-              'You are the friendly sommelier for VinoPairings.com.',
-              'Answer concisely; include 1–3 good alternatives when helpful.',
-              'If off-topic, still be helpful but brief.'
-            ].join(' '),
+          system: system ?? SOMM_SYSTEM,
           temperature: 0.7,
         }),
       });
@@ -127,7 +132,7 @@ export default function ChatWidget({
             }
           }
 
-          // ---- IMPORTANT: handle OpenAI namespaced events
+          // ---- Handle OpenAI namespaced events
           try {
             const parsed = JSON.parse(dataStr);
 
@@ -183,9 +188,7 @@ export default function ChatWidget({
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             query: q,
-            system:
-              system ??
-              'You are the friendly sommelier for VinoPairings.com. Be concise and practical. Offer 1–3 alternatives when helpful.',
+            system: system ?? SOMM_SYSTEM,
             temperature: 0.7,
           }),
         });
@@ -205,30 +208,40 @@ export default function ChatWidget({
 
   return (
     <>
-      {/* Floating Action Button */}
-      <button
-        aria-label="Open AI chat"
-        onClick={() => {
-          const next = !open;
-          setOpen(next);
-          track('ai_widget_toggle', { open: next });
-        }}
-        style={{
-          position: 'fixed',
-          right: 16,
-          bottom: 16,
-          zIndex: Z,
-          width: 64,
-          height: 64,
-          borderRadius: 9999,
-          background: '#7B1E3F',
-          color: '#fff',
-          fontWeight: 800,
-          boxShadow: '0 10px 20px rgba(0,0,0,.25)',
-        }}
-      >
-        AI
-      </button>
+    {/* Floating Action Button */}
+<button
+  aria-label="Open AI chat"
+  onClick={() => {
+    const next = !open;
+    setOpen(next);
+    track('ai_widget_toggle', { open: next });
+  }}
+  style={{
+    position: 'fixed',
+    right: 16,
+    bottom: 16,
+    zIndex: Z,
+    width: 70,
+    height: 70,
+    borderRadius: '50%',
+    background: 'linear-gradient(135deg, #7B1E3F, #C59B5F)',
+    color: '#fff',
+    fontSize: 36,        // ⬅️ increase emoji size
+    lineHeight: 1,
+    boxShadow: '0 10px 25px rgba(0,0,0,0.3)',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    cursor: 'pointer',
+    transition: 'transform 0.2s ease, box-shadow 0.2s ease',
+  }}
+  title="Chat with Viv"
+  onMouseEnter={(e) => (e.currentTarget.style.transform = 'scale(1.05)')}
+  onMouseLeave={(e) => (e.currentTarget.style.transform = 'scale(1.0)')}
+>
+  🍷
+</button>
+
 
       {/* Slide-up Panel */}
       <div
@@ -257,15 +270,20 @@ export default function ChatWidget({
         >
           {/* Header */}
           <div style={{ padding: '10px 12px', background: '#f7efe4', borderBottom: '1px solid #E8DFD3' }}>
-            <div style={{ fontSize: 13, fontWeight: 700, color: '#7B1E3F' }}>{title}</div>
-            <div style={{ fontSize: 11, color: '#6b7280' }}>{subtitle}</div>
+            <div style={{ fontSize: 13, fontWeight: 700, color: '#7B1E3F' }}>
+              {title}
+            </div>
+            <div style={{ fontSize: 11, color: '#6b7280' }}>
+              {subtitle}
+            </div>
           </div>
 
           {/* Body */}
           <div style={{ padding: 12, fontSize: 14, color: '#374151', whiteSpace: 'pre-wrap', lineHeight: 1.6 }}>
             {!streamText && !isLoading && !errorText && (
               <em style={{ color: '#6b7280' }}>
-                Try: “What wine pairs with griddle-cooked salmon?” or “Build me a cozy fall menu with pairings.”
+                Bonjour! 🍷 I’m <strong>Viv</strong>, your sommelier. Ask me about pairings, wine styles, or what to serve tonight—
+                I’ll pour a perfect suggestion.
               </em>
             )}
             {!!streamText && <div>{streamText}</div>}

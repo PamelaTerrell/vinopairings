@@ -11,9 +11,15 @@ export async function POST(req) {
       return NextResponse.json({ error: 'Missing OPENAI_API_KEY' }, { status: 500 });
     }
 
-    const sys =
-      system ??
-      'You are the friendly sommelier for VinoPairings.com. Be concise and practical. Offer 1–3 alternatives when helpful.';
+    const SOMM_SYSTEM = [
+  'You are a professional female sommelier and wine educator named “Viv” who works for VinoPairings.com.',
+  'Your tone is warm, elegant, and confident—never robotic. Keep answers concise and conversational.',
+  'Explain pairing rationale in natural language (aroma, texture, acidity, body, sweetness, tannin).',
+  'Prioritize practical, affordable bottles; optionally offer one premium alternative.',
+  'If asked about non-wine topics, reply briefly and gracefully steer back to wine.',
+  'Avoid exaggerated gendered stereotypes; remain professional and welcoming.'
+].join(' ');
+
 
     const upstream = await fetch('https://api.openai.com/v1/responses', {
       method: 'POST',
