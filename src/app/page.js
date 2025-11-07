@@ -13,6 +13,15 @@ export default function Home() {
   const [didYouMean, setDidYouMean] = useState('');
   const [vivAutoOpened, setVivAutoOpened] = useState(false);
 
+  // Desktop-only helper (>= 1024px and fine pointer like mouse/trackpad)
+  const isLargeScreen = () => {
+    if (typeof window === 'undefined') return false;
+    return (
+      window.matchMedia('(min-width: 1024px)').matches &&
+      window.matchMedia('(pointer: fine)').matches
+    );
+  };
+
   // --- Featured meta ---
   const FEATURED_UPDATED_ISO = '2025-11-06'; // update when you change the featured wine
   const featuredUpdatedText = new Intl.DateTimeFormat(undefined, {
@@ -40,16 +49,6 @@ export default function Home() {
       });
     }
   };
-
-  // Treat "large screen" as desktop/laptop: width ≥ 1024px and a fine pointer (mouse/trackpad)
-const isLargeScreen = () => {
-  if (typeof window === 'undefined') return false;
-  return (
-    window.matchMedia('(min-width: 1024px)').matches &&
-    window.matchMedia('(pointer: fine)').matches
-  );
-};
-
 
   // Helpers to normalize input (trim, lowercase, strip accents)
   const strip = (s) => s.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
@@ -102,11 +101,9 @@ const isLargeScreen = () => {
     const cTok = tokenize(candidate);
     const cSet = new Set(cTok);
 
-    // exact token overlap
     let exactOverlap = 0;
     qTok.forEach((t) => { if (cSet.has(t)) exactOverlap++; });
 
-    // prefix overlap (handles "salm" vs "salmon")
     let prefixOverlap = 0;
     qTok.forEach((qt) => {
       if (qt.length < 2) return;
@@ -115,20 +112,12 @@ const isLargeScreen = () => {
       }
     });
 
-    // unique coverage (favor candidates that hit more distinct query tokens)
     const uniqueCoverage = Math.min(qTok.length, exactOverlap + prefixOverlap);
-
-    // substring bonus (either direction)
     const containBonus = containsEither(query, candidate) ? 1 : 0;
-
-    // edit distance (invert for scoring)
     const dist = levenshtein(query, candidate);
     const invDist = 1 / (1 + dist);
-
-    // shorter strings break ties slightly
     const lenBonus = 1 / (1 + candidate.length);
 
-    // Weighted total
     return (
       uniqueCoverage * 4 +
       exactOverlap * 2 +
@@ -139,13 +128,13 @@ const isLargeScreen = () => {
     );
   };
 
-  // shared signal checker (used by suggestions AND results)
+  // shared signal checker
   const hasAnyTokenSignal = (query, candidate) => {
     const qTok = tokenize(query);
     const cTok = tokenize(candidate);
     const cSet = new Set(cTok);
-    if (qTok.some((t) => cSet.has(t))) return true; // exact token
-    return qTok.some((qt) => qt.length >= 2 && cTok.some((ct) => ct.startsWith(qt))); // prefix
+    if (qTok.some((t) => cSet.has(t))) return true;
+    return qTok.some((qt) => qt.length >= 2 && cTok.some((ct) => ct.startsWith(qt)));
   };
 
   // ---------------- Pairing dictionary: dish -> wine ----------------
@@ -388,16 +377,12 @@ const isLargeScreen = () => {
 
     if (mode === 'dish') {
       const dishes = Object.keys(pairings);
-
-      // If the query doesn't look like any dish, don't show a result.
       if (!anyHasSignal(dishes)) return { found: false, text: '' };
 
-      // exact dish
       if (pairings[nq]) {
         return { found: true, text: `🍷 A perfect wine pairing for "${q}" is **${pairings[nq]}**.` };
       }
 
-      // best-scored dish among those with a real signal
       const best = dishes
         .filter((k) => hasAnyTokenSignal(q, k))
         .map((k) => ({ k, s: scoreCandidate(q, k) }))
@@ -409,17 +394,14 @@ const isLargeScreen = () => {
       return { found: false, text: '' };
     }
 
-    // mode === 'wine'
     const wines = Object.keys(reversePairings);
     if (!anyHasSignal(wines)) return { found: false, text: '' };
 
-    // exact wine
     if (reversePairings[nq]) {
       const dishes = reversePairings[nq].map((d) => `**${d}**`).join(', ');
       return { found: true, text: `🍽️ Delicious dishes to enjoy with "${q}" include: ${dishes}.` };
     }
 
-    // best-scored wine among wines with a signal
     const bestWine = wines
       .filter((w) => hasAnyTokenSignal(q, w))
       .map((w) => ({ w, s: scoreCandidate(q, w) }))
@@ -496,31 +478,30 @@ const isLargeScreen = () => {
     const s = buildSuggestions(value, mode, 6);
     setDidYouMean(found ? '' : s[0] || '');
     setSuggestions(s);
-    setVivAutoOpened(false);
   };
 
   // ---- Auto-open Viv when there's no match (desktop only)
-const noResult = input.trim().length >= 2 && !resultText;
+  const noResult = input.trim().length >= 2 && !resultText;
 
-useEffect(() => {
-  if (noResult && !vivAutoOpened) {
-    if (isLargeScreen()) {
-      setVivAutoOpened(true);
-      // Give React a tick to ensure the FAB is in the DOM, then "click" it
-      setTimeout(() => {
-        const btn = document.querySelector('button[title="Chat with Viv"]');
-        if (btn) btn.click();
-      }, 200);
-    } else {
-      // On small/touch screens we show the instructions only
+  useEffect(() => {
+    if (!noResult || vivAutoOpened || !isLargeScreen()) return;
+
+    const btn = document.querySelector('button[title="Chat with Viv"]');
+    const isPressed = btn?.getAttribute('aria-pressed') === 'true';
+    if (!isPressed) {
+      btn?.click();           // open once
+      setVivAutoOpened(true); // remember
+    }
+  }, [noResult, vivAutoOpened]);
+
+  // Allow auto-open again only when cleared or we have a result
+  useEffect(() => {
+    const noText = input.trim().length < 2;
+    const hasResult = !!resultText;
+    if (noText || hasResult) {
       setVivAutoOpened(false);
     }
-  }
-  if (!noResult && vivAutoOpened) {
-    setVivAutoOpened(false);
-  }
-}, [noResult, vivAutoOpened]);
-
+  }, [input, resultText]);
 
   // JSON-LD for Featured Wine
   const jsonLd = {
@@ -699,7 +680,6 @@ useEffect(() => {
               “a light red under $15 for tacos”) and she’ll recommend a perfect pairing.
             </p>
 
-            {/* Show a couple of auto-suggestions if we have them */}
             {suggestions.length > 0 && (
               <div className="mt-3 text-sm">
                 <div className="font-medium">Suggestions you can try:</div>

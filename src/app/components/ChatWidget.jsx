@@ -3,12 +3,12 @@ import { useEffect, useRef, useState } from 'react';
 
 /**
  * Viv — Your Virtual Sommelier (VinoPairings)
- * - Streams from /api/ai/stream (SSE)
- * - Falls back to /api/ai (non-stream) if streaming hiccups
+ * - Streams from /api/ai/stream (SSE), falls back to /api/ai
  * - Ultra-high z-index; collapse/minimize support
+ * - Safe keyboard shortcuts (Alt+M) and ignores keystrokes while typing
+ * - Listens for a custom window event: window.dispatchEvent(new CustomEvent('viv-open'))
  */
 
-// Single source of truth for Viv's persona (sent to both routes unless overridden)
 const SOMM_SYSTEM = [
   'You are a professional female sommelier and wine educator named “Viv” who works for VinoPairings.com.',
   'Your tone is warm, elegant, and confident—never robotic. Keep answers concise and conversational.',
@@ -34,32 +34,8 @@ export default function ChatWidget({
   const abortRef = useRef(null);
   const panelRef = useRef(null);
 
-  // Highest practical z-index
   const Z = 2147483647;
 
-  // Restore collapsed state
-  useEffect(() => {
-    try {
-      const saved = localStorage.getItem('vp_viv_collapsed');
-      if (saved != null) setCollapsed(saved === '1');
-    } catch {}
-  }, []);
-
-  // Save collapsed state
-  useEffect(() => {
-    try {
-      localStorage.setItem('vp_viv_collapsed', collapsed ? '1' : '0');
-    } catch {}
-  }, [collapsed]);
-
-  // Auto-scroll body while content changes (only when not collapsed)
-  useEffect(() => {
-    if (!collapsed && panelRef.current) {
-      panelRef.current.scrollTop = panelRef.current.scrollHeight;
-    }
-  }, [streamText, isLoading, open, collapsed]);
-
-  // Optional GA/GTM events
   const track = (action, params = {}) => {
     if (typeof window !== 'undefined' && typeof window.gtag === 'function') {
       window.gtag('event', action, { event_category: 'ai_widget', ...params });
@@ -69,13 +45,49 @@ export default function ChatWidget({
     }
   };
 
-  // Keyboard: press "m" to toggle collapse when panel is open
+  // Restore/save collapsed
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem('vp_viv_collapsed');
+      if (saved != null) setCollapsed(saved === '1');
+    } catch {}
+  }, []);
+  useEffect(() => {
+    try {
+      localStorage.setItem('vp_viv_collapsed', collapsed ? '1' : '0');
+    } catch {}
+  }, [collapsed]);
+
+  // Auto-scroll when not collapsed
+  useEffect(() => {
+    if (!collapsed && panelRef.current) {
+      panelRef.current.scrollTop = panelRef.current.scrollHeight;
+    }
+  }, [streamText, isLoading, open, collapsed]);
+
+  // Helper: ignore shortcuts when user is typing
+  const isEditableTarget = (el) => {
+    if (!el) return false;
+    const tag = el.tagName?.toLowerCase();
+    if (tag === 'input' || tag === 'textarea' || tag === 'select') return true;
+    // contentEditable
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+    if (el.isContentEditable) return true;
+    return false;
+  };
+
+  // Keyboard shortcuts: Alt+M to collapse/expand; Esc to close
   useEffect(() => {
     const onKey = (e) => {
       if (!open) return;
-      if (e.key.toLowerCase() === 'm') {
+      if (isEditableTarget(e.target)) return; // don’t interfere while typing
+
+      // Use Alt+M instead of plain "m" to avoid collisions with normal typing
+      if ((e.key === 'm' || e.key === 'M') && (e.altKey || e.metaKey)) {
+        e.preventDefault();
         setCollapsed((c) => !c);
-        track('ai_widget_collapse_toggle', { via: 'key_m' });
+        track('ai_widget_collapse_toggle', { via: 'alt+m' });
+        return;
       }
       if (e.key === 'Escape') {
         setOpen(false);
@@ -85,6 +97,13 @@ export default function ChatWidget({
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
   }, [open]);
+
+  // Listen for a page-level event to open the widget without toggling
+  useEffect(() => {
+    const onOpen = () => setOpen(true); // idempotent
+    window.addEventListener('viv-open', onOpen);
+    return () => window.removeEventListener('viv-open', onOpen);
+  }, []);
 
   async function send(q) {
     if (!q || q.trim().length < 2 || isLoading) return;
@@ -97,12 +116,11 @@ export default function ChatWidget({
     let gotAnyText = false;
 
     try {
-      // Abort any prior in-flight request
       if (abortRef.current) abortRef.current.abort();
       const ac = new AbortController();
       abortRef.current = ac;
 
-      // ---- 1) STREAM first
+      // 1) Streaming
       const res = await fetch('/api/ai/stream', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -121,7 +139,6 @@ export default function ChatWidget({
       const reader = res.body.getReader();
       const decoder = new TextDecoder('utf-8');
 
-      // Hard timeout to force fallback if no text arrives
       const timeout = setTimeout(() => {
         if (!gotAnyText) {
           try { ac.abort(); } catch {}
@@ -136,15 +153,12 @@ export default function ChatWidget({
         const chunk = decoder.decode(value, { stream: true });
         buffer += chunk;
 
-        // Split into SSE events by blank line
         const events = buffer.split('\n\n');
         buffer = events.pop() || '';
 
         for (const evt of events) {
           let eventName = 'message';
           let dataStr = '';
-
-          // Parse "event: ..." and "data: ..." lines
           for (const line of evt.split('\n')) {
             const i = line.indexOf(':');
             if (i === -1) continue;
@@ -155,7 +169,6 @@ export default function ChatWidget({
           }
           if (!dataStr) continue;
 
-          // Server-forwarded error
           if (eventName === 'error') {
             try {
               const parsed = JSON.parse(dataStr);
@@ -165,18 +178,14 @@ export default function ChatWidget({
             }
           }
 
-          // ---- Handle OpenAI namespaced events
           try {
             const parsed = JSON.parse(dataStr);
 
-            // "response.output_text.delta" => { delta: "..." }
             if (eventName.includes('output_text.delta') && typeof parsed?.delta === 'string') {
               gotAnyText = true;
               setStreamText((t) => t + parsed.delta);
               continue;
             }
-
-            // "message.delta" => delta.content[].text
             if (eventName.includes('message.delta') && parsed?.delta?.content?.length) {
               for (const c of parsed.delta.content) {
                 if (c?.type === 'output_text' && typeof c?.text === 'string') {
@@ -186,8 +195,6 @@ export default function ChatWidget({
               }
               continue;
             }
-
-            // "response.completed" => { output_text } or { response: { output_text } }
             if (eventName.includes('response.completed')) {
               const finalText =
                 parsed?.output_text ||
@@ -200,7 +207,7 @@ export default function ChatWidget({
               continue;
             }
           } catch {
-            // ignore keepalives / non-JSON data
+            // ignore keepalives / non-JSON
           }
         }
       }
@@ -208,13 +215,12 @@ export default function ChatWidget({
       clearTimeout(timeout);
 
       if (!gotAnyText && !streamText) {
-        // Stream delivered nothing -> fallback
         throw new Error('No stream chunks parsed');
       }
 
       track('ai_widget_done');
     } catch (err) {
-      // ---- 2) Non-stream fallback
+      // 2) Fallback (non-stream)
       try {
         const res = await fetch('/api/ai', {
           method: 'POST',
@@ -243,7 +249,11 @@ export default function ChatWidget({
     <>
       {/* Floating Action Button */}
       <button
-        aria-label="Open AI chat"
+        type="button"
+        title="Chat with Viv"
+        aria-label="Chat with Viv"
+        aria-pressed={open}
+        data-open={open ? 'true' : 'false'}
         onClick={() => {
           const next = !open;
           setOpen(next);
@@ -259,7 +269,7 @@ export default function ChatWidget({
           borderRadius: '50%',
           background: 'linear-gradient(135deg, #7B1E3F, #C59B5F)',
           color: '#fff',
-          fontSize: 36, // larger 🍷
+          fontSize: 36,
           lineHeight: 1,
           boxShadow: '0 10px 25px rgba(0,0,0,0.3)',
           display: 'flex',
@@ -268,7 +278,6 @@ export default function ChatWidget({
           cursor: 'pointer',
           transition: 'transform 0.2s ease, box-shadow 0.2s ease',
         }}
-        title="Chat with Viv"
         onMouseEnter={(e) => (e.currentTarget.style.transform = 'scale(1.05)')}
         onMouseLeave={(e) => (e.currentTarget.style.transform = 'scale(1.0)')}
       >
@@ -297,10 +306,10 @@ export default function ChatWidget({
             borderRadius: 16,
             boxShadow: '0 20px 40px rgba(0,0,0,.25)',
             transition: 'max-height 180ms ease',
-            maxHeight: collapsed ? 64 : '50vh', // collapsed shows header only
+            maxHeight: collapsed ? 64 : '50vh',
           }}
         >
-          {/* Header (double-click to collapse/expand) */}
+          {/* Header */}
           <div
             onDoubleClick={() => {
               setCollapsed((c) => !c);
@@ -317,6 +326,7 @@ export default function ChatWidget({
             }}
           >
             <button
+              type="button"
               aria-label={collapsed ? 'Expand Viv' : 'Collapse Viv'}
               onClick={(e) => {
                 e.stopPropagation();
@@ -345,6 +355,7 @@ export default function ChatWidget({
             </div>
 
             <button
+              type="button"
               aria-label="Close Viv"
               title="Close"
               onClick={() => {
@@ -366,7 +377,6 @@ export default function ChatWidget({
           {/* Collapsible Content */}
           {!collapsed && (
             <>
-              {/* Body */}
               <div
                 ref={panelRef}
                 style={{
@@ -390,7 +400,6 @@ export default function ChatWidget({
                 {!!errorText && <div style={{ color: '#b91c1c' }}>{errorText}</div>}
               </div>
 
-              {/* Composer */}
               <form
                 onSubmit={(e) => {
                   e.preventDefault();
@@ -430,7 +439,6 @@ export default function ChatWidget({
                 </button>
               </form>
 
-              {/* Footer note */}
               <div style={{ padding: '6px 12px', fontSize: 11, color: '#6b7280', textAlign: 'center' }}>
                 AI suggestions may be imperfect. Verify availability/prices locally.
               </div>
