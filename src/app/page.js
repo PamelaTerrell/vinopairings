@@ -3,6 +3,7 @@
 import { useMemo, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import Script from 'next/script';
 
 export default function Home() {
   const [input, setInput] = useState('');
@@ -10,6 +11,34 @@ export default function Home() {
   const [resultText, setResultText] = useState('');
   const [suggestions, setSuggestions] = useState([]);
   const [didYouMean, setDidYouMean] = useState('');
+
+  // --- Featured meta ---
+  const FEATURED_UPDATED_ISO = '2025-11-06'; // update this when you change the featured wine
+  const featuredUpdatedText = new Intl.DateTimeFormat(undefined, {
+    year: 'numeric',
+    month: 'short',
+    day: '2-digit',
+  }).format(new Date(FEATURED_UPDATED_ISO));
+
+  // Fire GA4 on CTA click (works with gtag.js and GTM dataLayer)
+  const trackFeaturedCTA = () => {
+    if (typeof window !== 'undefined' && Array.isArray(window.dataLayer)) {
+      window.dataLayer.push({
+        event: 'cta_click',
+        cta_id: 'frontera_samsclub',
+        cta_location: 'featured_wine_top',
+        cta_text: 'Buy at Sam’s Club',
+        outbound: true,
+      });
+    }
+    if (typeof window !== 'undefined' && typeof window.gtag === 'function') {
+      window.gtag('event', 'cta_click', {
+        cta_id: 'frontera_samsclub',
+        cta_location: 'featured_wine_top',
+        link_domain: 'samsclub.com',
+      });
+    }
+  };
 
   // Helpers to normalize input (trim, lowercase, strip accents)
   const strip = (s) => s.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
@@ -455,46 +484,84 @@ export default function Home() {
     setSuggestions(s);
   };
 
+  // JSON-LD for Featured Wine
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    name: 'Frontera Cabernet Merlot 1.5L',
+    brand: { '@type': 'Brand', name: 'Concha y Toro' },
+    image: ['https://vinopairings.com/frontera-cabernet-merlot.png'],
+    offers: {
+      '@type': 'Offer',
+      url: 'https://www.samsclub.com/ip/Concha-y-Toro-Frontera-Cabernet-Merlot-1-5-L/13809102300?classType=REGULAR&from=/search',
+      priceCurrency: 'USD',
+      price: '6.99',
+      availability: 'https://schema.org/InStock'
+    }
+  };
+
   return (
     <div className="min-h-screen bg-cream text-charcoal font-body">
-      {/* Hero Image */}
-      <div className="relative w-full h-72 md:h-96 mb-8 shadow-lg overflow-hidden">
-        <Image
-          src="/picnicwine.png"
-          alt="Picnic with wine and bread"
-          fill
-          className="object-cover brightness-90"
-          priority
-          sizes="100vw"
-        />
-        <div className="absolute bottom-0 left-0 right-0 bg-black/50 text-white text-xs p-2 text-center">
-          Photo by{' '}
-          <a
-            href="https://unsplash.com/@juliesdfg?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash"
-            className="underline hover:text-gray-300"
-          >
-            Julie Sd
-          </a>{' '}
-          on{' '}
-          <a
-            href="https://unsplash.com/photos/a-group-of-wine-glasses-sitting-on-top-of-a-table-fDTv0BqaiFw?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash"
-            className="underline hover:text-gray-300"
-          >
-            Unsplash
-          </a>
+      {/* JSON-LD for Featured Wine */}
+      <Script
+        id="featured-wine-jsonld"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+
+      {/* Featured Wine — TOP */}
+      <section className="w-full max-w-3xl mx-auto px-4 pt-6">
+        <div className="bg-white border border-[#D8CFC4] shadow-lg rounded-xl overflow-hidden">
+          <div className="bg-gradient-to-r from-[#f7efe4] to-[#fdf7ef] px-6 py-4 text-center">
+            <p className="text-sm tracking-wide uppercase font-semibold text-[#7B1E3F]">
+              Featured Wine of the Week
+            </p>
+            <h1 className="text-2xl md:text-3xl font-heading font-extrabold mt-1">
+              Frontera Cabernet Merlot
+            </h1>
+            <p className="mt-1 text-xs text-gray-500">Last updated {featuredUpdatedText}</p>
+          </div>
+
+          <div className="relative w-full h-60 sm:h-72 md:h-80 bg-cream">
+            <Image
+              src="/frontera-cabernet-merlot.png"
+              alt="Frontera Cabernet Merlot bottle"
+              fill
+              className="object-contain p-4"
+              sizes="(min-width: 768px) 768px, 100vw"
+              priority
+            />
+          </div>
+
+          <div className="p-6 text-center">
+            <p className="text-lg mb-4">
+              Available at Sam’s Club for{' '}
+              <span className="font-bold" style={{ color: '#7B1E3F' }}>$6.99</span>
+            </p>
+            <a
+              href="https://www.samsclub.com/ip/Concha-y-Toro-Frontera-Cabernet-Merlot-1-5-L/13809102300?classType=REGULAR&from=/search"
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={trackFeaturedCTA}
+              className="inline-block bg-[#C59B5F] text-white font-semibold py-2 px-6 rounded hover:brightness-95 transition"
+              data-analytics="cta_buy_frontera_samsclub"
+            >
+              Buy at Sam’s Club
+            </a>
+          </div>
         </div>
-      </div>
+      </section>
 
       {/* Pairing Finder */}
-      <div className="max-w-3xl mx-auto p-6 flex flex-col items-center">
+      <section className="max-w-3xl mx-auto p-6 mt-10 flex flex-col items-center">
         <form
           onSubmit={(e) => e.preventDefault()}
           className="flex flex-col gap-5 bg-[#FDF7EF] border border-[#D8CFC4] shadow-md p-8 rounded-xl w-full"
           aria-labelledby="pairing-title"
         >
-          <h1 id="pairing-title" className="text-2xl md:text-3xl font-heading font-extrabold text-center">
+          <h2 id="pairing-title" className="text-2xl md:text-3xl font-heading font-extrabold text-center">
             Discover Your Perfect Pairing
-          </h1>
+          </h2>
 
           <div className="flex flex-col gap-2">
             <label className="font-medium" htmlFor="type">What would you like to enter?</label>
@@ -583,10 +650,10 @@ export default function Home() {
             )}
           </div>
         )}
-      </div>
+      </section>
 
       {/* Wine Basics Section */}
-      <div className="mt-10 w-full max-w-2xl px-4 mx-auto">
+      <section className="mt-12 w-full max-w-2xl px-4 mx-auto">
         <h2 className="text-xl font-heading font-bold text-center mb-4">Wine Pairing Basics</h2>
         <p className="text-center mb-6 italic text-lg">
           🍷✨ <strong>Not sure where to start?</strong> This beautifully simple chart highlights timeless wine pairings to help you plan ahead and sip with confidence.
@@ -599,39 +666,7 @@ export default function Home() {
           className="w-full h-auto border border-[#D8CFC4] shadow-md rounded"
           sizes="(min-width: 1024px) 768px, 100vw"
         />
-      </div>
-
-      {/* Featured Wine Section */}
-      <div className="mt-16 w-full max-w-3xl mx-auto px-4">
-        <div className="bg-white border border-[#D8CFC4] shadow-lg rounded-xl overflow-hidden">
-          <div className="relative w-full h-64 bg-cream">
-            <Image
-              src="/frontera-cabernet-merlot.png"
-              alt="Frontera Cabernet Merlot bottle"
-              fill
-              className="object-contain p-4"
-              sizes="(min-width: 768px) 768px, 100vw"
-            />
-          </div>
-          <div className="p-6 text-center">
-            <h2 className="text-2xl font-heading font-bold mb-2">Featured Wine of the Week</h2>
-            <p className="text-lg mb-4">
-              <strong>Frontera Cabernet Merlot</strong> <br />
-              Available at Sam’s Club for only{' '}
-              <span className="font-bold" style={{ color: '#7B1E3F' }}>$6.99</span>
-            </p>
-            <a
-  href="https://www.samsclub.com/ip/Concha-y-Toro-Frontera-Cabernet-Merlot-1-5-L/13809102300?classType=REGULAR&from=/search"
-  target="_blank"
-  rel="noopener noreferrer"
-  className="inline-block bg-[#C59B5F] text-white font-semibold py-2 px-6 rounded hover:brightness-95 transition"
-  data-analytics="cta_buy_frontera_samsclub"
->
-  Buy at Sam’s Club
-</a>
-          </div>
-        </div>
-      </div>
+      </section>
 
       {/* Animations */}
       <style jsx global>{`
