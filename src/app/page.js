@@ -41,6 +41,16 @@ export default function Home() {
     }
   };
 
+  // Treat "large screen" as desktop/laptop: width ≥ 1024px and a fine pointer (mouse/trackpad)
+const isLargeScreen = () => {
+  if (typeof window === 'undefined') return false;
+  return (
+    window.matchMedia('(min-width: 1024px)').matches &&
+    window.matchMedia('(pointer: fine)').matches
+  );
+};
+
+
   // Helpers to normalize input (trim, lowercase, strip accents)
   const strip = (s) => s.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
   const normalize = (s) => strip(s.trim().toLowerCase());
@@ -489,22 +499,28 @@ export default function Home() {
     setVivAutoOpened(false);
   };
 
-  // ---- Auto-open Viv when there's no match
-  const noResult = input.trim().length >= 2 && !resultText;
-  useEffect(() => {
-    if (noResult && !vivAutoOpened) {
+  // ---- Auto-open Viv when there's no match (desktop only)
+const noResult = input.trim().length >= 2 && !resultText;
+
+useEffect(() => {
+  if (noResult && !vivAutoOpened) {
+    if (isLargeScreen()) {
       setVivAutoOpened(true);
-      // Give React a beat to render the FAB, then click it
+      // Give React a tick to ensure the FAB is in the DOM, then "click" it
       setTimeout(() => {
         const btn = document.querySelector('button[title="Chat with Viv"]');
         if (btn) btn.click();
       }, 200);
-    }
-    if (!noResult && vivAutoOpened) {
-      // reset trigger for next search cycle
+    } else {
+      // On small/touch screens we show the instructions only
       setVivAutoOpened(false);
     }
-  }, [noResult, vivAutoOpened]);
+  }
+  if (!noResult && vivAutoOpened) {
+    setVivAutoOpened(false);
+  }
+}, [noResult, vivAutoOpened]);
+
 
   // JSON-LD for Featured Wine
   const jsonLd = {
