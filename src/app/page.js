@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import Script from 'next/script';
@@ -11,9 +11,10 @@ export default function Home() {
   const [resultText, setResultText] = useState('');
   const [suggestions, setSuggestions] = useState([]);
   const [didYouMean, setDidYouMean] = useState('');
+  const [vivAutoOpened, setVivAutoOpened] = useState(false);
 
   // --- Featured meta ---
-  const FEATURED_UPDATED_ISO = '2025-11-06'; // update this when you change the featured wine
+  const FEATURED_UPDATED_ISO = '2025-11-06'; // update when you change the featured wine
   const featuredUpdatedText = new Intl.DateTimeFormat(undefined, {
     year: 'numeric',
     month: 'short',
@@ -119,9 +120,9 @@ export default function Home() {
 
     // Weighted total
     return (
-      uniqueCoverage * 4 +     // cover more distinct query tokens first
-      exactOverlap * 2 +       // reward exact token matches
-      prefixOverlap * 1.5 +    // reward prefix token matches
+      uniqueCoverage * 4 +
+      exactOverlap * 2 +
+      prefixOverlap * 1.5 +
       containBonus * 1.25 +
       invDist * 1.0 +
       lenBonus * 0.25
@@ -194,6 +195,11 @@ export default function Home() {
       'eggplant parmesan': 'Montepulciano',
       'spaghetti bolognese': 'Montepulciano',
       'tuna fish': 'Albariño',
+
+      // NEW: pierogi spellings (aka perogies)
+      pierogi: 'Riesling (off-dry)',
+      pierogies: 'Riesling (off-dry)',
+      perogi: 'Riesling (off-dry)',
 
       // seafood & fish
       oysters: 'Muscadet',
@@ -426,9 +432,9 @@ export default function Home() {
     const candidates = getCandidates(mode);
 
     return candidates
-      .filter((c) => hasAnyTokenSignal(q, c))           // only items with a real signal
-      .map((c) => ({ c, s: scoreCandidate(q, c) }))     // score them
-      .sort((a, b) => b.s - a.s)                        // best first
+      .filter((c) => hasAnyTokenSignal(q, c))
+      .map((c) => ({ c, s: scoreCandidate(q, c) }))
+      .sort((a, b) => b.s - a.s)
       .slice(0, limit)
       .map(({ c }) => c);
   };
@@ -447,15 +453,12 @@ export default function Home() {
   const highlight = (s, q) => {
     const toks = tokenize(q);
     if (!toks.length) return <span>{s}</span>;
-
-    // Build regex that matches tokens as whole words OR as prefixes (last token often partial)
     const lastIdx = toks.length - 1;
     const parts = toks.map((t, i) => {
       const esc = escapeRegExp(t);
       return i === lastIdx ? `\\b${esc}\\w*` : `\\b${esc}\\b`;
     });
     const re = new RegExp(`(${parts.join('|')})`, 'gi');
-
     const split = s.split(re);
     return (
       <span>
@@ -474,6 +477,7 @@ export default function Home() {
     const s = buildSuggestions(value, type, 6);
     setDidYouMean(found ? '' : s[0] || '');
     setSuggestions([]);
+    setVivAutoOpened(false);
   };
 
   const updateLive = (value, mode) => {
@@ -482,7 +486,25 @@ export default function Home() {
     const s = buildSuggestions(value, mode, 6);
     setDidYouMean(found ? '' : s[0] || '');
     setSuggestions(s);
+    setVivAutoOpened(false);
   };
+
+  // ---- Auto-open Viv when there's no match
+  const noResult = input.trim().length >= 2 && !resultText;
+  useEffect(() => {
+    if (noResult && !vivAutoOpened) {
+      setVivAutoOpened(true);
+      // Give React a beat to render the FAB, then click it
+      setTimeout(() => {
+        const btn = document.querySelector('button[title="Chat with Viv"]');
+        if (btn) btn.click();
+      }, 200);
+    }
+    if (!noResult && vivAutoOpened) {
+      // reset trigger for next search cycle
+      setVivAutoOpened(false);
+    }
+  }, [noResult, vivAutoOpened]);
 
   // JSON-LD for Featured Wine
   const jsonLd = {
@@ -587,7 +609,7 @@ export default function Home() {
             <input
               id="query"
               type="text"
-              placeholder="e.g., salmon or Pinot Noir"
+              placeholder="e.g., pierogies or Pinot Noir"
               value={input}
               onChange={(e) => {
                 const v = e.target.value;
@@ -646,6 +668,37 @@ export default function Home() {
                   {didYouMean}
                 </button>
                 <span className="opacity-80">?</span>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* No match? → Suggest Viv */}
+        {noResult && (
+          <div className="mt-6 w-full max-w-xl bg-white border border-[#D8CFC4] rounded-xl shadow p-5 animate-fadeIn">
+            <div className="font-semibold text-[#7B1E3F]">Not finding an exact match?</div>
+            <p className="mt-1 text-sm text-gray-700">
+              Click the <strong>🍷</strong> button in the bottom-right to ask <strong>Viv, our virtual sommelier</strong>.
+              Tell Viv your dish or wine (for example, “pierogies with onions and sour cream” or
+              “a light red under $15 for tacos”) and she’ll recommend a perfect pairing.
+            </p>
+
+            {/* Show a couple of auto-suggestions if we have them */}
+            {suggestions.length > 0 && (
+              <div className="mt-3 text-sm">
+                <div className="font-medium">Suggestions you can try:</div>
+                <ul className="list-disc pl-5 mt-1 space-y-1">
+                  {suggestions.slice(0, 3).map((s) => (
+                    <li key={s}>
+                      <button
+                        className="underline hover:text-[#7B1E3F]"
+                        onClick={() => commitSelection(s)}
+                      >
+                        {s}
+                      </button>
+                    </li>
+                  ))}
+                </ul>
               </div>
             )}
           </div>
