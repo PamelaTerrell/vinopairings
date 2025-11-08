@@ -3,18 +3,23 @@
 
 import { useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 const LINKS = [
   { href: '/', label: 'Home' },
   { href: '/about', label: 'About' },
-  { href: '/history', label: 'History' },
+  // TEMP: while redirect experiment runs, send "History" clicks to /about.
+  // To restore later, change href back to '/history'.
+  { href: '/about', label: 'History' },
   { href: '/regions', label: 'Regions' },
   { href: '/tips', label: 'Tips' },
   { href: '/sunday', label: 'Sunday' },
   { href: '/contact', label: 'Contact' },
+  { href: '/celestial-sips', label: 'Celestial' },
 ];
 
 export default function NavBar() {
+  const pathname = usePathname();
   const fontFamily = '"Palatino Linotype","Book Antiqua",Palatino,serif';
   const [open, setOpen] = useState(false);
   const [visibleCount, setVisibleCount] = useState(LINKS.length);
@@ -27,6 +32,17 @@ export default function NavBar() {
 
   const visibleLinks = useMemo(() => LINKS.slice(0, visibleCount), [visibleCount]);
   const overflowLinks = useMemo(() => LINKS.slice(visibleCount), [visibleCount]);
+
+  // Active matcher: exact for '/', startsWith for section roots
+  const isActive = (href) =>
+    href === '/'
+      ? pathname === '/'
+      : pathname === href || pathname.startsWith(href + '/');
+
+  const linkClass = (href) =>
+    `transition-colors duration-300 rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-[#e2c48f] ${
+      isActive(href) ? 'text-[#2b2b2b] bg-[#f2e9dd] px-2 py-1 rounded-md' : 'hover:text-[#e2c48f]'
+    }`;
 
   useEffect(() => {
     if (!containerRef.current || !listRef.current) return;
@@ -58,8 +74,19 @@ export default function NavBar() {
       setOpen(false);
       setMoreOpen(false);
     };
+    const onKey = (e) => e.key === 'Escape' && setMoreOpen(false);
+    const onClickAway = (e) => {
+      if (!moreBtnRef.current) return;
+      if (!moreBtnRef.current.parentElement?.contains(e.target)) setMoreOpen(false);
+    };
     window.addEventListener('resize', onResize);
-    return () => window.removeEventListener('resize', onResize);
+    window.addEventListener('keydown', onKey);
+    window.addEventListener('click', onClickAway);
+    return () => {
+      window.removeEventListener('resize', onResize);
+      window.removeEventListener('keydown', onKey);
+      window.removeEventListener('click', onClickAway);
+    };
   }, []);
 
   return (
@@ -69,8 +96,9 @@ export default function NavBar() {
           ref={containerRef}
           className="flex items-center justify-between gap-3 h-16"
           style={{ fontFamily }}
+          aria-label="Primary"
         >
-          {/* Hamburger on left (mobile only) */}
+          {/* Hamburger (mobile) */}
           <button
             type="button"
             className="sm:hidden inline-flex items-center justify-center rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#e2c48f] focus:ring-offset-[#a37c58]"
@@ -78,12 +106,12 @@ export default function NavBar() {
             aria-expanded={open}
             onClick={() => setOpen((s) => !s)}
           >
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
               <path d="M3 6h18M3 12h18M3 18h18" />
             </svg>
           </button>
 
-          {/* ✅ Brand centered on small screens, left-aligned on desktop */}
+          {/* Brand */}
           <div
             data-brand
             className="text-2xl sm:text-3xl font-bold tracking-wide absolute left-1/2 -translate-x-1/2 sm:static sm:translate-x-0"
@@ -93,14 +121,15 @@ export default function NavBar() {
             </Link>
           </div>
 
-          {/* Desktop links (right) */}
+          {/* Desktop links */}
           <div className="hidden sm:block min-w-0 ml-auto">
             <ul ref={listRef} className="flex items-center gap-6 whitespace-nowrap">
               {visibleLinks.map((link) => (
                 <li key={link.href} ref={addItemRef}>
                   <Link
                     href={link.href}
-                    className="hover:text-[#e2c48f] transition-colors duration-300"
+                    className={linkClass(link.href)}
+                    aria-current={isActive(link.href) ? 'page' : undefined}
                   >
                     {link.label}
                   </Link>
@@ -112,18 +141,27 @@ export default function NavBar() {
                   <button
                     type="button"
                     onClick={() => setMoreOpen((s) => !s)}
-                    className="hover:text-[#e2c48f] transition-colors duration-300"
+                    className="hover:text-[#e2c48f] transition-colors duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#e2c48f] rounded"
+                    aria-haspopup="menu"
+                    aria-expanded={moreOpen}
+                    aria-controls="nav-more-menu"
                   >
                     More ▾
                   </button>
                   {moreOpen && (
-                    <div className="absolute right-0 mt-2 w-48 rounded-md bg-[#f9f6ef] text-[#2b2b2b] shadow-lg ring-1 ring-black/5 overflow-hidden">
+                    <div
+                      id="nav-more-menu"
+                      role="menu"
+                      className="absolute right-0 mt-2 w-52 rounded-md bg-[#f9f6ef] text-[#2b2b2b] shadow-lg ring-1 ring-black/5 overflow-hidden"
+                    >
                       {overflowLinks.map((link) => (
                         <Link
                           key={link.href}
                           href={link.href}
-                          className="block px-4 py-2 text-sm hover:bg-[#f2e9dd] hover:text-[#7a5a3f]"
+                          role="menuitem"
+                          className={`block px-4 py-2 text-sm hover:bg-[#f2e9dd] hover:text-[#7a5a3f] ${isActive(link.href) ? 'bg-[#f2e9dd] text-[#7a5a3f]' : ''}`}
                           onClick={() => setMoreOpen(false)}
+                          aria-current={isActive(link.href) ? 'page' : undefined}
                         >
                           {link.label}
                         </Link>
@@ -147,8 +185,9 @@ export default function NavBar() {
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="block py-2 hover:text-[#e2c48f] transition-colors duration-300"
+                    className={`block py-2 transition-colors duration-300 ${isActive(link.href) ? 'text-[#2b2b2b] bg-[#f2e9dd] px-2 rounded-md' : 'hover:text-[#e2c48f]'}`}
                     onClick={() => setOpen(false)}
+                    aria-current={isActive(link.href) ? 'page' : undefined}
                   >
                     {link.label}
                   </Link>
