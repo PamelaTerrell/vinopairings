@@ -580,11 +580,7 @@ export default function HomeClient() {
               Buy at Sam’s Club
             </a>
 
-            <p className="text-center mt-2">
-              <Link href="/vino-pairings" className="underline hover:text-[#7B1E3F]">
-                Explore the full vino pairings guide →
-              </Link>
-            </p>
+           
           </div>
         </div>
       </section>

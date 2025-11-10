@@ -1,4 +1,6 @@
-// src/app/components/NavBar.jsx
+// =============================================
+// File: src/app/components/NavBar.jsx
+// =============================================
 'use client';
 
 import { useEffect, useMemo, useRef, useState } from 'react';
@@ -8,13 +10,12 @@ import { usePathname } from 'next/navigation';
 const LINKS = [
   { href: '/', label: 'Home' },
   { href: '/about', label: 'About' },
-  { href: '/history', label: 'History' }, // ✅ fixed
+  { href: '/history', label: 'History' },
   { href: '/regions', label: 'Regions' },
   { href: '/tips', label: 'Tips' },
   { href: '/sunday', label: 'Sunday' },
   { href: '/celestial-sips', label: 'Celestial' },
   { href: '/contact', label: 'Contact' },
-  
 ];
 
 export default function NavBar() {
@@ -26,18 +27,29 @@ export default function NavBar() {
   const listRef = useRef(null);
   const moreBtnRef = useRef(null);
   const itemRefs = useRef([]);
-  const addItemRef = (el) => el && !itemRefs.current.includes(el) && itemRefs.current.push(el);
+  const addItemRef = (el) =>
+    el && !itemRefs.current.includes(el) && itemRefs.current.push(el);
   const [moreOpen, setMoreOpen] = useState(false);
 
-  const visibleLinks = useMemo(() => LINKS.slice(0, visibleCount), [visibleCount]);
-  const overflowLinks = useMemo(() => LINKS.slice(visibleCount), [visibleCount]);
+  const visibleLinks = useMemo(
+    () => LINKS.slice(0, visibleCount),
+    [visibleCount]
+  );
+  const overflowLinks = useMemo(
+    () => LINKS.slice(visibleCount),
+    [visibleCount]
+  );
 
   const isActive = (href) =>
-    href === '/' ? pathname === '/' : pathname === href || pathname.startsWith(href + '/');
+    href === '/'
+      ? pathname === '/'
+      : pathname === href || pathname.startsWith(href + '/');
 
   const linkClass = (href) =>
     `transition-colors duration-300 rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-[#e2c48f] ${
-      isActive(href) ? 'text-[#2b2b2b] bg-[#f2e9dd] px-2 py-1 rounded-md' : 'hover:text-[#e2c48f]'
+      isActive(href)
+        ? 'text-[#2b2b2b] bg-[#f2e9dd] px-2 py-1 rounded-md'
+        : 'hover:text-[#e2c48f]'
     }`;
 
   useEffect(() => {
@@ -45,11 +57,15 @@ export default function NavBar() {
     const ro = new ResizeObserver(() => {
       const containerWidth = containerRef.current.clientWidth;
       const brandWidth =
-        containerRef.current.querySelector('[data-brand]')?.getBoundingClientRect().width || 0;
+        containerRef.current.querySelector('[data-brand]')?.getBoundingClientRect()
+          .width || 0;
       const paddingGuard = 24;
       const budget = Math.max(containerWidth - brandWidth - paddingGuard, 0);
-      const widths = itemRefs.current.map((el) => el.getBoundingClientRect().width);
-      const moreWidth = (moreBtnRef.current?.getBoundingClientRect().width || 80) + 8;
+      const widths = itemRefs.current.map(
+        (el) => el.getBoundingClientRect().width
+      );
+      const moreWidth =
+        (moreBtnRef.current?.getBoundingClientRect().width || 80) + 8;
       let used = 0,
         count = 0;
       for (let i = 0; i < widths.length; i++) {
@@ -73,7 +89,8 @@ export default function NavBar() {
     const onKey = (e) => e.key === 'Escape' && setMoreOpen(false);
     const onClickAway = (e) => {
       if (!moreBtnRef.current) return;
-      if (!moreBtnRef.current.parentElement?.contains(e.target)) setMoreOpen(false);
+      if (!moreBtnRef.current.parentElement?.contains(e.target))
+        setMoreOpen(false);
     };
     window.addEventListener('resize', onResize);
     window.addEventListener('keydown', onKey);
@@ -102,7 +119,14 @@ export default function NavBar() {
             aria-expanded={open}
             onClick={() => setOpen((s) => !s)}
           >
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+            <svg
+              width="22"
+              height="22"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              aria-hidden="true"
+            >
               <path d="M3 6h18M3 12h18M3 18h18" />
             </svg>
           </button>
@@ -112,7 +136,10 @@ export default function NavBar() {
             data-brand
             className="text-2xl sm:text-3xl font-bold tracking-wide absolute left-1/2 -translate-x-1/2 sm:static sm:translate-x-0"
           >
-            <Link href="/" className="hover:text-[#e2c48f] transition-colors duration-300">
+            <Link
+              href="/"
+              className="hover:text-[#e2c48f] transition-colors duration-300"
+            >
               Vino Pairings
             </Link>
           </div>
@@ -155,9 +182,15 @@ export default function NavBar() {
                           key={link.href}
                           href={link.href}
                           role="menuitem"
-                          className={`block px-4 py-2 text-sm hover:bg-[#f2e9dd] hover:text-[#7a5a3f] ${isActive(link.href) ? 'bg-[#f2e9dd] text-[#7a5a3f]' : ''}`}
+                          className={`block px-4 py-2 text-sm hover:bg-[#f2e9dd] hover:text-[#7a5a3f] ${
+                            isActive(link.href)
+                              ? 'bg-[#f2e9dd] text-[#7a5a3f]'
+                              : ''
+                          }`}
                           onClick={() => setMoreOpen(false)}
-                          aria-current={isActive(link.href) ? 'page' : undefined}
+                          aria-current={
+                            isActive(link.href) ? 'page' : undefined
+                          }
                         >
                           {link.label}
                         </Link>
@@ -181,7 +214,11 @@ export default function NavBar() {
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className={`block py-2 transition-colors duration-300 ${isActive(link.href) ? 'text-[#2b2b2b] bg-[#f2e9dd] px-2 rounded-md' : 'hover:text-[#e2c48f]'}`}
+                    className={`block py-2 transition-colors duration-300 ${
+                      isActive(link.href)
+                        ? 'text-[#2b2b2b] bg-[#f2e9dd] px-2 rounded-md'
+                        : 'hover:text-[#e2c48f]'
+                    }`}
                     onClick={() => setOpen(false)}
                     aria-current={isActive(link.href) ? 'page' : undefined}
                   >
