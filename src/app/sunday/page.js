@@ -5,6 +5,7 @@ import Link from 'next/link';
 // ✅ Co-located, optimized images
 import salmonImg from './assets/salmon.png';
 import clueImg from './assets/clue.png';
+import turkeyImg from './assets/turkeysandwich.png'; // ← correct filename
 
 function CTA({ href, children }) {
   return (
@@ -37,7 +38,6 @@ function MealCard({ item }) {
           }}
         />
 
-        {/* Wine badge */}
         <span className="absolute top-3 left-3 bg-burgundy text-white text-xs font-semibold px-3 py-1 rounded-full shadow">
           {item.wine}
         </span>
@@ -75,6 +75,21 @@ export const metadata = {
 export default function SundayPage() {
   const gallery = [
     {
+      src: turkeyImg,
+      dish: 'Turkey Sandwich on the Lake (Subway)',
+      wine: 'Bogle Sauvignon Blanc',
+      date: 'Sunday, November 9, 2025',
+      notes:
+        'A relaxed Sunday cruise on a Bentley pontoon — crisp Bogle Sauvignon Blanc alongside a classic Subway turkey sandwich. Bright citrus and herb notes in the wine cut through the savory turkey, while the lake breeze does the rest.',
+      alt:
+        'Turkey sandwich from Subway with a glass of Sauvignon Blanc and a Bogle bottle on a Bentley pontoon boat at the lake.',
+      links: [
+        { label: 'Bogle Sauvignon Blanc', href: 'https://www.boglewinery.com/' },
+        { label: 'Subway Menu', href: 'https://www.subway.com/' },
+        { label: 'Bentley Pontoons', href: 'https://www.bentleypontoons.com/' }, // 🛥️ added link
+      ],
+    },
+    {
       src: clueImg,
       dish: 'CLUE: Wine Lovers Edition',
       wine: 'Cabernet Sauvignon',
@@ -84,7 +99,6 @@ export default function SundayPage() {
       alt: 'Clue Wine Lovers Edition board game beside a glass of Cabernet Sauvignon',
       source:
         'Found at World Market in Columbia, SC — an eclectic destination for gourmet finds, gifts, and wine accessories.',
-      fit: 'contain',
       links: [{ label: 'Visit World Market', href: 'https://www.worldmarket.com/' }],
     },
     {
@@ -110,13 +124,12 @@ export default function SundayPage() {
 
   return (
     <main className="min-h-screen bg-cream text-charcoal">
-      {/* HERO */}
+      {/* HERO — new photo */}
       <section className="relative w-full bg-cream flex flex-col items-center justify-center overflow-hidden">
         <div className="relative w-full flex items-center justify-center">
-          {/* ✅ Use responsive width & auto height instead of 'fill' */}
           <Image
-            src={clueImg}
-            alt="CLUE Wine Lovers Edition board game and wine"
+            src={turkeyImg}
+            alt="Bogle Sauvignon Blanc and a Subway turkey sandwich on a Bentley pontoon at the lake"
             className="w-full h-auto max-h-[64vh] object-contain"
             priority
             placeholder="blur"
@@ -128,10 +141,8 @@ export default function SundayPage() {
           />
         </div>
 
-        {/* Caption directly beneath */}
         <div className="mt-3 text-center text-xs sm:text-sm text-charcoal/90 max-w-[90%] leading-snug">
-          Limited Edition CLUE for Wine Lovers — starring Chef Chardonnay, Lady Rosé,
-          Colonel Cabernet, Lord Malbec, Mayor Merlot, and Professor Prosecco.
+          Sunday on the water — Bogle Sauvignon Blanc + a classic Subway turkey sandwich aboard a Bentley pontoon.
         </div>
       </section>
 
@@ -139,21 +150,13 @@ export default function SundayPage() {
       <section className="mx-auto max-w-5xl px-4 pt-8 pb-6 text-center">
         <h1 className="text-3xl md:text-4xl font-heading font-bold">Sunday</h1>
         <p className="mt-3 text-lg md:text-xl opacity-90">
-          This week: A mystery twist on wine pairing.
-        </p>
-
-        {/* 👇 New personal note */}
-        <p className="mt-3 italic text-charcoal/80">
-          No cooking tonight — just good company, a cozy dinner out, and a glass of red waiting for a round of CLUE: Wine Lovers Edition at home.
-        </p>
-
-        <p className="mt-3 text-base text-charcoal/80">
-          The CLUE Wine Lovers Edition — where every pour holds a clue and each
-          character brings their own flavor to the mystery.
+          This week: Lake vibes — simple food, bright wine, perfect views.
         </p>
 
         <div className="mt-5 flex items-center justify-center gap-3 flex-wrap">
-          <CTA href="https://www.worldmarket.com/">Visit World Market</CTA>
+          <CTA href="https://www.boglewinery.com/">Bogle Winery</CTA>
+          <CTA href="https://www.subway.com/">Subway</CTA>
+          <CTA href="https://www.bentleypontoons.com/">Bentley Pontoons</CTA> {/* 🛥️ added here too */}
         </div>
 
         <div className="mt-4 text-sm">
