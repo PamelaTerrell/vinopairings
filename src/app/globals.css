@@ -2,12 +2,16 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ----------------------------------------
+   Base Theme: Vino Pairings Global Styles
+---------------------------------------- */
+
 /* Apply your custom background and text colors and base font globally */
 body {
   @apply bg-cream text-charcoal font-body;
 }
 
-/* Optional: set smooth font rendering and transition */
+/* Smooth font rendering and scroll behavior */
 html {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -19,12 +23,14 @@ a {
   @apply hover:text-gold transition-colors duration-300;
 }
 
-/* Make buttons consistent */
+/* Buttons use the body font */
 button {
   @apply font-body;
 }
 
-/* --- Elegant fade and glow animations for About page --- */
+/* ----------------------------------------
+   Elegant fade & glow animations (About page)
+---------------------------------------- */
 
 /* Fade-up entrance (for portrait and headings) */
 @keyframes fadeUp {
@@ -66,7 +72,7 @@ button {
   animation: glowFade 2s ease-out 0.3s both;
 }
 
-/* Optional: continuous shimmer pulse for ambient warmth */
+/* Continuous shimmer pulse for ambient warmth */
 @keyframes shimmerPulse {
   0%, 100% {
     opacity: 0.45;
@@ -81,3 +87,123 @@ button {
 .shimmer-gold {
   animation: shimmerPulse 6s ease-in-out 2s infinite alternate;
 }
+
+/* ----------------------------------------
+   Celestial Sips: subtle twinkling starfield
+---------------------------------------- */
+
+/* Twinkling dots animation */
+@keyframes twinkle {
+  0%, 100% {
+    opacity: 0.6;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+}
+
+/* Very slow drift for depth */
+@keyframes drift {
+  from {
+    transform: translateY(0) rotate(0deg);
+  }
+  to {
+    transform: translateY(-40px) rotate(360deg);
+  }
+}
+
+/* Layered star backdrop (safe minimal version) */
+.celestial-bg {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  z-index: 0;
+}
+
+.celestial-bg::before,
+.celestial-bg::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-repeat: repeat;
+  background-size: 200px 200px;
+  background-image:
+    radial-gradient(2px 2px at 20px 20px, rgba(255,255,255,0.75) 40%, transparent 41%),
+    radial-gradient(2px 2px at 120px 140px, rgba(255,255,255,0.65) 40%, transparent 41%),
+    radial-gradient(2px 2px at 80px 60px, rgba(255,255,255,0.75) 40%, transparent 41%),
+    radial-gradient(2px 2px at 160px 30px, rgba(255,255,255,0.8) 40%, transparent 41%);
+  animation: twinkle 4.5s ease-in-out infinite alternate;
+}
+
+.celestial-bg::after {
+  background-size: 220px 220px;
+  background-image:
+    radial-gradient(1.5px 1.5px at 40px 60px, rgba(255,255,255,0.9) 45%, transparent 46%),
+    radial-gradient(1.5px 1.5px at 180px 100px, rgba(255,255,255,0.8) 45%, transparent 46%),
+    radial-gradient(1.5px 1.5px at 110px 20px, rgba(255,255,255,0.85) 45%, transparent 46%),
+    radial-gradient(1.5px 1.5px at 20px 180px, rgba(255,255,255,0.8) 45%, transparent 46%);
+  opacity: 0.75;
+  animation: twinkle 6.2s ease-in-out infinite alternate, drift 120s linear infinite;
+}
+
+/* Optional: shooting stars (safe) */
+@keyframes shoot {
+  0% {
+    transform: translate3d(0, 0, 0) rotate(45deg);
+    opacity: 0;
+  }
+  8% {
+    opacity: 1;
+  }
+  100% {
+    transform: translate3d(600px, -600px, 0) rotate(45deg);
+    opacity: 0;
+  }
+}
+
+.shooting-star {
+  position: absolute;
+  width: 140px;
+  height: 2px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, rgba(255,255,255,0.95), rgba(255,255,255,0));
+  filter: drop-shadow(0 0 6px rgba(255,255,255,0.9));
+  transform: rotate(45deg);
+  animation: shoot 4s linear infinite;
+  opacity: 0;
+}
+
+.shooting-star::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: -1px;
+  width: 4px;
+  height: 4px;
+  border-radius: 999px;
+  background: white;
+  filter: drop-shadow(0 0 6px rgba(255,255,255,0.9));
+}
+
+/* ----------------------------------------
+   Floating "Back to Gallery" visibility
+---------------------------------------- */
+body[data-celestial-in-essay=1] #backToGallery {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Subtle midnight tint so stars show on parchment */
+.celestial-sky {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(1200px 600px at 50% -20%, rgba(21,20,35,0.35), rgba(21,20,35,0) 60%),
+    linear-gradient(180deg, rgba(21,20,35,0.18), rgba(21,20,35,0));
+  z-index: 0; /* sits under the stars */
+}
+
+/* Raise stars ABOVE the tint */
+.celestial-bg { z-index: 1; }  /* <- add or override this line */
