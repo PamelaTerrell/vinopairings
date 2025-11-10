@@ -177,30 +177,8 @@ export default function AboutPage() {
         </section>
       </main>
 
-      {/* GA4: track redirected visits from /history -> /about (server component safe) */}
-      <script
-        dangerouslySetInnerHTML={{
-          __html: `
-            (function(){
-              try {
-                var hasGtag = typeof window !== 'undefined' && typeof window.gtag === 'function';
-                if (!hasGtag) return;
-                var ref = document.referrer || '';
-                if (!ref) return;
-                var url;
-                try { url = new URL(ref); } catch(e) { return; }
-                if (url.pathname === '/history') {
-                  window.gtag('event', 'redirected_from_history', {
-                    page_location: window.location.href,
-                    page_title: document.title || 'About Page',
-                    referrer_path: url.pathname
-                  });
-                }
-              } catch(e) {}
-            })();
-          `,
-        }}
-      />
+   
+    
     </div>
   );
 }

@@ -8,14 +8,13 @@ import { usePathname } from 'next/navigation';
 const LINKS = [
   { href: '/', label: 'Home' },
   { href: '/about', label: 'About' },
-  // TEMP: while redirect experiment runs, send "History" clicks to /about.
-  // To restore later, change href back to '/history'.
-  { href: '/about', label: 'History' },
+  { href: '/history', label: 'History' }, // ✅ fixed
   { href: '/regions', label: 'Regions' },
   { href: '/tips', label: 'Tips' },
   { href: '/sunday', label: 'Sunday' },
-  { href: '/contact', label: 'Contact' },
   { href: '/celestial-sips', label: 'Celestial' },
+  { href: '/contact', label: 'Contact' },
+  
 ];
 
 export default function NavBar() {
@@ -33,11 +32,8 @@ export default function NavBar() {
   const visibleLinks = useMemo(() => LINKS.slice(0, visibleCount), [visibleCount]);
   const overflowLinks = useMemo(() => LINKS.slice(visibleCount), [visibleCount]);
 
-  // Active matcher: exact for '/', startsWith for section roots
   const isActive = (href) =>
-    href === '/'
-      ? pathname === '/'
-      : pathname === href || pathname.startsWith(href + '/');
+    href === '/' ? pathname === '/' : pathname === href || pathname.startsWith(href + '/');
 
   const linkClass = (href) =>
     `transition-colors duration-300 rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-[#e2c48f] ${

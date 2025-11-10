@@ -207,3 +207,105 @@ body[data-celestial-in-essay=1] #backToGallery {
 
 /* Raise stars ABOVE the tint */
 .celestial-bg { z-index: 1; }  /* <- add or override this line */
+
+/* --- Celestial Nebula Layer --- */
+@keyframes nebulaMove {
+  from { background-position: 0 0, 100% 100%; }
+  to   { background-position: 100% 0, 0 100%; }
+}
+
+.celestial-nebula {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(900px 700px at 30% 30%, rgba(255,215,180,0.25), transparent 70%),
+    radial-gradient(900px 700px at 70% 70%, rgba(110,42,42,0.25), transparent 70%);
+  background-repeat: no-repeat;
+  animation: nebulaMove 60s ease-in-out infinite alternate;
+  filter: blur(60px) brightness(1.1);
+  z-index: 0;
+}
+
+/* Headline shimmer */
+@keyframes shimmerText {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.shimmer-text {
+  background: linear-gradient(90deg,
+    #a37c58 0%,
+    #f5e0b5 40%,
+    #a37c58 80%);
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shimmerText 6s linear infinite;
+}
+
+/* --- Enhanced shimmer & glow for Celestial Sips title --- */
+.shimmer-text {
+  position: relative;
+  display: inline-block;
+  background: linear-gradient(90deg, 
+    #8a694c 0%, 
+    #e6c391 35%, 
+    #fff1c4 50%, 
+    #e6c391 65%, 
+    #8a694c 100%);
+  background-size: 300% 100%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shimmerText 6s linear infinite;
+  text-shadow: 0 2px 6px rgba(163, 124, 88, 0.35),
+               0 4px 12px rgba(163, 124, 88, 0.25),
+               0 0 20px rgba(255, 240, 200, 0.3);
+}
+
+@keyframes shimmerText {
+  0% { background-position: 0% 0; }
+  100% { background-position: 200% 0; }
+}
+
+/* Optional: glowing halo behind text */
+.shimmer-text::after {
+  content: '';
+  position: absolute;
+  inset: -10px;
+  background: radial-gradient(circle, rgba(255,245,215,0.25), transparent 70%);
+  filter: blur(12px);
+  z-index: -1;
+}
+
+/* --- Celestial Sips: Autumn section warm vibe --- */
+.autumn-vibe {
+  position: relative;
+  background: linear-gradient(180deg, #fdf7ef 0%, #f9ede0 35%, #f5dac0 100%);
+  border-color: #e1c9b3 !important;
+  box-shadow: 0 0 20px rgba(163, 124, 88, 0.15);
+  overflow: hidden;
+}
+
+.autumn-vibe::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+      900px 500px at 80% 20%,
+      rgba(255, 215, 160, 0.25),
+      transparent 70%
+    ),
+    radial-gradient(700px 400px at 10% 110%, rgba(150, 80, 30, 0.15), transparent 70%);
+  mix-blend-mode: soft-light;
+  animation: autumnDrift 40s linear infinite alternate;
+  z-index: 0;
+}
+
+@keyframes autumnDrift {
+  from {
+    background-position: 0 0, 100% 100%;
+  }
+  to {
+    background-position: 100% 0, 0 100%;
+  }
+}

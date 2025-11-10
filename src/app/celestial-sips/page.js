@@ -89,18 +89,17 @@ export default function CelestialSipsPage() {
     <div className="min-h-screen" style={{ backgroundColor: brand.cream, color: brand.cocoa }}>
       <main id="top" className="mx-auto w-full max-w-6xl px-6 py-12 md:py-16">
 
-        {/* HERO — starfield + shooting stars (with sky tint) */}
+        {/* HERO — starfield + nebula + shooting stars */}
         <section
           className="relative overflow-hidden rounded-2xl border shadow-md text-center"
           style={{ backgroundColor: brand.parchment, borderColor: brand.line }}
         >
-          {/* Night-sky tint (makes stars visible on parchment) */}
+          {/* Layers: sky tint → nebula → stars */}
           <div className="celestial-sky" aria-hidden="true" />
-
-          {/* Animated starfield */}
+          <div className="celestial-nebula" aria-hidden="true" />
           <div className="celestial-bg" aria-hidden="true" />
 
-          {/* Shooting stars (no CSS vars) */}
+          {/* Shooting stars */}
           <div aria-hidden="true" className="pointer-events-none absolute inset-0 z-10">
             <div className="shooting-star" style={{ top: '72%', left: '8%',  animationDelay: '1.3s',  animationDuration: '3.6s' }} />
             <div className="shooting-star" style={{ top: '38%', left: '15%', animationDelay: '4.8s',  animationDuration: '3.2s' }} />
@@ -115,47 +114,39 @@ export default function CelestialSipsPage() {
             style={{ background: 'linear-gradient(180deg, rgba(21,20,35,0.45), rgba(21,20,35,0))' }}
           />
 
-          {/* Hero text */}
-          <div className="relative p-8 md:p-14 z-20">
-            {/* Glassy, glowing panel behind the title */}
-            <div
-              className="inline-block rounded-2xl px-4 py-2 md:px-6 md:py-3"
-              style={{
-                margin: '0 auto',
-                background: 'rgba(21,20,35,0.35)',
-                border: `1px solid ${brand.line}`,
-                boxShadow: '0 10px 25px rgba(21,20,35,0.25), inset 0 0 0 1px rgba(255,255,255,0.06)',
-                backdropFilter: 'blur(6px)',
-                WebkitBackdropFilter: 'blur(6px)',
-              }}
-            >
-              <h1 className="text-4xl md:text-5xl font-serif font-bold tracking-wide">
-                <span
-                  style={{
-                    background: 'linear-gradient(90deg, #a37c58 0%, #d8b07a 45%, #a37c58 100%)',
-                    WebkitBackgroundClip: 'text',
-                    WebkitTextFillColor: 'transparent',
-                    textShadow: '0 0 10px rgba(163,124,88,0.45)',
-                  }}
-                >
-                  Celestial&nbsp;Sips
-                </span>
-              </h1>
-            </div>
+         {/* Hero text */}
+<div className="relative p-8 md:p-14 z-20">
+  <div
+    className="absolute inset-0 z-0 rounded-2xl"
+    style={{
+      background:
+        'linear-gradient(180deg, rgba(75,63,47,0.15) 0%, rgba(249,246,239,0.9) 70%)',
+      backdropFilter: 'blur(4px)',
+    }}
+  />
+  <h1 className="relative text-4xl md:text-5xl font-serif font-bold tracking-wide shimmer-text z-10">
+    Celestial&nbsp;Sips
+  </h1>
+  <p className="relative mx-auto mt-4 max-w-3xl text-lg text-[#5c4a33] leading-relaxed z-10">
+    Inspired by the night sky — this collection blends the poetry of the stars
+    with the sensory world of food and wine. Each glass becomes a reflection
+    of rhythm, balance, and connection.
+  </p>
+</div>
 
-            <p className="mx-auto mt-4 max-w-3xl text-lg text-[#7a6b57] leading-relaxed">
-              Inspired by the night sky — this collection blends the poetry of the stars
-              with the sensory world of food and wine. Each glass becomes a reflection
-              of rhythm, balance, and connection.
-            </p>
-          </div>
         </section>
 
         {/* CURRENT SKY */}
         <section
-          className="mt-14 rounded-2xl border p-8 shadow-sm relative overflow-hidden"
-          style={{ backgroundColor: '#fff', borderColor: brand.line }}
-        >
+  className={`mt-14 rounded-2xl border p-8 shadow-sm relative overflow-hidden ${
+    season === 'Autumn' ? 'autumn-vibe' : ''
+  }`}
+  style={{
+    backgroundColor: season === 'Autumn' ? 'transparent' : '#fff',
+    borderColor: brand.line,
+  }}
+>
+
           <div
             aria-hidden="true"
             className="pointer-events-none absolute inset-0 -z-10"
