@@ -6,6 +6,7 @@ import Link from 'next/link';
 import salmonImg from './assets/salmon.png';
 import clueImg from './assets/clue.png';
 import turkeyImg from './assets/turkeysandwich.png'; // ← correct filename
+import whiteshellsImg from './assets/whiteshells.png'; // ← NEW
 
 function CTA({ href, children }) {
   return (
@@ -32,7 +33,7 @@ function MealCard({ item }) {
           placeholder="blur"
           priority
           sizes="(min-width:1536px) 22vw, (min-width:1280px) 28vw, (min-width:1024px) 31vw, (min-width:640px) 45vw, 100vw"
-          className="object-cover object-center w-full h-full transition-transform duration-300 group-hover:scale-[1.02]"
+          className="object-contain object-center w-full h-full transition-transform duration-300 group-hover:scale-[1.02]"
           style={{
             filter: 'saturate(1.1) contrast(1.06) brightness(1.02)',
           }}
@@ -49,9 +50,13 @@ function MealCard({ item }) {
           {item.dish}
         </h3>
         {item.date && <p className="text-xs opacity-70 mt-0.5">{item.date}</p>}
-        {item.notes && <p className="text-sm mt-2 text-charcoal/90">{item.notes}</p>}
+        {item.notes && (
+          <p className="text-sm mt-2 text-charcoal/90">{item.notes}</p>
+        )}
         {item.source && (
-          <p className="mt-2 text-sm italic text-charcoal/70">{item.source}</p>
+          <p className="mt-2 text-sm italic text-charcoal/70">
+            {item.source}
+          </p>
         )}
         {item.links?.length > 0 && (
           <div className="mt-3 flex flex-wrap gap-2">
@@ -86,7 +91,22 @@ export default function SundayPage() {
       links: [
         { label: 'Bogle Sauvignon Blanc', href: 'https://www.boglewinery.com/' },
         { label: 'Subway Menu', href: 'https://www.subway.com/' },
-        { label: 'Bentley Pontoons', href: 'https://www.bentleypontoons.com/' }, // 🛥️ added link
+        { label: 'Bentley Pontoons', href: 'https://www.bentleypontoons.com/' },
+      ],
+    },
+    {
+      src: whiteshellsImg,
+      dish: 'White Cheddar Shells with Zucchini & Bacon-Wrapped Filet',
+      wine: 'Frontera Cabernet Sauvignon–Merlot',
+      date: 'This Sunday',
+      notes:
+        'A cozy triple-market dinner: creamy white cheddar shells from Aldi, pan-seared zucchini, and a bacon-wrapped chuck tender filet from Lidl. Paired with Frontera Cabernet Sauvignon–Merlot from Sam’s Club — a smooth, fruit-forward blend with enough structure to stand up to the richness of the bacon and steak.',
+      alt:
+        'Creamy white cheddar pasta shells with pan-seared zucchini and a bacon-wrapped chuck tender filet, paired with a glass of Frontera Cabernet Sauvignon Merlot.',
+      links: [
+        { label: 'Aldi', href: 'https://www.aldi.us/' },
+        { label: 'Lidl', href: 'https://www.lidl.com/' },
+        { label: 'Frontera Wines at Sam’s Club', href: 'https://www.samsclub.com/' },
       ],
     },
     {
@@ -95,7 +115,7 @@ export default function SundayPage() {
       wine: 'Cabernet Sauvignon',
       date: 'This Sunday',
       notes:
-        'Tonight we’re pairing a game instead of a meal — the limited edition “CLUE: Wine Lovers Edition,” matched with a smooth Cabernet Sauvignon. This playful take on the classic mystery features delightful characters like Chef Chardonnay, Lady Rosé, Colonel Cabernet, Lord Malbec, Mayor Merlot, and Professor Prosecco — each bringing their own vintage flair to the board. Pour a glass and let the fun unfold.',
+        'Tonight we’re pairing a game instead of a meal — the limited edition “CLUE: Wine Lovers Edition,” matched with a smooth Cabernet Sauvignon. This playful take on the classic mystery features delightful characters like Chef Chardonnay, Lady Rosé, Colonel Cabernet, Lord Malbec, Mayor Merlot, and Professor Prosecco — each bringing their own vintage flair to the board.',
       alt: 'Clue Wine Lovers Edition board game beside a glass of Cabernet Sauvignon',
       source:
         'Found at World Market in Columbia, SC — an eclectic destination for gourmet finds, gifts, and wine accessories.',
@@ -108,13 +128,14 @@ export default function SundayPage() {
       date: 'Last Sunday',
       notes:
         'Griddle-seared salmon with tender asparagus and a rice–quinoa blend. The pairing — a juicy, bright GEN5 Pinot Noir from Costco — balances beautifully with the buttery grains and crisp vegetables. Serve the wine slightly chilled (55–58°F) for an extra layer of freshness.',
-      alt: 'Griddle cooked salmon with asparagus and a rice and quinoa blend plated for dinner',
+      alt:
+        'Griddle cooked salmon with asparagus and a rice and quinoa blend plated for dinner',
       source: 'Ingredients and wine sourced from Costco.',
       links: [
         { label: 'Join Costco', href: 'https://www.costco.com/join-costco.html' },
         { label: 'Shop GEN5 Wines', href: 'https://www.costco.com/wine.html' },
         {
-          label: 'Blackstone 36" Griddle',
+          label: 'Blackstone 36\" Griddle',
           href:
             'https://www.costco.com/blackstone-36-in.-griddle-with-hinged-hood%2C-front-shelf-and-soft-cover.product.1713585.html',
         },
@@ -124,7 +145,7 @@ export default function SundayPage() {
 
   return (
     <main className="min-h-screen bg-cream text-charcoal">
-      {/* HERO — new photo */}
+      {/* HERO */}
       <section className="relative w-full bg-cream flex flex-col items-center justify-center overflow-hidden">
         <div className="relative w-full flex items-center justify-center">
           <Image
@@ -156,7 +177,7 @@ export default function SundayPage() {
         <div className="mt-5 flex items-center justify-center gap-3 flex-wrap">
           <CTA href="https://www.boglewinery.com/">Bogle Winery</CTA>
           <CTA href="https://www.subway.com/">Subway</CTA>
-          <CTA href="https://www.bentleypontoons.com/">Bentley Pontoons</CTA> {/* 🛥️ added here too */}
+          <CTA href="https://www.bentleypontoons.com/">Bentley Pontoons</CTA>
         </div>
 
         <div className="mt-4 text-sm">
