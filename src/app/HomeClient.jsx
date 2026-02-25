@@ -534,56 +534,60 @@ export default function HomeClient() {
       <h1 className="sr-only">Vino Pairings: Find the Perfect Wine for Any Dish</h1>
 
       {/* JSON-LD for Featured Wine */}
-      <Script
-        id="featured-wine-jsonld"
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
+      {/*
+<Script
+  id="featured-wine-jsonld"
+  type="application/ld+json"
+  dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+/>
+*/}
 
       {/* Featured Wine — TOP */}
-      <section className="w-full max-w-3xl mx-auto px-4 pt-6">
-        <div className="bg-white border border-[#D8CFC4] shadow-lg rounded-xl overflow-hidden">
-          <div className="bg-gradient-to-r from-[#f7efe4] to-[#fdf7ef] px-6 py-4 text-center">
-            <p className="text-sm tracking-wide uppercase font-semibold text-[#7B1E3F]">
-              Featured Wine of the Week
-            </p>
-            <h2 className="text-2xl md:text-3xl font-heading font-extrabold mt-1">
-              Frontera Cabernet Merlot
-            </h2>
-            <p className="mt-1 text-xs text-gray-500">Last updated {featuredUpdatedText}</p>
-          </div>
+      {/* Featured Wine — TOP (TEMP DISABLED) */}
+{/*
+<section className="w-full max-w-3xl mx-auto px-4 pt-6">
+  <div className="bg-white border border-[#D8CFC4] shadow-lg rounded-xl overflow-hidden">
+    <div className="bg-gradient-to-r from-[#f7efe4] to-[#fdf7ef] px-6 py-4 text-center">
+      <p className="text-sm tracking-wide uppercase font-semibold text-[#7B1E3F]">
+        Featured Wine of the Week
+      </p>
+      <h2 className="text-2xl md:text-3xl font-heading font-extrabold mt-1">
+        Frontera Cabernet Merlot
+      </h2>
+      <p className="mt-1 text-xs text-gray-500">Last updated {featuredUpdatedText}</p>
+    </div>
 
-          <div className="relative w-full h-60 sm:h-72 md:h-80 bg-cream">
-            <Image
-              src="/frontera-cabernet-merlot.png"
-              alt="Frontera Cabernet Merlot bottle"
-              fill
-              className="object-contain p-4"
-              sizes="(min-width: 768px) 768px, 100vw"
-              priority
-            />
-          </div>
+    <div className="relative w-full h-60 sm:h-72 md:h-80 bg-cream">
+      <Image
+        src="/frontera-cabernet-merlot.png"
+        alt="Frontera Cabernet Merlot bottle"
+        fill
+        className="object-contain p-4"
+        sizes="(min-width: 768px) 768px, 100vw"
+        priority
+      />
+    </div>
 
-          <div className="p-6 text-center">
-            <p className="text-lg mb-4">
-              Available at Sam’s Club for{' '}
-              <span className="font-bold" style={{ color: '#7B1E3F' }}>$6.99</span>
-            </p>
-            <a
-              href="https://www.samsclub.com/ip/Concha-y-Toro-Frontera-Cabernet-Merlot-1-5-L/13809102300?classType=REGULAR&from=/search"
-              target="_blank"
-              rel="sponsored nofollow noopener"
-              onClick={trackFeaturedCTA}
-              className="inline-block bg-[#C59B5F] text-white font-semibold py-2 px-6 rounded hover:brightness-95 transition"
-              data-analytics="cta_buy_frontera_samsclub"
-            >
-              Buy at Sam’s Club
-            </a>
-
-           
-          </div>
-        </div>
-      </section>
+    <div className="p-6 text-center">
+      <p className="text-lg mb-4">
+        Available at Sam’s Club for{' '}
+        <span className="font-bold" style={{ color: '#7B1E3F' }}>$6.99</span>
+      </p>
+      <a
+        href="https://www.samsclub.com/ip/Concha-y-Toro-Frontera-Cabernet-Merlot-1-5-L/13809102300?classType=REGULAR&from=/search"
+        target="_blank"
+        rel="sponsored nofollow noopener"
+        onClick={trackFeaturedCTA}
+        className="inline-block bg-[#C59B5F] text-white font-semibold py-2 px-6 rounded hover:brightness-95 transition"
+        data-analytics="cta_buy_frontera_samsclub"
+      >
+        Buy at Sam’s Club
+      </a>
+    </div>
+  </div>
+</section>
+*/}
+              
 
       {/* Pairing Finder */}
       <section className="max-w-3xl mx-auto p-6 mt-10 flex flex-col items-center">
