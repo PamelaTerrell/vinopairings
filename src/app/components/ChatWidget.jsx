@@ -7,6 +7,8 @@ import { useEffect, useRef, useState } from 'react';
  * - Ultra-high z-index; collapse/minimize support
  * - Safe keyboard shortcuts (Alt+M) and ignores keystrokes while typing
  * - Listens for a custom window event: window.dispatchEvent(new CustomEvent('viv-open'))
+ * - Conversational memory (last N messages) + localStorage persistence
+ * - FIX: robust scrolling + flex layout so input never disappears
  */
 
 const SOMM_SYSTEM = [
@@ -17,6 +19,9 @@ const SOMM_SYSTEM = [
   'If asked about non-wine topics, reply briefly and gracefully steer back to wine.',
   'Avoid exaggerated gendered stereotypes; remain professional and welcoming.'
 ].join(' ');
+
+const HISTORY_KEY = 'vp_viv_history_v1';
+const MAX_HISTORY_MSGS = 6; // last 6 messages total (user+assistant entries)
 
 export default function ChatWidget({
   title = 'Viv, Your Virtual Sommelier',
@@ -30,6 +35,9 @@ export default function ChatWidget({
   const [streamText, setStreamText] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [errorText, setErrorText] = useState('');
+
+  // Conversational memory
+  const [history, setHistory] = useState([]);
 
   const abortRef = useRef(null);
   const panelRef = useRef(null);
@@ -58,20 +66,27 @@ export default function ChatWidget({
     } catch {}
   }, [collapsed]);
 
-  // Auto-scroll when not collapsed
+  // Restore/save history
   useEffect(() => {
-    if (!collapsed && panelRef.current) {
-      panelRef.current.scrollTop = panelRef.current.scrollHeight;
-    }
-  }, [streamText, isLoading, open, collapsed]);
+    try {
+      const saved = localStorage.getItem(HISTORY_KEY);
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed)) setHistory(parsed);
+      }
+    } catch {}
+  }, []);
+  useEffect(() => {
+    try {
+      localStorage.setItem(HISTORY_KEY, JSON.stringify(history));
+    } catch {}
+  }, [history]);
 
   // Helper: ignore shortcuts when user is typing
   const isEditableTarget = (el) => {
     if (!el) return false;
     const tag = el.tagName?.toLowerCase();
     if (tag === 'input' || tag === 'textarea' || tag === 'select') return true;
-    // contentEditable
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     if (el.isContentEditable) return true;
     return false;
   };
@@ -80,9 +95,8 @@ export default function ChatWidget({
   useEffect(() => {
     const onKey = (e) => {
       if (!open) return;
-      if (isEditableTarget(e.target)) return; // don’t interfere while typing
+      if (isEditableTarget(e.target)) return;
 
-      // Use Alt+M instead of plain "m" to avoid collisions with normal typing
       if ((e.key === 'm' || e.key === 'M') && (e.altKey || e.metaKey)) {
         e.preventDefault();
         setCollapsed((c) => !c);
@@ -100,10 +114,25 @@ export default function ChatWidget({
 
   // Listen for a page-level event to open the widget without toggling
   useEffect(() => {
-    const onOpen = () => setOpen(true); // idempotent
+    const onOpen = () => setOpen(true);
     window.addEventListener('viv-open', onOpen);
     return () => window.removeEventListener('viv-open', onOpen);
   }, []);
+
+  const trimHistory = (arr) => arr.slice(-MAX_HISTORY_MSGS);
+
+  // FIX: robust auto-scroll AFTER DOM paints, so the input never "falls below" visible area
+  useEffect(() => {
+    if (!open || collapsed) return;
+    const el = panelRef.current;
+    if (!el) return;
+
+    const raf = requestAnimationFrame(() => {
+      el.scrollTop = el.scrollHeight;
+    });
+
+    return () => cancelAnimationFrame(raf);
+  }, [streamText, isLoading, open, collapsed]);
 
   async function send(q) {
     if (!q || q.trim().length < 2 || isLoading) return;
@@ -111,39 +140,49 @@ export default function ChatWidget({
     setIsLoading(true);
     setStreamText('');
     setErrorText('');
-    track('ai_widget_send', { q_preview: q.slice(0, 80) });
+
+    const cleanQ = q.trim();
+
+    // history we send this turn (include user msg)
+    const nextHistory = trimHistory([...history, { role: 'user', content: cleanQ }]);
+    setHistory(nextHistory);
+
+    track('ai_widget_send', { q_preview: cleanQ.slice(0, 80) });
 
     let gotAnyText = false;
+    let full = '';
 
     try {
       if (abortRef.current) abortRef.current.abort();
       const ac = new AbortController();
       abortRef.current = ac;
 
-      // 1) Streaming
       const res = await fetch('/api/ai/stream', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         signal: ac.signal,
         body: JSON.stringify({
-          query: q,
+          query: cleanQ,
+          history: nextHistory,
           system: system ?? SOMM_SYSTEM,
           temperature: 0.7,
         }),
       });
 
       if (!res.ok || !res.body) {
-        throw new Error((await res.text()) || 'Streaming request failed');
+        const txt = await res.text().catch(() => '');
+        throw new Error(txt || 'Streaming request failed');
       }
 
       const reader = res.body.getReader();
       const decoder = new TextDecoder('utf-8');
 
+      // Allow cold starts / first-token delay
       const timeout = setTimeout(() => {
         if (!gotAnyText) {
           try { ac.abort(); } catch {}
         }
-      }, 3000);
+      }, 12000);
 
       let buffer = '';
       while (true) {
@@ -153,12 +192,14 @@ export default function ChatWidget({
         const chunk = decoder.decode(value, { stream: true });
         buffer += chunk;
 
+        buffer = buffer.replace(/\r\n/g, '\n');
         const events = buffer.split('\n\n');
         buffer = events.pop() || '';
 
         for (const evt of events) {
           let eventName = 'message';
           let dataStr = '';
+
           for (const line of evt.split('\n')) {
             const i = line.indexOf(':');
             if (i === -1) continue;
@@ -172,7 +213,13 @@ export default function ChatWidget({
           if (eventName === 'error') {
             try {
               const parsed = JSON.parse(dataStr);
-              throw new Error(parsed?.error || 'Streaming error');
+              const msg = parsed?.error?.message || parsed?.error || 'Streaming error';
+              const code = parsed?.error?.code || parsed?.code;
+              const nice =
+                code === 'insufficient_quota'
+                  ? 'Viv is taking a short break 🍷 — AI credits are exhausted. Please try again later.'
+                  : msg;
+              throw new Error(nice);
             } catch {
               throw new Error('Streaming error');
             }
@@ -183,18 +230,22 @@ export default function ChatWidget({
 
             if (eventName.includes('output_text.delta') && typeof parsed?.delta === 'string') {
               gotAnyText = true;
-              setStreamText((t) => t + parsed.delta);
+              full += parsed.delta;
+              setStreamText(full);
               continue;
             }
+
             if (eventName.includes('message.delta') && parsed?.delta?.content?.length) {
               for (const c of parsed.delta.content) {
                 if (c?.type === 'output_text' && typeof c?.text === 'string') {
                   gotAnyText = true;
-                  setStreamText((t) => t + c.text);
+                  full += c.text;
+                  setStreamText(full);
                 }
               }
               continue;
             }
+
             if (eventName.includes('response.completed')) {
               const finalText =
                 parsed?.output_text ||
@@ -202,7 +253,8 @@ export default function ChatWidget({
                 '';
               if (finalText) {
                 gotAnyText = true;
-                setStreamText((t) => t + finalText);
+                full += finalText;
+                setStreamText(full);
               }
               continue;
             }
@@ -214,29 +266,39 @@ export default function ChatWidget({
 
       clearTimeout(timeout);
 
-      if (!gotAnyText && !streamText) {
-        throw new Error('No stream chunks parsed');
-      }
+      if (!gotAnyText) throw new Error('No stream chunks parsed');
 
+      setHistory((h) => trimHistory([...h, { role: 'assistant', content: full || '...' }]));
       track('ai_widget_done');
     } catch (err) {
-      // 2) Fallback (non-stream)
+      // Fallback (non-stream)
       try {
         const res = await fetch('/api/ai', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            query: q,
+            query: cleanQ,
+            history: nextHistory,
             system: system ?? SOMM_SYSTEM,
             temperature: 0.7,
           }),
         });
-        const json = await res.json();
-        if (!res.ok) throw new Error(json?.error || 'Non-streaming request failed');
-        setStreamText(json?.answer || 'Sorry, I could not generate a reply.');
+
+        const json = await res.json().catch(() => ({}));
+        if (!res.ok) {
+          const code = json?.error?.code || json?.code;
+          if (code === 'insufficient_quota' || String(json?.error || '').includes('insufficient_quota')) {
+            throw new Error('Viv is taking a short break 🍷 — AI credits are exhausted. Please try again later.');
+          }
+          throw new Error(json?.error?.message || json?.error || 'Non-streaming request failed');
+        }
+
+        const answer = json?.answer || 'Sorry, I could not generate a reply.';
+        setStreamText(answer);
+        setHistory((h) => trimHistory([...h, { role: 'assistant', content: answer }]));
         track('ai_widget_done_fallback');
       } catch (fallbackErr) {
-        setErrorText(fallbackErr.message || 'Something went wrong.');
+        setErrorText(fallbackErr?.message || 'Something went wrong.');
         track('ai_widget_error', { message: String(fallbackErr?.message || fallbackErr) });
       }
     } finally {
@@ -305,8 +367,10 @@ export default function ChatWidget({
             border: '1px solid #D8CFC4',
             borderRadius: 16,
             boxShadow: '0 20px 40px rgba(0,0,0,.25)',
-            transition: 'max-height 180ms ease',
-            maxHeight: collapsed ? 64 : '50vh',
+            transition: 'height 180ms ease',
+            height: collapsed ? 64 : '50vh', // FIX: use flex layout height instead of maxHeight math
+            display: 'flex',
+            flexDirection: 'column',
           }}
         >
           {/* Header */}
@@ -323,6 +387,7 @@ export default function ChatWidget({
               alignItems: 'center',
               gap: 8,
               userSelect: 'none',
+              flex: '0 0 auto',
             }}
           >
             <button
@@ -377,16 +442,17 @@ export default function ChatWidget({
           {/* Collapsible Content */}
           {!collapsed && (
             <>
+              {/* Messages */}
               <div
                 ref={panelRef}
                 style={{
-                  padding: 12,
+                  padding: '12px 12px 18px', // FIX: extra bottom padding keeps last line visible
                   fontSize: 14,
                   color: '#374151',
                   whiteSpace: 'pre-wrap',
                   lineHeight: 1.6,
-                  maxHeight: 'calc(50vh - 64px)',
                   overflow: 'auto',
+                  flex: 1, // FIX: flex makes messages the scroll region
                 }}
               >
                 {!streamText && !isLoading && !errorText && (
@@ -400,6 +466,7 @@ export default function ChatWidget({
                 {!!errorText && <div style={{ color: '#b91c1c' }}>{errorText}</div>}
               </div>
 
+              {/* Input */}
               <form
                 onSubmit={(e) => {
                   e.preventDefault();
@@ -409,7 +476,14 @@ export default function ChatWidget({
                     setInput('');
                   }
                 }}
-                style={{ display: 'flex', gap: 8, padding: 12, borderTop: '1px solid #E8DFD3' }}
+                style={{
+                  display: 'flex',
+                  gap: 8,
+                  padding: 12,
+                  borderTop: '1px solid #E8DFD3',
+                  flex: '0 0 auto',
+                  background: '#fff',
+                }}
               >
                 <input
                   value={input}
@@ -439,7 +513,16 @@ export default function ChatWidget({
                 </button>
               </form>
 
-              <div style={{ padding: '6px 12px', fontSize: 11, color: '#6b7280', textAlign: 'center' }}>
+              <div
+                style={{
+                  padding: '6px 12px',
+                  fontSize: 11,
+                  color: '#6b7280',
+                  textAlign: 'center',
+                  flex: '0 0 auto',
+                  background: '#fff',
+                }}
+              >
                 AI suggestions may be imperfect. Verify availability/prices locally.
               </div>
             </>
