@@ -9,6 +9,7 @@ import { useEffect, useRef, useState } from 'react';
  * - Listens for a custom window event: window.dispatchEvent(new CustomEvent('viv-open'))
  * - Conversational memory (last N messages) + localStorage persistence
  * - FIX: robust scrolling + flex layout so input never disappears
+ * - NEW: 500-char usage guard + Viv-styled message (client-side)
  */
 
 const SOMM_SYSTEM = [
@@ -22,6 +23,10 @@ const SOMM_SYSTEM = [
 
 const HISTORY_KEY = 'vp_viv_history_v1';
 const MAX_HISTORY_MSGS = 6; // last 6 messages total (user+assistant entries)
+
+const MAX_QUERY_CHARS = 500;
+const LONG_MSG =
+  'That’s quite a long note 🍷 — could you shorten your question a bit? Viv works best with messages under 500 characters.';
 
 export default function ChatWidget({
   title = 'Viv, Your Virtual Sommelier',
@@ -121,7 +126,7 @@ export default function ChatWidget({
 
   const trimHistory = (arr) => arr.slice(-MAX_HISTORY_MSGS);
 
-  // FIX: robust auto-scroll AFTER DOM paints, so the input never "falls below" visible area
+  // Robust auto-scroll AFTER DOM paints, so the input never falls below visible area
   useEffect(() => {
     if (!open || collapsed) return;
     const el = panelRef.current;
@@ -137,11 +142,17 @@ export default function ChatWidget({
   async function send(q) {
     if (!q || q.trim().length < 2 || isLoading) return;
 
+    const cleanQ = q.trim();
+
+    // ✅ Client-side usage guard BEFORE we set loading
+    if (cleanQ.length > MAX_QUERY_CHARS) {
+      setErrorText(LONG_MSG);
+      return;
+    }
+
     setIsLoading(true);
     setStreamText('');
     setErrorText('');
-
-    const cleanQ = q.trim();
 
     // history we send this turn (include user msg)
     const nextHistory = trimHistory([...history, { role: 'user', content: cleanQ }]);
@@ -325,7 +336,7 @@ export default function ChatWidget({
           position: 'fixed',
           right: 16,
           bottom: 16,
-          zIndex: Z,
+          zIndex: 2147483647,
           width: 70,
           height: 70,
           borderRadius: '50%',
@@ -356,7 +367,7 @@ export default function ChatWidget({
           pointerEvents: open ? 'auto' : 'none',
           transform: `translateY(${open ? 0 : 6}px)`,
           transition: 'all 160ms ease',
-          zIndex: Z,
+          zIndex: 2147483647,
           width: 'min(92vw, 380px)',
         }}
       >
@@ -368,7 +379,7 @@ export default function ChatWidget({
             borderRadius: 16,
             boxShadow: '0 20px 40px rgba(0,0,0,.25)',
             transition: 'height 180ms ease',
-            height: collapsed ? 64 : '50vh', // FIX: use flex layout height instead of maxHeight math
+            height: collapsed ? 64 : '50vh',
             display: 'flex',
             flexDirection: 'column',
           }}
@@ -446,13 +457,13 @@ export default function ChatWidget({
               <div
                 ref={panelRef}
                 style={{
-                  padding: '12px 12px 18px', // FIX: extra bottom padding keeps last line visible
+                  padding: '12px 12px 18px',
                   fontSize: 14,
                   color: '#374151',
                   whiteSpace: 'pre-wrap',
                   lineHeight: 1.6,
                   overflow: 'auto',
-                  flex: 1, // FIX: flex makes messages the scroll region
+                  flex: 1,
                 }}
               >
                 {!streamText && !isLoading && !errorText && (
@@ -487,7 +498,10 @@ export default function ChatWidget({
               >
                 <input
                   value={input}
-                  onChange={(e) => setInput(e.target.value)}
+                  onChange={(e) => {
+                    setInput(e.target.value);
+                    if (errorText) setErrorText('');
+                  }}
                   placeholder={placeholder}
                   style={{
                     flex: 1,

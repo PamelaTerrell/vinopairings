@@ -1,7 +1,11 @@
-// app/api/ai/route.js (or src/app/api/ai/route.js — whichever your project uses)
+// app/api/ai/route.js
 import { NextResponse } from 'next/server';
 
 export const runtime = 'edge';
+
+const MAX_QUERY_CHARS = 500;
+const MAX_HISTORY_MSGS = 6;
+const MAX_MSG_CHARS = 1000;
 
 export async function POST(req) {
   try {
@@ -32,14 +36,27 @@ export async function POST(req) {
     const q = String(query || '').trim();
     if (!q) return NextResponse.json({ error: 'Empty query' }, { status: 400 });
 
+    // ✅ Usage guard: query length
+    if (q.length > MAX_QUERY_CHARS) {
+  return NextResponse.json(
+    {
+      error:
+        "That’s quite a long note 🍷 — could you shorten your question a bit? Viv works best with messages under 500 characters.",
+      code: 'query_too_long',
+    },
+    { status: 400 }
+  );
+}
+
+    // ✅ Usage guard: sanitize + clamp history
     const safeHistory = Array.isArray(history)
       ? history
           .filter((m) => m && typeof m === 'object')
           .map((m) => ({
             role: m.role === 'assistant' ? 'assistant' : 'user',
-            content: String(m.content ?? '').slice(0, 2000),
+            content: String(m.content ?? '').slice(0, MAX_MSG_CHARS),
           }))
-          .slice(-6)
+          .slice(-MAX_HISTORY_MSGS)
       : [];
 
     const upstream = await fetch('https://api.openai.com/v1/responses', {
@@ -63,8 +80,10 @@ export async function POST(req) {
 
     const data = await upstream.json().catch(() => ({}));
     if (!upstream.ok) {
-      // Pass through a structured error if OpenAI provided one
-      return NextResponse.json({ error: data?.error || data || 'Upstream error' }, { status: upstream.status });
+      return NextResponse.json(
+        { error: data?.error || data || 'Upstream error' },
+        { status: upstream.status }
+      );
     }
 
     const text =
