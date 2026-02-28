@@ -1,4 +1,3 @@
-
 // =================================
 // File: src/app/HomeClient.jsx (CLIENT)
 // =================================
@@ -27,29 +26,42 @@ export default function HomeClient() {
   };
 
   // --- Featured meta ---
-  const FEATURED_UPDATED_ISO = '2025-11-06'; // update when you change the featured wine
+  const FEATURED_UPDATED_ISO = '2026-02-27'; // update when you change the featured wine
   const featuredUpdatedText = new Intl.DateTimeFormat(undefined, {
     year: 'numeric',
     month: 'short',
     day: '2-digit',
   }).format(new Date(FEATURED_UPDATED_ISO));
 
-  // Fire GA4 on CTA click (works with gtag.js and GTM dataLayer)
+  // --- Featured wine content (edit these each month) ---
+  const FEATURED = {
+    name: 'Le FATbastard Chardonnay (2022)',
+    brand: 'Le FATbastard',
+    imagePath: '/lefatbastard.png',
+    brandUrl: 'https://www.fatbastardwine.com',
+    brandLabel: 'Visit Official Website',
+    pairingTags: ['Roast chicken', 'Lobster', 'Mac & cheese', 'Mushroom risotto'],
+    blurb:
+      'A plush, full-bodied Chardonnay—great with roast chicken, creamy pastas, or buttery seafood.',
+  };
+
+  // Track outbound click (works with gtag.js and GTM dataLayer)
   const trackFeaturedCTA = () => {
     if (typeof window !== 'undefined' && Array.isArray(window.dataLayer)) {
       window.dataLayer.push({
         event: 'cta_click',
-        cta_id: 'frontera_samsclub',
+        cta_id: 'featured_wine_brand_site',
         cta_location: 'featured_wine_top',
-        cta_text: 'Buy at Sam’s Club',
+        cta_text: FEATURED.brandLabel,
         outbound: true,
       });
     }
+
     if (typeof window !== 'undefined' && typeof window.gtag === 'function') {
       window.gtag('event', 'cta_click', {
-        cta_id: 'frontera_samsclub',
+        cta_id: 'featured_wine_brand_site',
         cta_location: 'featured_wine_top',
-        link_domain: 'samsclub.com',
+        link_domain: 'fatbastardwine.com',
       });
     }
   };
@@ -372,6 +384,23 @@ export default function HomeClient() {
     return acc;
   }, [pairings]);
 
+  // ---------------- Suggestions helpers ----------------
+  const getCandidates = (mode) =>
+    mode === 'dish' ? Object.keys(pairings) : Object.keys(reversePairings);
+
+  const buildSuggestions = (q, mode, limit = 6) => {
+    const nq = normalize(q);
+    if (!nq || nq.length < 2) return [];
+    const candidates = getCandidates(mode);
+
+    return candidates
+      .filter((c) => hasAnyTokenSignal(q, c))
+      .map((c) => ({ c, s: scoreCandidate(q, c) }))
+      .sort((a, b) => b.s - a.s)
+      .slice(0, limit)
+      .map(({ c }) => c);
+  };
+
   // ---------------- Compute result (mode-guarded) ----------------
   const computeResult = (q, mode) => {
     const nq = normalize(q);
@@ -418,23 +447,6 @@ export default function HomeClient() {
     return { found: false, text: '' };
   };
 
-  // ---------------- Suggestions (reuse shared helper) ----------------
-  const getCandidates = (mode) =>
-    mode === 'dish' ? Object.keys(pairings) : Object.keys(reversePairings);
-
-  const buildSuggestions = (q, mode, limit = 6) => {
-    const nq = normalize(q);
-    if (!nq || nq.length < 2) return [];
-    const candidates = getCandidates(mode);
-
-    return candidates
-      .filter((c) => hasAnyTokenSignal(q, c))
-      .map((c) => ({ c, s: scoreCandidate(q, c) }))
-      .sort((a, b) => b.s - a.s)
-      .slice(0, limit)
-      .map(({ c }) => c);
-  };
-
   // Safely render **bold** without dangerouslySetInnerHTML
   const renderWithStrong = (text) => {
     const parts = text.split(/(\*\*.*?\*\*)/g);
@@ -445,7 +457,7 @@ export default function HomeClient() {
     });
   };
 
-  // ---------------- Highlight matched tokens (fixed regex test) ----------------
+  // ---------------- Highlight matched tokens ----------------
   const highlight = (s, q) => {
     const toks = tokenize(q);
     if (!toks.length) return <span>{s}</span>;
@@ -497,8 +509,8 @@ export default function HomeClient() {
     const btn = document.querySelector('button[title="Chat with Viv"]');
     const isPressed = btn?.getAttribute('aria-pressed') === 'true';
     if (!isPressed) {
-      btn?.click();           // open once
-      setVivAutoOpened(true); // remember
+      btn?.click();
+      setVivAutoOpened(true);
     }
   }, [noResult, vivAutoOpened]);
 
@@ -506,88 +518,86 @@ export default function HomeClient() {
   useEffect(() => {
     const noText = input.trim().length < 2;
     const hasResult = !!resultText;
-    if (noText || hasResult) {
-      setVivAutoOpened(false);
-    }
+    if (noText || hasResult) setVivAutoOpened(false);
   }, [input, resultText]);
 
-  // JSON-LD for Featured Wine (mark sponsored seller)
+  // JSON-LD for Featured Wine (brand site, not purchase)
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Product',
-    name: 'Frontera Cabernet Merlot 1.5L',
-    brand: { '@type': 'Brand', name: 'Concha y Toro' },
-    image: ['https://vinopairings.com/frontera-cabernet-merlot.png'],
-    offers: {
-      '@type': 'Offer',
-      url: 'https://www.samsclub.com/ip/Concha-y-Toro-Frontera-Cabernet-Merlot-1-5-L/13809102300?classType=REGULAR&from=/search',
-      priceCurrency: 'USD',
-      price: '6.99',
-      availability: 'https://schema.org/InStock',
-      seller: { '@type': 'Organization', name: 'Sam’s Club' }
-    }
+    name: 'Le FATbastard Chardonnay 2022',
+    brand: { '@type': 'Brand', name: 'Le FATbastard' },
+    image: ['https://vinopairings.com/lefatbastard.png'],
+    url: 'https://www.fatbastardwine.com'
   };
 
   return (
     <div className="min-h-screen bg-cream text-charcoal font-body">
-      {/* Page H1 for topic relevance (visually hidden) */}
       <h1 className="sr-only">Vino Pairings: Find the Perfect Wine for Any Dish</h1>
 
-      {/* JSON-LD for Featured Wine */}
+      {/* JSON-LD for Featured Wine (enable if you want SEO structured data) */}
       {/*
-<Script
-  id="featured-wine-jsonld"
-  type="application/ld+json"
-  dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-/>
-*/}
+      <Script
+        id="featured-wine-jsonld"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      */}
 
       {/* Featured Wine — TOP */}
-      {/* Featured Wine — TOP (TEMP DISABLED) */}
-{/*
-<section className="w-full max-w-3xl mx-auto px-4 pt-6">
-  <div className="bg-white border border-[#D8CFC4] shadow-lg rounded-xl overflow-hidden">
-    <div className="bg-gradient-to-r from-[#f7efe4] to-[#fdf7ef] px-6 py-4 text-center">
-      <p className="text-sm tracking-wide uppercase font-semibold text-[#7B1E3F]">
-        Featured Wine of the Week
-      </p>
-      <h2 className="text-2xl md:text-3xl font-heading font-extrabold mt-1">
-        Frontera Cabernet Merlot
-      </h2>
-      <p className="mt-1 text-xs text-gray-500">Last updated {featuredUpdatedText}</p>
-    </div>
+      <section className="w-full max-w-3xl mx-auto px-4 pt-6">
+        <div className="bg-white border border-[#D8CFC4] shadow-lg rounded-xl overflow-hidden">
+          <div className="bg-gradient-to-r from-[#f7efe4] to-[#fdf7ef] px-6 py-4 text-center">
+            <p className="text-sm tracking-wide uppercase font-semibold text-[#7B1E3F]">
+              Featured Wine of the Month
+            </p>
+            <h2 className="text-2xl md:text-3xl font-heading font-extrabold mt-1">
+              {FEATURED.name}
+            </h2>
+            <p className="mt-1 text-xs text-gray-500">Last updated {featuredUpdatedText}</p>
+          </div>
 
-    <div className="relative w-full h-60 sm:h-72 md:h-80 bg-cream">
-      <Image
-        src="/frontera-cabernet-merlot.png"
-        alt="Frontera Cabernet Merlot bottle"
-        fill
-        className="object-contain p-4"
-        sizes="(min-width: 768px) 768px, 100vw"
-        priority
-      />
-    </div>
+          <div className="relative w-full h-72 sm:h-80 md:h-96 bg-cream">
+            <Image
+              src={FEATURED.imagePath}
+              alt={`${FEATURED.name} bottle`}
+              fill
+              className="object-contain p-4"
+              sizes="(min-width: 768px) 768px, 100vw"
+              priority
+            />
+          </div>
 
-    <div className="p-6 text-center">
-      <p className="text-lg mb-4">
-        Available at Sam’s Club for{' '}
-        <span className="font-bold" style={{ color: '#7B1E3F' }}>$6.99</span>
-      </p>
-      <a
-        href="https://www.samsclub.com/ip/Concha-y-Toro-Frontera-Cabernet-Merlot-1-5-L/13809102300?classType=REGULAR&from=/search"
-        target="_blank"
-        rel="sponsored nofollow noopener"
-        onClick={trackFeaturedCTA}
-        className="inline-block bg-[#C59B5F] text-white font-semibold py-2 px-6 rounded hover:brightness-95 transition"
-        data-analytics="cta_buy_frontera_samsclub"
-      >
-        Buy at Sam’s Club
-      </a>
-    </div>
-  </div>
-</section>
-*/}
-              
+          <div className="p-6 text-center">
+            <p className="text-base md:text-lg">{FEATURED.blurb}</p>
+
+            <div className="mt-4 flex flex-wrap justify-center gap-2 text-sm">
+              {FEATURED.pairingTags.map((tag) => (
+                <span
+                  key={tag}
+                  className="px-3 py-1 rounded-full border border-[#D8CFC4] bg-[#FDF7EF]"
+                >
+                  {tag}
+                </span>
+              ))}
+            </div>
+
+            {/* Brand Website CTA */}
+            <div className="mt-6 flex items-center justify-center gap-3 flex-wrap">
+              <a
+                href={FEATURED.brandUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={trackFeaturedCTA}
+                className="inline-block bg-[#C59B5F] text-white font-semibold py-2 px-6 rounded hover:brightness-95 transition"
+              >
+                {FEATURED.brandLabel}
+              </a>
+              <span className="text-xs text-gray-500">Opens official brand site</span>
+            </div>
+          </div>
+        </div>
+      </section>
 
       {/* Pairing Finder */}
       <section className="max-w-3xl mx-auto p-6 mt-10 flex flex-col items-center">
@@ -605,10 +615,7 @@ export default function HomeClient() {
             <select
               id="type"
               value={type}
-              onChange={(e) => {
-                const mode = e.target.value;
-                setType(mode);
-              }}
+              onChange={(e) => setType(e.target.value)}
               className="border border-[#D8CFC4] p-2 rounded focus:outline-none focus:ring-2 focus:ring-[#C59B5F]"
             >
               <option value="dish">Dish</option>
@@ -617,9 +624,7 @@ export default function HomeClient() {
           </div>
 
           <div className="flex flex-col gap-2 relative">
-            <label className="font-medium" htmlFor="query">
-              {`Enter your ${type}`}
-            </label>
+            <label className="font-medium" htmlFor="query">{`Enter your ${type}`}</label>
             <input
               id="query"
               type="text"
@@ -637,7 +642,6 @@ export default function HomeClient() {
               aria-activedescendant={suggestions.length ? 'sug-0' : undefined}
             />
 
-            {/* Typeahead suggestions */}
             {suggestions.length > 0 && (
               <ul
                 id="suggestions"
@@ -663,7 +667,6 @@ export default function HomeClient() {
           </div>
         </form>
 
-        {/* Results */}
         {resultText && (
           <div
             className="mt-6 p-6 max-w-xl w-full bg-[#f4ede4] border-l-4 border-[#C59B5F] rounded shadow transition-opacity duration-500 animate-fadeIn"
@@ -686,7 +689,6 @@ export default function HomeClient() {
           </div>
         )}
 
-        {/* No match? → Suggest Viv */}
         {noResult && (
           <div className="mt-6 w-full max-w-xl bg-white border border-[#D8CFC4] rounded-xl shadow p-5 animate-fadeIn">
             <div className="font-semibold text-[#7B1E3F]">Not finding an exact match?</div>
@@ -740,10 +742,18 @@ export default function HomeClient() {
           to { opacity: 1; transform: translateY(0); }
         }
         .animate-fadeIn { animation: fadeIn 0.5s ease-out; }
-        .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+        .sr-only {
+          position: absolute;
+          width: 1px;
+          height: 1px;
+          padding: 0;
+          margin: -1px;
+          overflow: hidden;
+          clip: rect(0, 0, 0, 0);
+          white-space: nowrap;
+          border: 0;
+        }
       `}</style>
     </div>
   );
 }
-
-
