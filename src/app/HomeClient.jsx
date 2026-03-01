@@ -25,6 +25,13 @@ export default function HomeClient() {
     );
   };
 
+  const GLASS_GUIDE = {
+  priceLabel: '$9 Printable Download',
+  paymentLink: 'https://buy.stripe.com/test_28E4gs18o9IW0epbW36wE00',
+  previewImage: '/wine-glass-guide-preview.png',
+};
+
+
   // --- Featured meta ---
   const FEATURED_UPDATED_ISO = '2026-02-27'; // update when you change the featured wine
   const featuredUpdatedText = new Intl.DateTimeFormat(undefined, {
@@ -734,6 +741,43 @@ export default function HomeClient() {
           </div>
         )}
       </section>
+
+      {/* Wine Glass Guide (Paid Download) */}
+<section className="mt-12 w-full max-w-2xl px-4 mx-auto">
+  <h2 className="text-xl font-heading font-bold text-center mb-4">
+    Wine Glass Guide
+  </h2>
+
+  <p className="text-center mb-6 italic text-lg">
+    🍷✨ A simple, elegant guide to help you choose the right glass for each wine style.
+  </p>
+
+  <div className="bg-white border border-[#D8CFC4] shadow-md rounded-xl overflow-hidden">
+    <Image
+      src={GLASS_GUIDE.previewImage}
+      alt="Wine Glass Guide preview"
+      width={1400}
+      height={900}
+      className="w-full h-auto"
+      sizes="(min-width: 1024px) 768px, 100vw"
+    />
+
+    <div className="p-6 text-center">
+      <a
+        href={GLASS_GUIDE.paymentLink}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="inline-block bg-[#C59B5F] text-white font-semibold py-2 px-6 rounded hover:brightness-95 transition"
+      >
+        Get the Printable ({GLASS_GUIDE.priceLabel})
+      </a>
+
+      <p className="text-xs text-gray-500 mt-3">
+        You’ll be redirected to your download after checkout.
+      </p>
+    </div>
+  </div>
+</section>
 
       {/* Wine Basics Section */}
       <section className="mt-12 w-full max-w-2xl px-4 mx-auto">
