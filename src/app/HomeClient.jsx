@@ -27,7 +27,7 @@ export default function HomeClient() {
 
   const GLASS_GUIDE = {
   priceLabel: '$9 Printable Download',
-  paymentLink: 'https://buy.stripe.com/test_28E4gs18o9IW0epbW36wE00',
+  paymentLink: 'https://buy.stripe.com/8x2cN598s6S726j7iY0gw01',
   previewImage: '/wine-glass-guide-preview.png',
 };
 
