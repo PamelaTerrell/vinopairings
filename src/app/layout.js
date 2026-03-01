@@ -84,16 +84,27 @@ export default function RootLayout({ children }) {
         <main className="max-w-2xl mx-auto p-4">{children}</main>
 
         <footer className="w-full p-4 mt-8 border-t border-gray-200 text-center text-sm text-gray-500">
-          &copy; 2024 Vino Pairings · Created by{' '}
-          <a
-            href="https://pamelajterrell.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="underline hover:text-gray-700"
-          >
-            Pamela J. Terrell
-          </a>
-        </footer>
+  <p>
+    &copy; 2024 Vino Pairings · Created by{' '}
+    <a
+      href="https://pamelajterrell.com"
+      target="_blank"
+      rel="noopener noreferrer"
+      className="underline hover:text-gray-700"
+    >
+      Pamela J. Terrell
+    </a>
+  </p>
+
+  <p className="mt-2">
+    <a
+      href="/disclosure"
+      className="underline hover:text-gray-700"
+    >
+      Affiliate Disclosure
+    </a>
+  </p>
+</footer>
 
         {GA_ID && <GtagPageView />}
         <Analytics />

@@ -35,15 +35,20 @@ export default function HomeClient() {
 
   // --- Featured wine content (edit these each month) ---
   const FEATURED = {
-    name: 'Le FATbastard Chardonnay (2022)',
-    brand: 'Le FATbastard',
-    imagePath: '/lefatbastard.png',
-    brandUrl: 'https://www.fatbastardwine.com',
-    brandLabel: 'Visit Official Website',
-    pairingTags: ['Roast chicken', 'Lobster', 'Mac & cheese', 'Mushroom risotto'],
-    blurb:
-      'A plush, full-bodied Chardonnay—great with roast chicken, creamy pastas, or buttery seafood.',
-  };
+  name: 'Le FATbastard Chardonnay (2022)',
+  brand: 'Le FATbastard',
+  imagePath: '/lefatbastard.png',
+  brandUrl: 'https://www.fatbastardwine.com',
+  brandLabel: 'Visit Brand Website',
+  pairingTags: [
+    'Roast chicken',
+    'Lobster',
+    'Mac & cheese',
+    'Mushroom risotto'
+  ],
+  blurb:
+    'A plush, full-bodied Chardonnay—great with roast chicken, creamy pastas, or buttery seafood.',
+};
 
   // Track outbound click (works with gtag.js and GTM dataLayer)
   const trackFeaturedCTA = () => {
@@ -546,58 +551,69 @@ export default function HomeClient() {
 
       {/* Featured Wine — TOP */}
       <section className="w-full max-w-3xl mx-auto px-4 pt-6">
-        <div className="bg-white border border-[#D8CFC4] shadow-lg rounded-xl overflow-hidden">
-          <div className="bg-gradient-to-r from-[#f7efe4] to-[#fdf7ef] px-6 py-4 text-center">
-            <p className="text-sm tracking-wide uppercase font-semibold text-[#7B1E3F]">
-              Featured Wine of the Month
-            </p>
-            <h2 className="text-2xl md:text-3xl font-heading font-extrabold mt-1">
-              {FEATURED.name}
-            </h2>
-            <p className="mt-1 text-xs text-gray-500">Last updated {featuredUpdatedText}</p>
-          </div>
+  <div className="bg-white border border-[#D8CFC4] shadow-lg rounded-xl overflow-hidden">
 
-          <div className="relative w-full h-72 sm:h-80 md:h-96 bg-cream">
-            <Image
-              src={FEATURED.imagePath}
-              alt={`${FEATURED.name} bottle`}
-              fill
-              className="object-contain p-4"
-              sizes="(min-width: 768px) 768px, 100vw"
-              priority
-            />
-          </div>
+    <div className="bg-gradient-to-r from-[#f7efe4] to-[#fdf7ef] px-6 py-4 text-center">
+      <p className="text-sm tracking-wide uppercase font-semibold text-[#7B1E3F]">
+        Featured Wine of the Month
+      </p>
 
-          <div className="p-6 text-center">
-            <p className="text-base md:text-lg">{FEATURED.blurb}</p>
+      <h2 className="text-2xl md:text-3xl font-heading font-extrabold mt-1">
+        {FEATURED.name}
+      </h2>
 
-            <div className="mt-4 flex flex-wrap justify-center gap-2 text-sm">
-              {FEATURED.pairingTags.map((tag) => (
-                <span
-                  key={tag}
-                  className="px-3 py-1 rounded-full border border-[#D8CFC4] bg-[#FDF7EF]"
-                >
-                  {tag}
-                </span>
-              ))}
-            </div>
+      <p className="mt-1 text-xs text-gray-500">
+        Last updated {featuredUpdatedText}
+      </p>
+    </div>
 
-            {/* Brand Website CTA */}
-            <div className="mt-6 flex items-center justify-center gap-3 flex-wrap">
-              <a
-                href={FEATURED.brandUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={trackFeaturedCTA}
-                className="inline-block bg-[#C59B5F] text-white font-semibold py-2 px-6 rounded hover:brightness-95 transition"
-              >
-                {FEATURED.brandLabel}
-              </a>
-              <span className="text-xs text-gray-500">Opens official brand site</span>
-            </div>
-          </div>
-        </div>
-      </section>
+    <div className="relative w-full h-72 sm:h-80 md:h-96 bg-cream">
+      <Image
+        src={FEATURED.imagePath}
+        alt={`${FEATURED.name} bottle`}
+        fill
+        className="object-contain p-4"
+        priority
+      />
+    </div>
+
+    <div className="p-6 text-center">
+      <p className="text-base md:text-lg">
+        {FEATURED.blurb}
+      </p>
+
+      <div className="mt-4 flex flex-wrap justify-center gap-2 text-sm">
+        {FEATURED.pairingTags.map((tag) => (
+          <span
+            key={tag}
+            className="px-3 py-1 rounded-full border border-[#D8CFC4] bg-[#FDF7EF]"
+          >
+            {tag}
+          </span>
+        ))}
+      </div>
+
+      {/* Brand Website Button */}
+      <div className="mt-6">
+        <a
+          href={FEATURED.brandUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-block bg-[#C59B5F] text-white font-semibold py-2 px-6 rounded hover:brightness-95 transition"
+        >
+          {FEATURED.brandLabel}
+        </a>
+
+        <p className="text-xs text-gray-500 mt-2">
+          Opens official brand website
+        </p>
+      </div>
+    </div>
+
+  </div>
+</section>
+           
+           
 
       {/* Pairing Finder */}
       <section className="max-w-3xl mx-auto p-6 mt-10 flex flex-col items-center">
