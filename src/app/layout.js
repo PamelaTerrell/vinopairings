@@ -1,14 +1,23 @@
 // src/app/layout.js
 import './globals.css';
-import { Inter } from 'next/font/google';
+import { Inter, Playfair_Display } from 'next/font/google';
 import NavBar from './components/NavBar';
 import { Analytics } from '@vercel/analytics/react';
 import Script from 'next/script';
 import GtagPageView from './GtagPageView';
 import dynamic from 'next/dynamic';
 
-// Fonts (define BEFORE use)
-const inter = Inter({ subsets: ['latin'] });
+// Fonts
+const inter = Inter({
+  subsets: ['latin'],
+  variable: '--font-inter',
+});
+
+const playfair = Playfair_Display({
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700'],
+  variable: '--font-playfair',
+});
 
 // Env (fallback is fine for local)
 const GA_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || 'G-SRJRLWGF89';
@@ -26,19 +35,26 @@ export const metadata = {
     url: 'https://vinopairings.com',
     title: 'Vino Pairings',
     description: 'Find the perfect wine and dish pairing.',
-    images: [{ url: '/wineog.png', width: 1200, height: 630, alt: 'Vino Pairings Wine Glass' }]
+    images: [
+      {
+        url: '/wineog.png',
+        width: 1200,
+        height: 630,
+        alt: 'Vino Pairings Wine Glass',
+      },
+    ],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Vino Pairings',
     description: 'Find the perfect wine and dish pairing.',
-    images: ['/wineog.png']
-  }
+    images: ['/wineog.png'],
+  },
 };
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
+    <html lang="en" className={`${inter.variable} ${playfair.variable}`}>
       <head>
         {/* Perf for GA */}
         <link rel="preconnect" href="https://www.googletagmanager.com" />
@@ -54,8 +70,8 @@ export default function RootLayout({ children }) {
             potentialAction: {
               '@type': 'SearchAction',
               target: 'https://vinopairings.com/?q={search_term_string}',
-              'query-input': 'required name=search_term_string'
-            }
+              'query-input': 'required name=search_term_string',
+            },
           })}
         </Script>
 
@@ -84,27 +100,24 @@ export default function RootLayout({ children }) {
         <main className="max-w-2xl mx-auto p-4">{children}</main>
 
         <footer className="w-full p-4 mt-8 border-t border-gray-200 text-center text-sm text-gray-500">
-  <p>
-    &copy; 2024 Vino Pairings · Created by{' '}
-    <a
-      href="https://pamelajterrell.com"
-      target="_blank"
-      rel="noopener noreferrer"
-      className="underline hover:text-gray-700"
-    >
-      Pamela J. Terrell
-    </a>
-  </p>
+          <p>
+            &copy; 2024 Vino Pairings · Created by{' '}
+            <a
+              href="https://pamelajterrell.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline hover:text-gray-700"
+            >
+              Pamela J. Terrell
+            </a>
+          </p>
 
-  <p className="mt-2">
-    <a
-      href="/disclosure"
-      className="underline hover:text-gray-700"
-    >
-      Affiliate Disclosure
-    </a>
-  </p>
-</footer>
+          <p className="mt-2">
+            <a href="/disclosure" className="underline hover:text-gray-700">
+              Affiliate Disclosure
+            </a>
+          </p>
+        </footer>
 
         {GA_ID && <GtagPageView />}
         <Analytics />
