@@ -772,6 +772,14 @@ export default function HomeClient() {
         Get the Printable ({GLASS_GUIDE.priceLabel})
       </a>
 
+     <a
+  href="/downloads/sweet-dry-wines-guide.pdf"
+  download
+  className="inline-block bg-[#7B1E3F] text-white font-semibold py-2 px-6 rounded hover:brightness-95 transition"
+>
+  Download Your Guide
+</a>
+
       <p className="text-xs text-gray-500 mt-3">
         You’ll be redirected to your download after checkout.
       </p>
