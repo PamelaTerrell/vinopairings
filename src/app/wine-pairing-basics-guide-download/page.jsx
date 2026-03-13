@@ -35,7 +35,7 @@ export default function WinePairingBasicsGuideDownloadPage() {
             </p>
 
             <a
-              href="/downloads/wine-pairing-basics-guide.png"
+              href="/downloads/wine-pairing-basics-guide.pdf"
               download
               className="inline-block bg-[#C59B5F] text-white font-semibold py-3 px-6 rounded hover:brightness-95 transition"
             >
