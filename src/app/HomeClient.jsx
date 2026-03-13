@@ -806,21 +806,7 @@ export default function HomeClient() {
   </div>
 </section>
 
-      {/* Wine Basics Section */}
-      <section className="mt-12 w-full max-w-2xl px-4 mx-auto">
-        <h2 className="text-xl font-heading font-bold text-center mb-4">Wine Pairing Basics</h2>
-        <p className="text-center mb-6 italic text-lg">
-          🍷✨ <strong>Not sure where to start?</strong> This beautifully simple chart highlights timeless wine pairings to help you plan ahead and sip with confidence.
-        </p>
-        <Image
-          src="/winebasics.png"
-          alt="Wine pairing chart"
-          width={1400}
-          height={980}
-          className="w-full h-auto border border-[#D8CFC4] shadow-md rounded"
-          sizes="(min-width: 1024px) 768px, 100vw"
-        />
-      </section>
+
 
       {/* Animations */}
       <style jsx global>{`

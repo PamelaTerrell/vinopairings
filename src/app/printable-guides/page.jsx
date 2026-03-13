@@ -24,6 +24,20 @@ const GUIDES = [
     previewNote:
       'Preview shown with watermark or reduced quality — premium printable download is delivered after purchase.',
   },
+
+  {
+  slug: 'wine-pairing-basics-guide',
+  title: 'Wine Pairing Basics Guide',
+  priceLabel: '$9 Printable Download',
+  paymentLink: 'https://buy.stripe.com/fZubJ13O80tJcKXbze0gw05',
+  previewImage: '/wine-pairing-basics-preview.png',
+  description:
+    'A beautifully designed visual guide showing classic wine styles and the foods they pair best with.',
+  accent: 'gold',
+  previewNote:
+    'Preview shown with watermark — premium printable download is delivered after purchase.',
+},
+
 ];
 
 export const metadata = {
