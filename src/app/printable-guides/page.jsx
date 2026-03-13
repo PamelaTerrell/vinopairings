@@ -16,12 +16,13 @@ const GUIDES = [
     slug: 'sweet-dry-wines-guide',
     title: 'Sweet vs. Dry Wines Guide',
     priceLabel: '$9 Printable Download',
-    paymentLink: 'https://buy.stripe.com/dRmdR9ckE6S74erava0gw03',
-    previewImage: '/sweet-dry-wines-guide-preview.png',
+    paymentLink: 'https://buy.stripe.com/dRmfZh2K40tJdP19r60gw04',
+    previewImage: '/dry-vs-sweet-preview.png',
     description:
-      'A beautifully designed guide to help you understand dry, off-dry, and sweet wines, with beginner-friendly examples and pairing tips.',
+      'A beautifully designed guide to help you quickly understand sweet red, dry red, sweet white, and dry white wines.',
     accent: 'burgundy',
-    previewNote: 'Preview shown with watermark or reduced quality — premium printable download is delivered after purchase.',
+    previewNote:
+      'Preview shown with watermark or reduced quality — premium printable download is delivered after purchase.',
   },
 ];
 

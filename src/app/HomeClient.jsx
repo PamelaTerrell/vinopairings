@@ -772,18 +772,37 @@ export default function HomeClient() {
         Get the Printable ({GLASS_GUIDE.priceLabel})
       </a>
 
-     <a
-  href="/downloads/sweet-dry-wines-guide.pdf"
-  download
-  className="inline-block bg-[#7B1E3F] text-white font-semibold py-2 px-6 rounded hover:brightness-95 transition"
->
-  Download Your Guide
-</a>
+   
 
       <p className="text-xs text-gray-500 mt-3">
         You’ll be redirected to your download after checkout.
       </p>
     </div>
+  </div>
+</section>
+
+{/* More Printable Guides */}
+<section className="mt-10 w-full max-w-2xl px-4 mx-auto">
+  <div className="bg-[#FDF7EF] border border-[#D8CFC4] shadow-md rounded-xl p-6 text-center">
+
+    <h3 className="text-xl font-heading font-bold">
+      Explore More Printable Wine Guides
+    </h3>
+
+    <p className="mt-2 text-gray-700">
+      Looking for more helpful wine resources?  
+      Browse our growing collection of beautifully designed printable wine guides.
+    </p>
+
+    <div className="mt-5">
+      <Link
+        href="/printable-guides"
+        className="inline-block bg-[#7B1E3F] text-white font-semibold py-2 px-6 rounded hover:brightness-95 transition"
+      >
+        Browse All Printable Guides
+      </Link>
+    </div>
+
   </div>
 </section>
 
