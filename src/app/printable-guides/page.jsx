@@ -38,13 +38,32 @@ const GUIDES = [
     'Preview shown with watermark — premium printable download is delivered after purchase.',
 },
 
+{
+  slug: 'wine-guide-bundle',
+  title: 'Wine Guide Bundle',
+  priceLabel: '$19 Bundle Download',
+  paymentLink: 'https://buy.stripe.com/7sYcN584o1xN8uHdHm0gw06',
+  previewImage: '/wine-bundle.png',
+  description:
+    'Save with the complete wine guide collection. Includes the Wine Glass Guide, Sweet vs. Dry Wines Guide, and Wine Pairing Basics Guide.',
+  accent: 'burgundy',
+  previewNote:
+    'Best value — download all three premium printable wine guides after purchase.',
+  isBundle: true,
+},
+
 ];
 
 export const metadata = {
   title: 'Printable Wine Guides | Vino Pairings',
   description:
     'Shop printable wine guides from Vino Pairings, including elegant downloads for wine basics, sweetness levels, and more.',
+
+    
+  
 };
+
+
 
 export default function PrintableGuidesPage() {
   return (
@@ -63,6 +82,10 @@ export default function PrintableGuidesPage() {
           with confidence, understand wine more easily, and elevate your next meal.
         </p>
       </section>
+
+      <p className="mt-4 text-sm text-gray-600">
+  🍷 Instant digital downloads — perfect for kitchens, wine bars, and entertaining.
+</p>
 
       <section className="max-w-5xl mx-auto mt-10 grid grid-cols-1 md:grid-cols-2 gap-8">
         {GUIDES.map((guide) => {
