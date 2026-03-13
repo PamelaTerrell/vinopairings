@@ -1,5 +1,3 @@
-import Image from 'next/image';
-
 export const metadata = {
   title: 'Wine Guide Bundle Download | Vino Pairings',
   description: 'Download your complete Wine Guide Bundle.',
