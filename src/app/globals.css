@@ -354,3 +354,11 @@ button {
 .animate-fadeIn {
   animation: fadeIn 0.8s ease forwards;
 }
+
+.section-title {
+  font-family: var(--font-playfair);
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #3b2f2f;
+  margin-bottom: 0.75rem;
+}

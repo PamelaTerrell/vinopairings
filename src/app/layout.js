@@ -114,10 +114,14 @@ export default function RootLayout({ children }) {
           </p>
 
           <p className="mt-2">
-            <a href="/disclosure" className="underline hover:text-gray-700">
-              Affiliate Disclosure
-            </a>
-          </p>
+  <a href="/disclosure" className="underline hover:text-gray-700">
+    Affiliate Disclosure
+  </a>{' '}
+  ·{' '}
+  <a href="/privacy" className="underline hover:text-gray-700">
+    Privacy Policy
+  </a>
+</p>
         </footer>
 
         {GA_ID && <GtagPageView />}
