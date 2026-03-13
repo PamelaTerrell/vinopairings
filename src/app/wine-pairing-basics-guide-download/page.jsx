@@ -21,7 +21,7 @@ export default function WinePairingBasicsGuideDownloadPage() {
         <div className="bg-white border border-[#D8CFC4] rounded-2xl shadow-md overflow-hidden">
 
           <Image
-            src="/wine-pairing-basics-preview.png"
+            src="/wine-pairing-basics-guide.png"
             alt="Wine Pairing Basics Guide preview"
             width={1400}
             height={1800}
