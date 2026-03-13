@@ -19,7 +19,7 @@ export default function WineGlassGuideDownloadPage() {
 
         <div className="bg-white border border-[#D8CFC4] rounded-2xl shadow-md overflow-hidden">
           <Image
-            src="/wine-glass-guide.png"
+            src="/wine-glass-guide-preview.png"
             alt="Wine Glass Guide preview"
             width={1400}
             height={1800}
