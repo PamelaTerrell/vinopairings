@@ -6,6 +6,7 @@ import { Analytics } from '@vercel/analytics/react';
 import Script from 'next/script';
 import GtagPageView from './GtagPageView';
 import dynamic from 'next/dynamic';
+import CookieNotice from "./components/CookieNotice";
 
 // Fonts
 const inter = Inter({
@@ -128,6 +129,7 @@ export default function RootLayout({ children }) {
             <ChatWidget />
           </div>
         </ClientPortal>
+        <CookieNotice />
       </body>
     </html>
   );
