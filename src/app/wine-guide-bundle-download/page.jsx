@@ -27,7 +27,7 @@ export default function WineGuideBundleDownloadPage() {
           <div className="flex flex-col gap-4 items-center">
 
             <a
-              href="/downloads/wine-glass-guide-printable.pdf"
+              href="/downloads/wine-glass-guide.pdf"
               download
               className="inline-block bg-[#C59B5F] text-white font-semibold py-3 px-6 rounded hover:brightness-95 transition"
             >
