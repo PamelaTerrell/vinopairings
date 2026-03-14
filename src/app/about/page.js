@@ -1,184 +1,305 @@
 // app/about/page.js
-import Image from 'next/image';
+import Image from "next/image";
+import Link from "next/link";
 
 export const metadata = {
-  title: 'About • Vino Pairings',
+  title: "About • Vino Pairings",
   description:
-    'Learn about Pamela Terrell, creator of Vino Pairings — where food and wine meet to bring people together.',
+    "Learn about Pamela Terrell, creator of Vino Pairings — where thoughtful wine pairings elevate everyday meals.",
 };
 
 export default function AboutPage() {
   const brand = {
-    cream: '#f9f6ef',
-    parchment: '#fdfaf3',
-    cocoa: '#4b3f2f',
-    gold: '#a37c58',
-    line: '#d8cfc4',
-    burgundy: '#6e2a2a',
+    cream: "#f9f6ef",
+    parchment: "#fdfaf3",
+    cocoa: "#4b3f2f",
+    gold: "#a37c58",
+    line: "#d8cfc4",
+    burgundy: "#6e2a2a",
+    muted: "#7a6b57",
+  };
+
+  const values = [
+    {
+      title: "Approachable",
+      desc: "Wine should feel welcoming and intuitive — something to enjoy without overthinking.",
+    },
+    {
+      title: "Connected",
+      desc: "Great pairings do more than complement a dish. They create space for conversation and shared moments.",
+    },
+    {
+      title: "Authentic",
+      desc: "Every pairing shared here grows from genuine curiosity and a love of gathering well.",
+    },
+    {
+      title: "Beautiful",
+      desc: "A thoughtfully chosen wine can elevate even a simple meal into something memorable.",
+    },
+  ];
+
+  const serif = {
+    fontFamily: "var(--font-playfair), Georgia, serif",
   };
 
   return (
-    <div className="min-h-screen" style={{ backgroundColor: brand.cream, color: brand.cocoa }}>
-      {/* Subtle vignette background */}
+    <div
+      className="min-h-screen overflow-x-hidden"
+      style={{ backgroundColor: brand.cream, color: brand.cocoa }}
+    >
+      {/* background */}
       <div
         aria-hidden="true"
-        className="pointer-events-none fixed inset-0 -z-10 opacity-80"
+        className="pointer-events-none fixed inset-0 -z-10"
         style={{
           background:
-            'radial-gradient(900px 600px at 50% 10%, rgba(163,124,88,0.25), transparent 70%), radial-gradient(1200px 600px at 50% 100%, rgba(110,42,42,0.12), transparent 60%)',
+            "radial-gradient(900px 500px at 50% 0%, rgba(163,124,88,0.14), transparent 70%)",
         }}
       />
 
-      <main className="mx-auto w-full max-w-5xl px-6 py-12 md:py-16">
-        {/* HERO — Portrait-centered */}
-        <section className="relative flex flex-col items-center text-center">
-          <div className="relative fade-up">
-            {/* Gold glow behind portrait */}
+      <main className="mx-auto max-w-5xl px-6 py-12">
+
+        {/* HERO */}
+        <section
+          className="rounded-[30px] border px-8 py-12 text-center shadow-sm"
+          style={{
+            background: "linear-gradient(#fdfaf3, #f9f6ef)",
+            borderColor: brand.line,
+          }}
+        >
+          <p
+            className="text-[11px] uppercase tracking-[0.32em]"
+            style={{ color: brand.gold }}
+          >
+            About the Creator
+          </p>
+
+          <div className="relative mx-auto mt-8 w-fit">
             <div
-              className="absolute inset-0 rounded-full blur-3xl opacity-50 glow-bloom shimmer-gold"
+              className="absolute inset-0 blur-3xl opacity-50"
               style={{
                 background:
-                  'radial-gradient(circle, rgba(163,124,88,0.4), transparent 70%)',
+                  "radial-gradient(circle, rgba(163,124,88,0.25), transparent 70%)",
               }}
             />
-            <Image
-              src="/Me.jpg"
-              alt="Photo of Pamela Terrell, creator of Vino Pairings"
-              width={420}
-              height={420}
-              priority
-              className="relative z-10 rounded-full border-8 shadow-xl"
-              style={{ borderColor: brand.line, objectFit: 'cover' }}
-            />
+
+            <div
+              className="relative overflow-hidden border bg-[#f6f1e8]"
+              style={{
+                borderColor: "#ece2d5",
+                borderRadius: "999px 999px 28px 28px",
+              }}
+            >
+              <Image
+                src="/Me.jpg"
+                alt="Pamela Terrell"
+                width={320}
+                height={480}
+                priority
+                className="h-[420px] w-[280px] object-cover object-top"
+              />
+            </div>
           </div>
 
-          <h1 className="mt-8 text-4xl font-serif font-bold tracking-wide md:text-5xl fade-up-delay">
+          <h1
+            className="mt-8 text-[38px] font-semibold"
+            style={{ ...serif }}
+          >
             Pamela Terrell
           </h1>
-          <p className="mt-2 text-lg italic text-[#7a6b57] fade-up-delay">
-            Founder • Creator of Vino Pairings
-          </p>
-          <p className="mt-3 max-w-md text-base text-[#7a6b57] fade-up-delay">
-            “I believe every shared meal is a chance to connect — to pause, laugh, and remember what matters.”
+
+          <p
+            className="mt-2 text-[11px] uppercase tracking-[0.24em]"
+            style={{ color: brand.muted }}
+          >
+            Founder of Vino Pairings
           </p>
 
-          <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed">
-            Welcome to <strong>Vino Pairings</strong> — a space born from curiosity, joy, and the simple
-            belief that food and wine are better together. What began as a few dinner notes has become a
-            living collection of pairings you can trust, without fuss or jargon.
+          <p
+            className="mx-auto mt-5 max-w-xl text-[22px] italic leading-[1.6]"
+            style={{ ...serif, color: brand.muted }}
+          >
+            Where thoughtful wine pairings turn everyday meals into memorable moments.
           </p>
 
-          <div className="mt-8 flex flex-wrap justify-center gap-4">
-            <a
+          <p className="mx-auto mt-6 max-w-[600px] text-[16px] leading-[1.85]">
+            Vino Pairings was created to make wine feel welcoming, elegant,
+            and easy to enjoy. It is a place for discovering pairings that
+            elevate everyday meals and inspire gatherings around the table.
+          </p>
+
+          <div className="mt-8 flex justify-center gap-3">
+            <Link
               href="/"
-              className="rounded-full border px-5 py-2 text-sm font-semibold shadow-sm transition hover:brightness-110"
-              style={{ borderColor: brand.gold, backgroundColor: brand.gold, color: '#fff' }}
+              className="rounded-full px-6 py-2 text-sm font-semibold text-white"
+              style={{ backgroundColor: brand.gold }}
             >
               Explore Pairings
-            </a>
-            <a
+            </Link>
+
+            <Link
               href="/sunday"
-              className="rounded-full border px-5 py-2 text-sm font-semibold transition hover:bg-white"
+              className="rounded-full border px-6 py-2 text-sm font-semibold"
               style={{ borderColor: brand.line }}
             >
               Sunday Gallery
-            </a>
+            </Link>
+          </div>
+        </section>
+
+        {/* INTRO */}
+        <section className="mt-10">
+          <div
+            className="rounded-[26px] border px-8 py-7 text-center"
+            style={{
+              borderColor: brand.line,
+              background: "rgba(255,255,255,0.7)",
+            }}
+          >
+            <p
+              className="mx-auto max-w-2xl text-[20px] leading-[1.7]"
+              style={{ ...serif }}
+            >
+              At its heart, Vino Pairings is about making wine feel less
+              intimidating and more personal — thoughtful enough to elevate
+              a meal, yet approachable enough to enjoy any day of the week.
+            </p>
           </div>
         </section>
 
         {/* STORY */}
-        <section
-          className="mt-16 rounded-2xl border shadow-md md:mt-20"
-          style={{ backgroundColor: brand.parchment, borderColor: brand.line }}
-        >
-          <div className="p-8 md:p-12">
-            <h2 className="text-3xl font-serif font-bold tracking-wide text-center">My Story</h2>
-            <div className="mx-auto mt-6 max-w-3xl text-lg leading-relaxed">
+        <section className="mt-12">
+          <div
+            className="rounded-[30px] border px-8 py-10"
+            style={{
+              backgroundColor: brand.parchment,
+              borderColor: brand.line,
+            }}
+          >
+            <p
+              className="text-center text-[11px] uppercase tracking-[0.32em]"
+              style={{ color: brand.gold }}
+            >
+              My Story
+            </p>
+
+            <h2
+              className="mt-3 text-center text-[32px]"
+              style={{ ...serif }}
+            >
+              Pairing flavor with feeling
+            </h2>
+
+            <div className="mx-auto mt-6 max-w-[620px] text-[16px] leading-[1.85]">
               <p>
-                For me, wine has never been about collecting bottles — it’s about connection. The moment you
-                take a sip, share a meal, and discover that balance between food and wine, it tells a story.
+                My interest in wine pairing grew from a love of meals that
+                linger a little longer — where conversation flows naturally
+                and the smallest details make the evening feel special.
               </p>
-              <p className="mt-4">
-                What I’ve loved most isn’t just discovering pairings — it’s hearing how others use them to bring
-                people together. Whether it’s dinner with friends, a quiet moment with a partner, or a new
-                tradition around a favorite bottle, connection is the thread that ties it all together.
+
+              <p className="mt-5">
+                Over time, I became fascinated by the way a well-chosen wine
+                can transform a dish. The right pairing brings balance,
+                harmony, and a sense of completeness to the table.
               </p>
-              <p className="mt-4">
-                I hope this site inspires you to explore confidently and pair joyfully, one dish and one glass at a time.
+
+              <p className="mt-5">
+                Vino Pairings was created to share that experience —
+                helping others discover combinations that feel both
+                beautiful and memorable.
               </p>
             </div>
           </div>
         </section>
 
-       {/* VALUES */}
-<section
-  className="mt-12 grid gap-6 sm:gap-8 grid-cols-[repeat(auto-fit,minmax(240px,1fr))]"
->
-  {[
-    { title: 'Approachable', desc: 'Wine should feel inclusive and human — not intimidating.' },
-    { title: 'Connected',   desc: 'Food and wine mean more when they bring people together — every pairing is a story shared.' },
-    { title: 'Authentic',   desc: 'Every pairing and photo comes from real kitchens and real curiosity.' },
-    { title: 'Beautiful',   desc: 'Design, flavor, and experience belong together in harmony.' },
-  ].map(({ title, desc }) => (
-    <article
-      key={title}
-      className="rounded-2xl border bg-white p-6 text-center shadow-sm"
-      style={{ borderColor: '#d8cfc4' }}
-    >
-      <h3 className="text-xl font-serif font-bold text-[#a37c58]">{title}</h3>
-      <p className="mt-2 text-base leading-relaxed">{desc}</p>
-    </article>
-  ))}
-</section>
-
-
-        {/* COMMUNITY INVITE */}
-        <section
-          className="mt-12 rounded-2xl border p-5 text-center text-base opacity-95"
-          style={{ borderColor: brand.line, backgroundColor: '#fff' }}
-        >
-          <p>
-            I’d love to hear how food and wine bring joy to your table — your moments and your favorites.
-            <br className="hidden sm:block" />
-            <a href="/contact" className="underline decoration-dotted underline-offset-4 hover:opacity-90">
-              Reach out and say hello
-            </a>
-            .
-          </p>
-        </section>
-
-        {/* FOOTER CTA */}
-        <section
-          className="mt-12 rounded-2xl border p-8 text-center shadow-sm"
-          style={{ borderColor: brand.line, background: '#fff' }}
-        >
-          <h3 className="text-2xl font-serif font-bold tracking-wide">
-            Ready to discover your next perfect pairing?
-          </h3>
-          <p className="mx-auto mt-3 max-w-2xl text-lg">
-            Browse by dish, wine, or occasion — or ask the AI helper for instant inspiration.
-          </p>
-          <div className="mt-6 flex flex-wrap justify-center gap-3">
-            <a
-              href="/"
-              className="rounded-full border px-5 py-2 text-sm font-semibold shadow-sm transition hover:brightness-110"
-              style={{ borderColor: brand.gold, backgroundColor: brand.gold, color: '#fff' }}
+        {/* VALUES */}
+        <section className="mt-12">
+          <div className="text-center">
+            <p
+              className="text-[11px] uppercase tracking-[0.32em]"
+              style={{ color: brand.gold }}
             >
-              Find Pairings
-            </a>
-            <a
-              href="/tips"
-              className="rounded-full border px-5 py-2 text-sm font-semibold transition hover:bg-white"
-              style={{ borderColor: brand.line }}
+              What Guides This Space
+            </p>
+
+            <h2
+              className="mt-3 text-[32px]"
+              style={{ ...serif }}
             >
-              Wine Tips
-            </a>
+              The values behind Vino Pairings
+            </h2>
+          </div>
+
+          <div className="mt-8 grid gap-5 md:grid-cols-2">
+            {values.map((item) => (
+              <article
+                key={item.title}
+                className="rounded-[24px] border p-6"
+                style={{
+                  borderColor: brand.line,
+                  background:
+                    "linear-gradient(180deg,#ffffff,#fdfaf3)",
+                }}
+              >
+                <h3
+                  className="text-[22px]"
+                  style={{ ...serif, color: brand.gold }}
+                >
+                  {item.title}
+                </h3>
+
+                <p
+                  className="mt-3 text-[15px] leading-[1.8]"
+                  style={{ color: brand.muted }}
+                >
+                  {item.desc}
+                </p>
+              </article>
+            ))}
           </div>
         </section>
-      </main>
 
-   
-    
+        {/* CONTACT */}
+        <section className="mt-12">
+          <div
+            className="rounded-[26px] border px-8 py-9 text-center"
+            style={{
+              borderColor: brand.line,
+              background:
+                "linear-gradient(#ffffff,#f9f6ef)",
+            }}
+          >
+            <p
+              className="text-[11px] uppercase tracking-[0.32em]"
+              style={{ color: brand.gold }}
+            >
+              Contact
+            </p>
+
+            <h3
+              className="mt-3 text-[32px]"
+              style={{ ...serif }}
+            >
+              I'd love to hear what is bringing beauty to your table
+            </h3>
+
+            <p className="mx-auto mt-4 max-w-xl text-[16px] leading-[1.85]">
+              Food and wine have a way of bringing people together.
+              If you have discovered a pairing you love, I would
+              truly enjoy hearing about it.
+            </p>
+
+            <Link
+              href="/contact"
+              className="mt-5 inline-block text-sm font-semibold underline"
+              style={{ color: brand.burgundy }}
+            >
+              Reach out and say hello
+            </Link>
+          </div>
+        </section>
+
+      </main>
     </div>
   );
 }
