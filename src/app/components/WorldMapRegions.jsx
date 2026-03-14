@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
 import {
   ComposableMap,
   Geographies,
@@ -75,21 +74,6 @@ export default function WorldMapRegions() {
           <div className="mx-auto mt-5 h-[2px] w-24 bg-gradient-to-r from-transparent via-[#a37c58] to-transparent" />
         </div>
 
-        {/* Mobile quick links */}
-        <div className="px-4 md:hidden pb-2">
-          <div className="grid grid-cols-2 gap-3">
-            {markers.map((marker) => (
-              <Link
-                key={marker.name}
-                href={marker.href}
-                className="rounded-full border border-[#d8cfc4] bg-[#fdfaf3] px-4 py-3 text-sm font-semibold text-[#4b3f2f] text-center shadow-sm hover:bg-white transition"
-              >
-                {marker.name}
-              </Link>
-            ))}
-          </div>
-        </div>
-
         <div className="px-4 md:px-6 pb-3">
           <div className="flex flex-wrap items-center justify-center gap-4 rounded-full border border-[#e7ddd1] bg-[#fdfaf3] px-4 py-3 text-sm text-[#5f5144]">
             <div className="flex items-center gap-2">
@@ -144,10 +128,17 @@ export default function WorldMapRegions() {
                   >
                     <g className="cursor-pointer">
                       {/* larger invisible tap target */}
-                      <circle
-                        r={18}
-                        fill="transparent"
-                      />
+                      <circle r={22} fill="transparent" />
+
+                      {/* subtle luxury pulse */}
+                      {!isActive && (
+                        <circle
+                          r={12}
+                          fill="rgba(197,155,95,0.18)"
+                          className="animate-mapPulse"
+                        />
+                      )}
+
                       <circle
                         r={isActive ? 9 : 7}
                         fill={isActive ? "#C59B5F" : "#7B1E3F"}
@@ -155,6 +146,7 @@ export default function WorldMapRegions() {
                         strokeWidth={2.5}
                         style={{ transition: "all 0.2s ease" }}
                       />
+
                       <circle
                         r={isActive ? 16 : 0}
                         fill="rgba(197,155,95,0.18)"
@@ -196,12 +188,34 @@ export default function WorldMapRegions() {
             {/* Mobile helper text */}
             <div className="mt-4 md:hidden rounded-[20px] border border-[#e7ddd1] bg-white px-5 py-4 text-center shadow-sm">
               <p className="text-sm text-[#6b5b4b]">
-                For easier browsing on mobile, use the region buttons above.
+                For easier browsing on mobile, use the region cards below the map.
               </p>
             </div>
           </div>
         </div>
       </div>
+
+      <style jsx>{`
+        @keyframes mapPulse {
+          0% {
+            transform: scale(0.9);
+            opacity: 0.55;
+          }
+          70% {
+            transform: scale(1.18);
+            opacity: 0;
+          }
+          100% {
+            transform: scale(1.18);
+            opacity: 0;
+          }
+        }
+
+        .animate-mapPulse {
+          animation: mapPulse 2.8s ease-out infinite;
+          transform-origin: center;
+        }
+      `}</style>
     </section>
   );
 }
