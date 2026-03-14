@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import {
   ComposableMap,
   Geographies,
@@ -68,11 +69,25 @@ export default function WorldMapRegions() {
           </h2>
 
           <p className="mt-3 max-w-2xl mx-auto text-[#6b5b4b] leading-relaxed">
-            Hover or tap a region to preview it, then click to explore signature
-            wines and classic pairings.
+            Explore signature wines and classic pairings by region.
           </p>
 
           <div className="mx-auto mt-5 h-[2px] w-24 bg-gradient-to-r from-transparent via-[#a37c58] to-transparent" />
+        </div>
+
+        {/* Mobile quick links */}
+        <div className="px-4 md:hidden pb-2">
+          <div className="grid grid-cols-2 gap-3">
+            {markers.map((marker) => (
+              <Link
+                key={marker.name}
+                href={marker.href}
+                className="rounded-full border border-[#d8cfc4] bg-[#fdfaf3] px-4 py-3 text-sm font-semibold text-[#4b3f2f] text-center shadow-sm hover:bg-white transition"
+              >
+                {marker.name}
+              </Link>
+            ))}
+          </div>
         </div>
 
         <div className="px-4 md:px-6 pb-3">
@@ -83,7 +98,7 @@ export default function WorldMapRegions() {
             </div>
             <div className="flex items-center gap-2">
               <span className="h-3 w-3 rounded-full bg-[#C59B5F]" />
-              <span>Click to explore pairings</span>
+              <span>Tap or click to explore</span>
             </div>
           </div>
         </div>
@@ -128,6 +143,11 @@ export default function WorldMapRegions() {
                     onClick={() => router.push(marker.href)}
                   >
                     <g className="cursor-pointer">
+                      {/* larger invisible tap target */}
+                      <circle
+                        r={18}
+                        fill="transparent"
+                      />
                       <circle
                         r={isActive ? 9 : 7}
                         fill={isActive ? "#C59B5F" : "#7B1E3F"}
@@ -146,7 +166,8 @@ export default function WorldMapRegions() {
               })}
             </ComposableMap>
 
-            <div className="mt-4 min-h-[88px] rounded-[20px] border border-[#e7ddd1] bg-white px-5 py-4 text-center shadow-sm">
+            {/* Desktop preview */}
+            <div className="mt-4 hidden md:block min-h-[88px] rounded-[20px] border border-[#e7ddd1] bg-white px-5 py-4 text-center shadow-sm">
               {active ? (
                 <>
                   <p className="text-[11px] uppercase tracking-[0.24em] text-[#8a7a68] font-semibold">
@@ -170,6 +191,13 @@ export default function WorldMapRegions() {
                   </p>
                 </>
               )}
+            </div>
+
+            {/* Mobile helper text */}
+            <div className="mt-4 md:hidden rounded-[20px] border border-[#e7ddd1] bg-white px-5 py-4 text-center shadow-sm">
+              <p className="text-sm text-[#6b5b4b]">
+                For easier browsing on mobile, use the region buttons above.
+              </p>
             </div>
           </div>
         </div>
