@@ -10,7 +10,7 @@ const GUIDES = [
   {
     title: 'Wine Glass Guide',
     image: '/wine-glass-guide-preview.png',
-    href: '/downloads/wine-glass-guide-printable.pdf',
+    href: '/downloads/wine-glass-guide.pdf',
     buttonClass: 'bg-[#a37c58] text-white',
     eyebrow: 'Glassware',
     note: 'An elegant printable for choosing the right glass with confidence.',
