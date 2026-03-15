@@ -30,7 +30,7 @@ const GUIDES = [
   title: 'Wine Pairing Basics Guide',
   priceLabel: '$9 Printable Download',
   paymentLink: 'https://buy.stripe.com/fZubJ13O80tJcKXbze0gw05',
-  previewImage: '/wine-pairing-basics-preview.png',
+  previewImage: '/wine-pairing-basics-guide.png',
   description:
     'A beautifully designed visual guide showing classic wine styles and the foods they pair best with.',
   accent: 'gold',
