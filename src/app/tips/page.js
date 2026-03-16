@@ -1,6 +1,7 @@
 // src/app/tips/page.js
 import Link from "next/link";
-import VideoCard from "../components/VideoCard";
+import TrackedVideoCard from "../components/TrackedVideoCard";
+import TipsCTA from "../components/TipsCTA";
 
 export const metadata = {
   title: "How to Use a Corkscrew | Wine Tips & Tutorials | Vino Pairings",
@@ -33,10 +34,12 @@ export default function TipsPage() {
         </p>
       </header>
 
-      <VideoCard
+      <TrackedVideoCard
         src="/wine-opener.mp4"
         poster="/wine-thumbnail.png"
         caption="A simple demonstration of opening a wine bottle with a classic corkscrew."
+        videoTitle="How to Use a Corkscrew"
+        pagePath="/tips"
       />
 
       <section className="max-w-2xl space-y-5 text-[17px] leading-8 text-[#6b5645]">
@@ -68,12 +71,7 @@ export default function TipsPage() {
           your next meal.
         </p>
 
-        <Link
-          href="/"
-          className="mt-5 inline-flex items-center rounded-lg bg-[#7a1e1e] px-5 py-3 text-white transition hover:opacity-90"
-        >
-          Explore Wine Pairings →
-        </Link>
+        <TipsCTA href="/">Explore Wine Pairings →</TipsCTA>
       </section>
     </div>
   );
