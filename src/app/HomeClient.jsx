@@ -570,6 +570,65 @@ export default function HomeClient() {
         Vino Pairings: Wine Pairing Guides, Wine Tips, Printables, and Wine Essentials
       </h1>
 
+      {/* FEATURED WINE ESSENTIALS */}
+<section className="my-16 rounded-[2rem] border border-[#e6d8c8] bg-[#fffaf4] p-8 shadow-sm md:p-12">
+  <div className="grid gap-10 md:grid-cols-[1.1fr_0.9fr] md:items-center">
+    <div>
+      <p className="text-sm uppercase tracking-[0.25em] text-[#a37c58]">
+        Wine Essentials
+      </p>
+
+      <h2 className="mt-3 text-3xl font-semibold tracking-tight text-[#3b2f2f] md:text-4xl">
+        Start with the tool that makes every bottle feel effortless.
+      </h2>
+
+      <p className="mt-5 max-w-2xl text-base leading-8 text-[#6f5d4f]">
+        A beautiful wine experience begins before the first pour. Our beginner-friendly
+        guide highlights elegant corkscrews and wine openers that are simple,
+        dependable, and gift-worthy.
+      </p>
+
+      <div className="mt-7 flex flex-wrap gap-3">
+        <Link
+          href="/best-wine-opener-for-beginners"
+          className="rounded-full bg-[#a37c58] px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:opacity-90"
+        >
+          View the Wine Opener Guide
+        </Link>
+
+        <Link
+          href="/tips"
+          className="rounded-full border border-[#cdbba8] px-6 py-3 text-sm font-semibold text-[#4b3f2f] transition hover:bg-white"
+        >
+          Watch the Corkscrew Tutorial
+        </Link>
+      </div>
+    </div>
+
+    <div className="rounded-[1.75rem] border border-[#eadfd3] bg-white p-6 shadow-sm">
+      <p className="text-xs uppercase tracking-[0.22em] text-[#a37c58]">
+        Featured Guide
+      </p>
+
+      <h3 className="mt-3 text-2xl font-semibold text-[#3b2f2f]">
+        Best Wine Opener for Beginners
+      </h3>
+
+      <p className="mt-4 text-sm leading-7 text-[#6f5d4f]">
+        From classic waiter’s corkscrews to elegant electric openers, this guide
+        helps you choose the right first tool with confidence.
+      </p>
+
+      <Link
+        href="/best-wine-opener-for-beginners"
+        className="mt-6 inline-flex text-sm font-semibold text-[#8a633f] underline underline-offset-4"
+      >
+        Read the guide →
+      </Link>
+    </div>
+  </div>
+</section>
+
       {/* HERO */}
       <section className="relative overflow-hidden rounded-[36px] border border-[#d8cfc4] bg-[#fdfaf3] px-6 py-16 shadow-[0_18px_60px_rgba(75,63,47,0.08)] md:px-12 md:py-20">
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(163,124,88,0.20),transparent_38%),radial-gradient(circle_at_bottom_right,rgba(110,42,42,0.08),transparent_35%)]" />
