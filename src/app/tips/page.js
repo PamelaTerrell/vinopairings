@@ -71,47 +71,52 @@ export default function TipsPage() {
         </p>
       </section>
 
-      <section className="rounded-2xl border border-[#d8cfc4] bg-white p-6 shadow-sm">
-        <div className="space-y-5">
-          <p className="text-sm uppercase tracking-[0.18em] text-[#8a7463]">
-            Recommended Wine Tool
-          </p>
+      
 
-          <h2 className="text-2xl font-medium text-[#2f241f] md:text-3xl [font-family:var(--font-playfair)]">
-            A Classic Waiter’s Corkscrew Is Still One of the Best Choices
-          </h2>
+       <section className="rounded-2xl border border-[#d8cfc4] bg-white p-6 shadow-sm">
+  <div className="space-y-5">
+    <p className="text-sm uppercase tracking-[0.18em] text-[#8a7463]">
+      Recommended Wine Tool
+    </p>
 
-          <p className="text-[17px] leading-8 text-[#6b5645]">
-            For most home wine lovers, a waiter’s corkscrew is elegant,
-            compact, affordable, and reliable. Look for one with a comfortable
-            grip, a built-in foil cutter, a sturdy hinge, and a smooth spiral.
-          </p>
+    <h2 className="text-2xl font-medium text-[#2f241f] md:text-3xl [font-family:var(--font-playfair)]">
+      Need the Right Corkscrew First?
+    </h2>
 
-          <div className="rounded-xl border border-[#eee2d6] bg-[#fdf7ef] p-5">
-            <h3 className="font-medium text-[#2f241f]">
-              Premium Waiter’s Corkscrew
-            </h3>
+    <p className="text-[17px] leading-8 text-[#6b5645]">
+      If you are new to opening wine, the right tool can make the process feel
+      much easier. Our beginner-friendly guide explains which corkscrews are
+      easiest to use and includes a trusted Amazon pick for first-time wine
+      lovers.
+    </p>
 
-            <p className="mt-2 text-sm leading-7 text-[#6b5645]">
-              A refined option for everyday wine opening, dinner parties, and
-              gifting. Ideal if you want something simple, useful, and timeless.
-            </p>
+    <div className="rounded-xl border border-[#eee2d6] bg-[#fdf7ef] p-5">
+      <h3 className="font-medium text-[#2f241f]">
+        Best Wine Opener for Beginners
+      </h3>
 
-            <Link
-  href="/best-corkscrews"
-  className="mt-4 inline-block rounded-full bg-[#6e2a2a] px-5 py-3 text-sm font-medium text-white transition hover:bg-[#8a3a3a]"
->
-  Explore Corkscrew Guide →
-</Link>
-          </div>
+      <p className="mt-2 text-sm leading-7 text-[#6b5645]">
+        A simple guide to beginner-friendly wine openers, including wing
+        corkscrews, waiter’s corkscrews, and easy tools for opening your first
+        bottles with confidence.
+      </p>
 
-          <p className="text-xs leading-6 text-[#8a7463]">
-            Disclosure: As an Amazon Associate I earn from qualifying purchases.
-            This page may contain affiliate links, which means Vino Pairings may
-            earn a commission at no additional cost to you.
-          </p>
-        </div>
-      </section>
+      <Link
+        href="/best-wine-opener-for-beginners"
+        className="mt-4 inline-block rounded-full bg-[#6e2a2a] px-5 py-3 text-sm font-medium text-white transition hover:bg-[#8a3a3a]"
+      >
+        View Beginner Wine Opener Guide →
+      </Link>
+    </div>
+
+    <p className="text-xs leading-6 text-[#8a7463]">
+      Disclosure: As an Amazon Associate I earn from qualifying purchases. This
+      page may contain affiliate links, which means Vino Pairings may earn a
+      commission at no additional cost to you.
+    </p>
+  </div>
+</section>
+  
 
       <section className="rounded-2xl border border-[#d8cfc4] bg-[#fdf7ef] p-6 shadow-sm">
         <h2 className="text-2xl font-medium tracking-tight text-[#2f241f] md:text-3xl [font-family:var(--font-playfair)]">
