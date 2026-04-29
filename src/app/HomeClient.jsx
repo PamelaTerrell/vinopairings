@@ -781,6 +781,100 @@ export default function HomeClient() {
   </div>
 </section>
 
+
+{/* Wine Essentials */}
+<section className="mt-12 w-full max-w-3xl px-4 mx-auto">
+  <div className="rounded-2xl border border-[#D8CFC4] bg-[#FDF7EF] p-7 shadow-md text-center">
+    <p className="text-sm uppercase tracking-[0.2em] text-[#7B1E3F] font-semibold">
+      Wine Essentials
+    </p>
+
+    <h2 className="mt-3 text-2xl md:text-3xl font-heading font-extrabold text-charcoal">
+      Helpful Guides for a More Elegant Wine Experience
+    </h2>
+
+    <p className="mt-3 text-gray-700 leading-7">
+      From choosing the right corkscrew to selecting beautiful glassware,
+      these simple guides help make wine feel easier, smoother, and more
+      enjoyable at home.
+    </p>
+
+    <div className="mt-6 grid gap-4 md:grid-cols-2">
+      <Link
+        href="/best-corkscrews"
+        className="rounded-xl border border-[#D8CFC4] bg-white p-5 text-left shadow-sm transition hover:-translate-y-1 hover:shadow-md"
+      >
+        <p className="text-sm uppercase tracking-[0.16em] text-[#7B1E3F] font-semibold">
+          Guide
+        </p>
+
+        <h3 className="mt-2 text-xl font-heading font-bold text-charcoal">
+          Best Corkscrews for Wine Lovers
+        </h3>
+
+        <p className="mt-2 text-sm leading-6 text-gray-700">
+          A refined guide to choosing a corkscrew for everyday bottles,
+          entertaining, and gifting.
+        </p>
+
+        <span className="mt-4 inline-block text-sm font-semibold text-[#7B1E3F] underline underline-offset-4">
+          Explore Corkscrews →
+        </span>
+      </Link>
+
+      <Link
+        href="/best-wine-glasses"
+        className="rounded-xl border border-[#D8CFC4] bg-white p-5 text-left shadow-sm transition hover:-translate-y-1 hover:shadow-md"
+      >
+        <p className="text-sm uppercase tracking-[0.16em] text-[#7B1E3F] font-semibold">
+          Guide
+        </p>
+
+        <h3 className="mt-2 text-xl font-heading font-bold text-charcoal">
+          Best Wine Glasses for Everyday Elegance
+        </h3>
+
+        <p className="mt-2 text-sm leading-6 text-gray-700">
+          A simple guide to choosing glasses for red, white, sparkling,
+          and relaxed outdoor wine moments.
+        </p>
+
+        <span className="mt-4 inline-block text-sm font-semibold text-[#7B1E3F] underline underline-offset-4">
+          Explore Wine Glasses →
+        </span>
+      </Link>
+
+      <Link
+  href="/wine-gifts-under-50"
+  className="rounded-xl border border-[#D8CFC4] bg-white p-5 text-left shadow-sm transition hover:-translate-y-1 hover:shadow-md md:col-span-2"
+>
+  <p className="text-sm uppercase tracking-[0.16em] text-[#7B1E3F] font-semibold">
+    Gift Guide
+  </p>
+
+  <h3 className="mt-2 text-xl font-heading font-bold text-charcoal">
+    Best Wine Gifts Under $50
+  </h3>
+
+  <p className="mt-2 text-sm leading-6 text-gray-700">
+    Thoughtful wine gift ideas for hosts, birthdays, holidays, housewarmings,
+    and everyday celebrations.
+  </p>
+
+  <span className="mt-4 inline-block text-sm font-semibold text-[#7B1E3F] underline underline-offset-4">
+    Explore Wine Gifts →
+  </span>
+</Link>
+
+    </div>
+
+    <p className="mt-5 text-xs leading-6 text-gray-500">
+      Product recommendations are selected independently. Vino Pairings may
+      participate in affiliate programs in the future.
+    </p>
+  </div>
+</section>
+
 {/* More Printable Guides */}
 <section className="mt-10 w-full max-w-2xl px-4 mx-auto">
   <div className="bg-[#FDF7EF] border border-[#D8CFC4] shadow-md rounded-xl p-6 text-center">
