@@ -7,14 +7,15 @@ import { usePathname } from "next/navigation";
 
 const NAV_GROUPS = [
   {
-    label: "Learn",
-    links: [
-      { href: "/history", label: "Wine History" },
-      { href: "/regions", label: "Wine Regions" },
-      { href: "/tips", label: "Wine Tips" },
-      { href: "/celestial-sips", label: "Celestial Sips" },
-    ],
-  },
+  label: "Learn",
+  links: [
+    { href: "/history", label: "Wine History" },
+    { href: "/regions", label: "Wine Regions" },
+    { href: "/tips", label: "Wine Tips" },
+    { href: "/best-wines-for-pasta", label: "Wines for Pasta" },
+    { href: "/celestial-sips", label: "Celestial Sips" },
+  ],
+},
   {
     label: "Essentials",
     links: [
