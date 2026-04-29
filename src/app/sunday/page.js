@@ -1,12 +1,26 @@
 // src/app/sunday/page.js
-import Image from 'next/image';
-import Link from 'next/link';
+import Image from "next/image";
+import Link from "next/link";
 
-// ✅ Co-located, optimized images
-import salmonImg from './assets/salmon.png';
-import clueImg from './assets/clue.png';
-import turkeyImg from './assets/turkeysandwich.png'; // ← correct filename
-import whiteshellsImg from './assets/whiteshells.png'; // ← NEW
+// images
+import salmonImg from "./assets/salmon.png";
+import clueImg from "./assets/clue.png";
+import turkeyImg from "./assets/turkeysandwich.png";
+import whiteshellsImg from "./assets/whiteshells.png";
+
+export const metadata = {
+  title: "Sunday Pairings | Real Meals, Wine & Lifestyle Inspiration | Vino Pairings",
+  description:
+    "A weekly collection of real meals, thoughtful wine pairings, and elegant everyday inspiration from Pamela Terrell of Vino Pairings.",
+  alternates: { canonical: "/sunday" },
+  openGraph: {
+    title: "Sunday Pairings | Vino Pairings",
+    description:
+      "Real meals, real wines, and beautiful everyday moments shared weekly.",
+    type: "website",
+    url: "https://vinopairings.com/sunday",
+  },
+};
 
 function CTA({ href, children }) {
   return (
@@ -14,7 +28,20 @@ function CTA({ href, children }) {
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      className="inline-flex items-center gap-2 rounded-lg bg-gold px-4 py-2 text-white font-semibold hover:brightness-95 transition shadow-sm"
+      className="inline-flex items-center gap-2 rounded-full bg-[#a37c58] px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:brightness-95"
+    >
+      {children}
+    </a>
+  );
+}
+
+function ProductCTA({ href, children }) {
+  return (
+    <a
+      href={href}
+      target="_blank"
+      rel="nofollow sponsored noopener noreferrer"
+      className="inline-flex items-center gap-2 rounded-full bg-[#6e2a2a] px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-[#8a3a3a]"
     >
       {children}
     </a>
@@ -23,46 +50,47 @@ function CTA({ href, children }) {
 
 function MealCard({ item }) {
   return (
-    <article className="group bg-white border border-[#D8CFC4] rounded-xl shadow-md overflow-hidden hover:shadow-lg transition">
-      {/* Image container */}
-      <div className="relative w-full aspect-[4/5] sm:aspect-[4/3] lg:aspect-[3/2] xl:aspect-[16/10] bg-cream overflow-hidden">
+    <article className="overflow-hidden rounded-2xl border border-[#d8cfc4] bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-lg">
+      <div className="relative aspect-[4/3] w-full bg-[#f9f6ef]">
         <Image
           src={item.src}
-          alt={item.alt || item.dish}
+          alt={item.alt}
           fill
-          placeholder="blur"
           priority
-          sizes="(min-width:1536px) 22vw, (min-width:1280px) 28vw, (min-width:1024px) 31vw, (min-width:640px) 45vw, 100vw"
-          className="object-contain object-center w-full h-full transition-transform duration-300 group-hover:scale-[1.02]"
-          style={{
-            filter: 'saturate(1.1) contrast(1.06) brightness(1.02)',
-          }}
+          placeholder="blur"
+          className="object-contain p-3"
+          sizes="(min-width: 1024px) 33vw, 100vw"
         />
 
-        <span className="absolute top-3 left-3 bg-burgundy text-white text-xs font-semibold px-3 py-1 rounded-full shadow">
+        <span className="absolute left-3 top-3 rounded-full bg-[#6e2a2a] px-3 py-1 text-xs font-semibold text-white shadow">
           {item.wine}
         </span>
       </div>
 
-      {/* Text section */}
-      <div className="p-4">
-        <h3 className="text-lg font-heading font-bold text-charcoal">
+      <div className="space-y-3 p-5">
+        <p className="text-xs uppercase tracking-[0.18em] text-[#8a7463]">
+          {item.date}
+        </p>
+
+        <h2 className="text-xl font-semibold text-[#2f241f] [font-family:var(--font-playfair)]">
           {item.dish}
-        </h3>
-        {item.date && <p className="text-xs opacity-70 mt-0.5">{item.date}</p>}
-        {item.notes && (
-          <p className="text-sm mt-2 text-charcoal/90">{item.notes}</p>
-        )}
+        </h2>
+
+        <p className="text-[15px] leading-7 text-[#6b5645]">
+          {item.notes}
+        </p>
+
         {item.source && (
-          <p className="mt-2 text-sm italic text-charcoal/70">
+          <p className="text-sm italic text-[#8a7463]">
             {item.source}
           </p>
         )}
+
         {item.links?.length > 0 && (
-          <div className="mt-3 flex flex-wrap gap-2">
-            {item.links.map((l, i) => (
-              <CTA key={i} href={l.href}>
-                {l.label}
+          <div className="flex flex-wrap gap-2 pt-1">
+            {item.links.map((link, i) => (
+              <CTA key={i} href={link.href}>
+                {link.label}
               </CTA>
             ))}
           </div>
@@ -72,139 +100,190 @@ function MealCard({ item }) {
   );
 }
 
-export const metadata = {
-  title: 'Sunday • VinoPairings',
-  description: 'Homemade meals and inspired pairings — wine, food, and fun.',
-};
-
 export default function SundayPage() {
   const gallery = [
     {
       src: turkeyImg,
-      dish: 'Turkey Sandwich on the Lake (Subway)',
-      wine: 'Bogle Sauvignon Blanc',
-      date: 'Sunday, November 9, 2025',
+      dish: "Turkey Sandwich on the Lake",
+      wine: "Bogle Sauvignon Blanc",
+      date: "Sunday Escape",
       notes:
-        'A relaxed Sunday cruise on a Bentley pontoon — crisp Bogle Sauvignon Blanc alongside a classic Subway turkey sandwich. Bright citrus and herb notes in the wine cut through the savory turkey, while the lake breeze does the rest.',
-      alt:
-        'Turkey sandwich from Subway with a glass of Sauvignon Blanc and a Bogle bottle on a Bentley pontoon boat at the lake.',
+        "A relaxed pontoon afternoon with crisp Sauvignon Blanc and a simple turkey sandwich. Proof that great pairings do not need to be complicated to feel memorable.",
+      alt: "Turkey sandwich and white wine on pontoon boat",
       links: [
-        { label: 'Bogle Sauvignon Blanc', href: 'https://www.boglewinery.com/' },
-        { label: 'Subway Menu', href: 'https://www.subway.com/' },
-        { label: 'Bentley Pontoons', href: 'https://www.bentleypontoons.com/' },
+        { label: "Bogle Winery", href: "https://www.boglewinery.com/" },
       ],
     },
     {
       src: whiteshellsImg,
-      dish: 'White Cheddar Shells with Zucchini & Bacon-Wrapped Filet',
-      wine: 'Frontera Cabernet Sauvignon–Merlot',
-      date: 'This Sunday',
+      dish: "White Cheddar Shells & Bacon-Wrapped Filet",
+      wine: "Cabernet-Merlot",
+      date: "This Week",
       notes:
-        'A cozy triple-market dinner: creamy white cheddar shells from Aldi, pan-seared zucchini, and a bacon-wrapped chuck tender filet from Lidl. Paired with Frontera Cabernet Sauvignon–Merlot from Sam’s Club — a smooth, fruit-forward blend with enough structure to stand up to the richness of the bacon and steak.',
-      alt:
-        'Creamy white cheddar pasta shells with pan-seared zucchini and a bacon-wrapped chuck tender filet, paired with a glass of Frontera Cabernet Sauvignon Merlot.',
-      links: [
-        { label: 'Aldi', href: 'https://www.aldi.us/' },
-        { label: 'Lidl', href: 'https://www.lidl.com/' },
-        { label: 'Frontera Wines at Sam’s Club', href: 'https://www.samsclub.com/' },
-      ],
+        "Creamy shells, seared zucchini, and rich beef create a comforting dinner made even better with a smooth red blend.",
+      alt: "Pasta shells zucchini and filet dinner",
     },
     {
       src: clueImg,
-      dish: 'CLUE: Wine Lovers Edition',
-      wine: 'Cabernet Sauvignon',
-      date: 'This Sunday',
+      dish: "CLUE: Wine Lovers Edition",
+      wine: "Cabernet Sauvignon",
+      date: "Game Night",
       notes:
-        'Tonight we’re pairing a game instead of a meal — the limited edition “CLUE: Wine Lovers Edition,” matched with a smooth Cabernet Sauvignon. This playful take on the classic mystery features delightful characters like Chef Chardonnay, Lady Rosé, Colonel Cabernet, Lord Malbec, Mayor Merlot, and Professor Prosecco — each bringing their own vintage flair to the board.',
-      alt: 'Clue Wine Lovers Edition board game beside a glass of Cabernet Sauvignon',
-      source:
-        'Found at World Market in Columbia, SC — an eclectic destination for gourmet finds, gifts, and wine accessories.',
-      links: [{ label: 'Visit World Market', href: 'https://www.worldmarket.com/' }],
+        "Sometimes the best pairing is not a meal, but a moment. A cozy evening game paired with a generous pour of Cabernet.",
+      alt: "Wine lovers clue game with red wine",
     },
     {
       src: salmonImg,
-      dish: 'Griddle Cooked Salmon with Asparagus & Rice–Quinoa Blend',
-      wine: 'GEN5 Pinot Noir',
-      date: 'Last Sunday',
+      dish: "Salmon with Asparagus & Rice-Quinoa Blend",
+      wine: "GEN5 Pinot Noir",
+      date: "Last Sunday",
       notes:
-        'Griddle-seared salmon with tender asparagus and a rice–quinoa blend. The pairing — a juicy, bright GEN5 Pinot Noir from Costco — balances beautifully with the buttery grains and crisp vegetables. Serve the wine slightly chilled (55–58°F) for an extra layer of freshness.',
-      alt:
-        'Griddle cooked salmon with asparagus and a rice and quinoa blend plated for dinner',
-      source: 'Ingredients and wine sourced from Costco.',
-      links: [
-        { label: 'Join Costco', href: 'https://www.costco.com/join-costco.html' },
-        { label: 'Shop GEN5 Wines', href: 'https://www.costco.com/wine.html' },
-        {
-          label: 'Blackstone 36\" Griddle',
-          href:
-            'https://www.costco.com/blackstone-36-in.-griddle-with-hinged-hood%2C-front-shelf-and-soft-cover.product.1713585.html',
-        },
-      ],
+        "Fresh salmon, tender asparagus, and a bright Pinot Noir create an elegant yet approachable dinner worth repeating.",
+      alt: "Salmon asparagus plated dinner",
     },
   ];
 
   return (
-    <main className="min-h-screen bg-cream text-charcoal">
+    <main className="min-h-screen bg-[#f9f6ef] text-[#4b3f2f]">
       {/* HERO */}
-      <section className="relative w-full bg-cream flex flex-col items-center justify-center overflow-hidden">
-        <div className="relative w-full flex items-center justify-center">
-          <Image
-            src={turkeyImg}
-            alt="Bogle Sauvignon Blanc and a Subway turkey sandwich on a Bentley pontoon at the lake"
-            className="w-full h-auto max-h-[64vh] object-contain"
-            priority
-            placeholder="blur"
-            style={{
-              filter: 'saturate(1.15) contrast(1.05) brightness(1.03)',
-              objectPosition: 'center',
-            }}
-            sizes="100vw"
-          />
-        </div>
+      <section className="border-b border-[#e6ddd2] bg-gradient-to-b from-[#fdfaf3] to-[#f9f6ef]">
+        <div className="mx-auto max-w-6xl px-6 py-14 text-center">
+          <p className="text-sm uppercase tracking-[0.24em] text-[#8a7463]">
+            Weekly Lifestyle Series
+          </p>
 
-        <div className="mt-3 text-center text-xs sm:text-sm text-charcoal/90 max-w-[90%] leading-snug">
-          Sunday on the water — Bogle Sauvignon Blanc + a classic Subway turkey sandwich aboard a Bentley pontoon.
+          <h1 className="mt-4 text-4xl font-semibold md:text-6xl [font-family:var(--font-playfair)] text-[#2f241f]">
+            Sunday Pairings
+          </h1>
+
+          <p className="mx-auto mt-6 max-w-3xl text-[18px] leading-8 text-[#6b5645]">
+            Real meals. Thoughtful wine pairings. Beautiful everyday moments.
+            Shared weekly by Pamela Terrell, creator of Vino Pairings.
+          </p>
+
+          <p className="mx-auto mt-4 max-w-3xl text-sm leading-7 text-[#8a7463]">
+            As an Amazon Associate I earn from qualifying purchases. Some pages
+            may contain affiliate links at no additional cost to you.
+          </p>
+
+          <div className="mt-8 flex flex-wrap justify-center gap-3">
+            <CTA href="/">Explore Pairings</CTA>
+            <CTA href="/tips">Wine Tips</CTA>
+          </div>
         </div>
       </section>
 
-      {/* TITLE + CTAs */}
-      <section className="mx-auto max-w-5xl px-4 pt-8 pb-6 text-center">
-        <h1 className="text-3xl md:text-4xl font-heading font-bold">Sunday</h1>
-        <p className="mt-3 text-lg md:text-xl opacity-90">
-          This week: Lake vibes — simple food, bright wine, perfect views.
-        </p>
+      {/* FEATURE IMAGE */}
+      <section className="mx-auto max-w-6xl px-6 py-10">
+        <div className="overflow-hidden rounded-3xl border border-[#d8cfc4] bg-white shadow-sm">
+          <div className="relative aspect-[16/8] w-full bg-[#f9f6ef]">
+            <Image
+              src={turkeyImg}
+              alt="Wine and sandwich on pontoon"
+              fill
+              priority
+              placeholder="blur"
+              className="object-contain p-4"
+            />
+          </div>
 
-        <div className="mt-5 flex items-center justify-center gap-3 flex-wrap">
-          <CTA href="https://www.boglewinery.com/">Bogle Winery</CTA>
-          <CTA href="https://www.subway.com/">Subway</CTA>
-          <CTA href="https://www.bentleypontoons.com/">Bentley Pontoons</CTA>
-        </div>
+          <div className="px-8 py-8 text-center">
+            <h2 className="text-3xl font-semibold [font-family:var(--font-playfair)] text-[#2f241f]">
+              This Week’s Mood
+            </h2>
 
-        <div className="mt-4 text-sm">
-          <Link href="/" className="underline hover:text-burgundy">
-            ← Back to Pairings
-          </Link>
+            <p className="mx-auto mt-4 max-w-2xl text-[17px] leading-8 text-[#6b5645]">
+              Lake breeze, bright Sauvignon Blanc, and the reminder that simple
+              pleasures often create the best memories.
+            </p>
+          </div>
         </div>
       </section>
 
       {/* GALLERY */}
-      <section className="mx-auto max-w-screen-2xl px-4 pb-20">
-        <div className="grid gap-6 [grid-template-columns:repeat(auto-fit,minmax(320px,1fr))]">
+      <section className="mx-auto max-w-6xl px-6 pb-14">
+        <div className="grid gap-7 md:grid-cols-2">
           {gallery.map((item, i) => (
             <MealCard key={i} item={item} />
           ))}
+        </div>
+      </section>
 
-          <div className="flex items-center justify-center bg-[#FDF7EF] border-2 border-dashed border-[#D8CFC4] rounded-xl p-8 text-center text-charcoal/80 shadow-sm hover:shadow-md transition">
-            <div>
-              <span className="text-5xl block mb-3">📸</span>
-              <p className="font-heading text-lg font-semibold mb-1">
-                More Sundays Coming Soon
+      {/* AMAZON SECTION */}
+      <section className="mx-auto max-w-5xl px-6 pb-14">
+        <div className="rounded-3xl border border-[#d8cfc4] bg-white p-8 shadow-sm">
+          <p className="text-sm uppercase tracking-[0.22em] text-[#8a7463]">
+            Sunday Essentials
+          </p>
+
+          <h2 className="mt-3 text-3xl font-semibold text-[#2f241f] [font-family:var(--font-playfair)]">
+            A Few Favorites for Relaxed Entertaining
+          </h2>
+
+          <div className="mt-7 grid gap-5 md:grid-cols-3">
+            <div className="rounded-2xl bg-[#fdf7ef] p-5">
+              <h3 className="font-semibold text-[#2f241f]">
+                Elegant Corkscrew
+              </h3>
+              <p className="mt-2 text-sm leading-7 text-[#6b5645]">
+                A reliable classic for opening bottles smoothly.
               </p>
-              <p className="text-sm italic">
-                Check back for new meals, pairings, and inspirations.
+              <div className="mt-4">
+                <ProductCTA href="YOUR_AFFILIATE_LINK">
+                  View Option
+                </ProductCTA>
+              </div>
+            </div>
+
+            <div className="rounded-2xl bg-[#fdf7ef] p-5">
+              <h3 className="font-semibold text-[#2f241f]">
+                Outdoor Wine Tumblers
+              </h3>
+              <p className="mt-2 text-sm leading-7 text-[#6b5645]">
+                Ideal for lake days, patios, and gatherings.
               </p>
+              <div className="mt-4">
+                <ProductCTA href="YOUR_AFFILIATE_LINK">
+                  View Option
+                </ProductCTA>
+              </div>
+            </div>
+
+            <div className="rounded-2xl bg-[#fdf7ef] p-5">
+              <h3 className="font-semibold text-[#2f241f]">
+                Serving Board
+              </h3>
+              <p className="mt-2 text-sm leading-7 text-[#6b5645]">
+                Perfect for cheese, fruit, and small bites.
+              </p>
+              <div className="mt-4">
+                <ProductCTA href="YOUR_AFFILIATE_LINK">
+                  View Option
+                </ProductCTA>
+              </div>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* CTA */}
+      <section className="mx-auto max-w-4xl px-6 pb-20 text-center">
+        <h2 className="text-3xl font-semibold text-[#2f241f] [font-family:var(--font-playfair)]">
+          More Sundays Coming Soon
+        </h2>
+
+        <p className="mx-auto mt-4 max-w-2xl text-[17px] leading-8 text-[#6b5645]">
+          Check back for new meals, wine pairings, hosting inspiration, and
+          beautiful moments from everyday life.
+        </p>
+
+        <div className="mt-6">
+          <Link
+            href="/"
+            className="inline-block rounded-full bg-[#6e2a2a] px-7 py-3 font-semibold text-white transition hover:bg-[#8a3a3a]"
+          >
+            Explore All Pairings →
+          </Link>
         </div>
       </section>
     </main>
