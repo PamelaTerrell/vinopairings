@@ -61,6 +61,49 @@ export default function TipsPage() {
         </p>
       </section>
 
+      {/* Affiliate Promotion Section */}
+      <section className="rounded-2xl border border-[#d8cfc4] bg-white p-6 shadow-sm">
+        <div className="space-y-4">
+          <p className="text-sm uppercase tracking-[0.18em] text-[#8a7463]">
+            Recommended Tool
+          </p>
+
+          <h2 className="text-2xl md:text-3xl font-medium text-[#2f241f] [font-family:var(--font-playfair)]">
+            Our Favorite Elegant Corkscrew
+          </h2>
+
+          <p className="text-[17px] leading-8 text-[#6b5645]">
+            A quality corkscrew makes opening wine smoother, faster, and more
+            enjoyable. We recommend choosing one with a comfortable grip,
+            sturdy hinge, and clean foil cutter.
+          </p>
+
+          <div className="rounded-xl bg-[#fdf7ef] p-5 border border-[#eee2d6]">
+            <p className="font-medium text-[#2f241f]">
+              Premium Waiter’s Corkscrew
+            </p>
+            <p className="mt-2 text-sm leading-7 text-[#6b5645]">
+              Sleek, reliable, and perfect for home entertaining or gifting.
+            </p>
+
+            <a
+              href="YOUR_AFFILIATE_LINK_HERE"
+              target="_blank"
+              rel="nofollow sponsored noopener noreferrer"
+              className="mt-4 inline-block rounded-full bg-[#2f241f] px-5 py-3 text-sm font-medium text-white transition hover:opacity-90"
+            >
+              View Corkscrew →
+            </a>
+          </div>
+
+          <p className="text-xs text-[#8a7463] leading-6">
+            Disclosure: This page may contain affiliate links. If you purchase
+            through them, Vino Pairings may earn a commission at no additional
+            cost to you.
+          </p>
+        </div>
+      </section>
+
       <section className="rounded-2xl border border-[#d8cfc4] bg-[#fdf7ef] p-6 shadow-sm">
         <h2 className="text-2xl md:text-3xl font-medium tracking-tight text-[#2f241f] [font-family:var(--font-playfair)]">
           Now that the bottle is open…
