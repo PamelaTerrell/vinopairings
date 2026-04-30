@@ -1,5 +1,6 @@
 // src/app/best-wines-for-pasta/page.js
 import Link from "next/link";
+import Image from "next/image";
 
 export const metadata = {
   title: "Best Wines for Pasta Night | Vino Pairings",
@@ -74,8 +75,23 @@ export default function BestWinesForPastaPage() {
             pasta dishes—from tomato sauce to creamy Alfredo and seafood pasta.
           </p>
 
+  
+
           <div className="mx-auto mt-6 h-[2px] w-24 bg-gradient-to-r from-transparent via-[#a37c58] to-transparent" />
         </header>
+
+                      <div className="mx-auto mt-10 max-w-5xl overflow-hidden rounded-[2rem] border border-[#d8cfc4] bg-[#fdfaf3] shadow-md">
+  <Image
+    src="/best-wines-for-pasta-hero.png"
+    alt="Elegant pasta night table with wine pairings"
+    width={1600}
+    height={900}
+    priority
+    className="h-auto w-full object-cover"
+  />
+</div>
+
+  
 
         {/* Intro */}
         <section className="mx-auto mt-10 max-w-3xl rounded-3xl border border-[#d8cfc4] bg-[#fdfaf3] p-8 shadow-sm">
