@@ -565,454 +565,464 @@ export default function HomeClient() {
   }, [input, resultText]);
 
   return (
-    <div className="min-h-screen bg-[#f9f6ef] text-[#4b3f2f] font-body">
-      <h1 className="sr-only">
-        Vino Pairings: Wine Pairing Guides, Wine Tips, Printables, and Wine Essentials
-      </h1>
+  <div className="min-h-screen bg-[#f9f6ef] px-4 py-8 text-[#4b3f2f] font-body md:px-8">
+    <h1 className="sr-only">
+      Vino Pairings: Wine Pairing Guides, Wine Tips, Printables, and Wine Essentials
+    </h1>
 
-      {/* FEATURED WINE ESSENTIALS */}
-<section className="my-16 rounded-[2rem] border border-[#e6d8c8] bg-[#fffaf4] p-8 shadow-sm md:p-12">
-  <div className="grid gap-10 md:grid-cols-[1.1fr_0.9fr] md:items-center">
-    <div>
-      <p className="text-sm uppercase tracking-[0.25em] text-[#a37c58]">
-        Wine Essentials
-      </p>
+    {/* IMAGE-LED HERO */}
+    <section className="relative mx-auto max-w-6xl overflow-hidden rounded-[2.5rem] border border-[#e6d8c8] bg-[#fdfaf3] shadow-[0_18px_60px_rgba(75,63,47,0.08)]">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,#ead8c2,transparent_35%),radial-gradient(circle_at_bottom_right,#f4e8dc,transparent_38%)]" />
 
-      <h2 className="mt-3 text-3xl font-semibold tracking-tight text-[#3b2f2f] md:text-4xl">
-        Start with the tool that makes every bottle feel effortless.
-      </h2>
-
-      <p className="mt-5 max-w-2xl text-base leading-8 text-[#6f5d4f]">
-        A beautiful wine experience begins before the first pour. Our beginner-friendly
-        guide highlights elegant corkscrews and wine openers that are simple,
-        dependable, and gift-worthy.
-      </p>
-
-      <div className="mt-7 flex flex-wrap gap-3">
-        <Link
-          href="/best-wine-opener-for-beginners"
-          className="rounded-full bg-[#a37c58] px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:opacity-90"
-        >
-          View the Wine Opener Guide
-        </Link>
-
-        <Link
-          href="/tips"
-          className="rounded-full border border-[#cdbba8] px-6 py-3 text-sm font-semibold text-[#4b3f2f] transition hover:bg-white"
-        >
-          Watch the Corkscrew Tutorial
-        </Link>
-      </div>
-    </div>
-
-    <div className="rounded-[1.75rem] border border-[#eadfd3] bg-white p-6 shadow-sm">
-      <p className="text-xs uppercase tracking-[0.22em] text-[#a37c58]">
-        Featured Guide
-      </p>
-
-      <h3 className="mt-3 text-2xl font-semibold text-[#3b2f2f]">
-        Best Wine Opener for Beginners
-      </h3>
-
-      <p className="mt-4 text-sm leading-7 text-[#6f5d4f]">
-        From classic waiter’s corkscrews to elegant electric openers, this guide
-        helps you choose the right first tool with confidence.
-      </p>
-
-      <Link
-        href="/best-wine-opener-for-beginners"
-        className="mt-6 inline-flex text-sm font-semibold text-[#8a633f] underline underline-offset-4"
-      >
-        Read the guide →
-      </Link>
-    </div>
-  </div>
-</section>
-
-      {/* HERO */}
-      <section className="relative overflow-hidden rounded-[36px] border border-[#d8cfc4] bg-[#fdfaf3] px-6 py-16 shadow-[0_18px_60px_rgba(75,63,47,0.08)] md:px-12 md:py-20">
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(163,124,88,0.20),transparent_38%),radial-gradient(circle_at_bottom_right,rgba(110,42,42,0.08),transparent_35%)]" />
-
-        <div className="relative mx-auto max-w-4xl text-center">
-          <p className="text-sm font-semibold uppercase tracking-[0.28em] text-[#a37c58]">
+      <div className="relative z-10 grid gap-10 px-6 py-12 md:grid-cols-[0.95fr_1.05fr] md:items-center md:px-12 md:py-16">
+        <div>
+          <p className="text-xs uppercase tracking-[0.32em] text-[#a37c58]">
             Wine · Food · Elegance
           </p>
 
-          <h2 className="mt-5 text-4xl font-semibold leading-tight tracking-tight text-[#2f241f] md:text-6xl [font-family:var(--font-playfair)]">
-            Pair Every Meal with More Beauty
+          <h2 className="mt-5 text-4xl font-semibold leading-tight text-[#2f241f] md:text-6xl [font-family:var(--font-playfair)]">
+            Pair the right wine with the moment.
           </h2>
 
-          <p className="mx-auto mt-6 max-w-2xl text-[17px] leading-8 text-[#6b5b4b] md:text-lg">
-            Discover thoughtful wine pairings, elegant tutorials, printable wine
-            guides, and refined essentials for hosting, gifting, and everyday
-            meals.
+          <p className="mt-6 max-w-xl text-[18px] leading-8 text-[#6b5645]">
+            Discover elegant wine pairings, thoughtful gift guides, beginner
+            wine tips, and beautiful essentials for the table.
           </p>
 
-          <div className="mt-9 flex flex-wrap justify-center gap-3">
+          <div className="mt-8 flex flex-col gap-3 sm:flex-row">
             <a
               href="#pairing-finder"
-              className="rounded-full bg-[#6e2a2a] px-7 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-[#8a3a3a]"
+              className="inline-flex justify-center rounded-full bg-[#6e2a2a] px-7 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-[#8a3a3a]"
             >
               Find a Pairing
             </a>
 
             <Link
-              href="/printable-guides"
-              className="rounded-full border border-[#d8cfc4] bg-white/80 px-7 py-3 text-sm font-semibold text-[#6e2a2a] shadow-sm transition hover:bg-[#f3eadf]"
+              href="/wine-gifts-under-50"
+              className="inline-flex justify-center rounded-full border border-[#cdbba8] bg-white/70 px-7 py-3 text-sm font-semibold text-[#4b3f2f] transition hover:bg-white"
             >
-              Shop Printable Guides
-            </Link>
-
-            <Link
-              href="/best-wines-for-pasta"
-              className="rounded-full border border-[#d8cfc4] bg-white/80 px-7 py-3 text-sm font-semibold text-[#6e2a2a] shadow-sm transition hover:bg-[#f3eadf]"
-            >
-              Pasta Pairings
+              Explore Wine Gifts
             </Link>
           </div>
         </div>
-      </section>
 
-      {/* PAIRING FINDER */}
-      <section id="pairing-finder" className="mx-auto mt-14 max-w-3xl px-4">
-        <form
-          onSubmit={(e) => e.preventDefault()}
-          className="rounded-3xl border border-[#d8cfc4] bg-white p-8 shadow-sm"
-          aria-labelledby="pairing-title"
+        <div className="relative">
+          <div className="overflow-hidden rounded-[2rem] border border-[#eadfd3] bg-white p-3 shadow-md">
+            <Image
+              src="/vino-hero-table.png"
+              alt="Elegant wine pairing table with pasta, cheese, candles, and wine glasses"
+              width={1600}
+              height={1200}
+              priority
+              className="h-auto w-full rounded-[2rem] object-contain"
+            />
+          </div>
+
+         
+        </div>
+      </div>
+    </section>
+
+    {/* PAIRING FINDER */}
+    <section id="pairing-finder" className="mx-auto mt-16 max-w-3xl">
+      <form
+        onSubmit={(e) => e.preventDefault()}
+        className="rounded-3xl border border-[#d8cfc4] bg-white p-8 shadow-sm"
+        aria-labelledby="pairing-title"
+      >
+        <p className="text-center text-sm font-semibold uppercase tracking-[0.22em] text-[#a37c58]">
+          Pairing Finder
+        </p>
+
+        <h2
+          id="pairing-title"
+          className="mt-3 text-center text-3xl font-semibold text-[#2f241f] [font-family:var(--font-playfair)]"
         >
-          <p className="text-center text-sm font-semibold uppercase tracking-[0.22em] text-[#a37c58]">
-            Pairing Finder
-          </p>
+          Discover Your Perfect Pairing
+        </h2>
 
-          <h2
-            id="pairing-title"
-            className="mt-3 text-center text-3xl font-semibold text-[#2f241f] [font-family:var(--font-playfair)]"
-          >
-            Discover Your Perfect Pairing
-          </h2>
+        <p className="mx-auto mt-3 max-w-xl text-center text-sm leading-7 text-[#6b5b4b]">
+          Enter a dish to find a wine, or enter a wine to discover foods that
+          pair beautifully with it.
+        </p>
 
-          <p className="mx-auto mt-3 max-w-xl text-center text-sm leading-7 text-[#6b5b4b]">
-            Enter a dish to find a wine, or enter a wine to discover foods that
-            pair beautifully with it.
-          </p>
+        <div className="mt-7 grid gap-5 md:grid-cols-[180px_1fr]">
+          <div className="flex flex-col gap-2">
+            <label className="font-medium" htmlFor="type">
+              Search by
+            </label>
 
-          <div className="mt-7 grid gap-5 md:grid-cols-[180px_1fr]">
-            <div className="flex flex-col gap-2">
-              <label className="font-medium" htmlFor="type">
-                Search by
-              </label>
-
-              <select
-                id="type"
-                value={type}
-                onChange={(e) => setType(e.target.value)}
-                className="rounded-xl border border-[#d8cfc4] bg-[#fdfaf3] p-3 outline-none focus:ring-2 focus:ring-[#a37c58]"
-              >
-                <option value="dish">Dish</option>
-                <option value="wine">Wine</option>
-              </select>
-            </div>
-
-            <div className="relative flex flex-col gap-2">
-              <label className="font-medium" htmlFor="query">
-                {`Enter your ${type}`}
-              </label>
-
-              <input
-                id="query"
-                type="text"
-                placeholder="e.g., pasta, salmon, Cabernet, Pinot Noir"
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                onFocus={() => setSuggestions(buildSuggestions(input, type))}
-                onBlur={() => setTimeout(() => setSuggestions([]), 120)}
-                className="rounded-xl border border-[#d8cfc4] bg-[#fdfaf3] p-3 outline-none focus:ring-2 focus:ring-[#a37c58]"
-                inputMode="search"
-                autoComplete="off"
-                aria-autocomplete="list"
-                aria-controls="suggestions"
-                aria-expanded={suggestions.length > 0}
-                aria-activedescendant={suggestions.length ? "sug-0" : undefined}
-              />
-
-              {suggestions.length > 0 && (
-                <ul
-                  id="suggestions"
-                  role="listbox"
-                  className="absolute top-full z-10 mt-1 max-h-60 w-full overflow-auto rounded-xl border border-[#d8cfc4] bg-white shadow-lg"
-                >
-                  {suggestions.map((s, i) => (
-                    <li
-                      key={`${s}-${i}`}
-                      id={`sug-${i}`}
-                      role="option"
-                      aria-selected="false"
-                      tabIndex={-1}
-                      className="cursor-pointer px-4 py-3 hover:bg-[#f4ede4]"
-                      onMouseDown={(e) => {
-                        e.preventDefault();
-                        commitSelection(s);
-                      }}
-                      onKeyDown={(e) => {
-                        if (e.key === "Enter") commitSelection(s);
-                      }}
-                    >
-                      {highlight(s, input)}
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </div>
+            <select
+              id="type"
+              value={type}
+              onChange={(e) => setType(e.target.value)}
+              className="rounded-xl border border-[#d8cfc4] bg-[#fdfaf3] p-3 outline-none focus:ring-2 focus:ring-[#a37c58]"
+            >
+              <option value="dish">Dish</option>
+              <option value="wine">Wine</option>
+            </select>
           </div>
-        </form>
 
-        {resultText && (
-          <div
-            className="mt-6 rounded-2xl border-l-4 border-[#a37c58] bg-[#fdf7ef] p-6 shadow-sm animate-fadeIn"
-            role="status"
-            aria-live="polite"
-          >
-            {renderWithStrong(resultText)}
-          </div>
-        )}
+          <div className="relative flex flex-col gap-2">
+            <label className="font-medium" htmlFor="query">
+              {`Enter your ${type}`}
+            </label>
 
-        {noResult && (
-          <div className="mt-6 rounded-2xl border border-[#d8cfc4] bg-white p-5 shadow-sm animate-fadeIn">
-            <div className="font-semibold text-[#6e2a2a]">
-              Not finding an exact match?
-            </div>
+            <input
+              id="query"
+              type="text"
+              placeholder="e.g., pasta, salmon, Cabernet, Pinot Noir"
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              onFocus={() => setSuggestions(buildSuggestions(input, type))}
+              onBlur={() => setTimeout(() => setSuggestions([]), 120)}
+              className="rounded-xl border border-[#d8cfc4] bg-[#fdfaf3] p-3 outline-none focus:ring-2 focus:ring-[#a37c58]"
+              inputMode="search"
+              autoComplete="off"
+              aria-autocomplete="list"
+              aria-controls="suggestions"
+              aria-expanded={suggestions.length > 0}
+              aria-activedescendant={suggestions.length ? "sug-0" : undefined}
+            />
 
-            <p className="mt-1 text-sm leading-7 text-[#6b5b4b]">
-              Click the <strong>🍷</strong> button in the bottom-right to ask{" "}
-              <strong>Viv, our virtual sommelier</strong>.
-            </p>
-
-            {didYouMean && (
-              <button
-                className="mt-3 text-sm font-semibold text-[#6e2a2a] underline underline-offset-4"
-                onClick={() => commitSelection(didYouMean)}
+            {suggestions.length > 0 && (
+              <ul
+                id="suggestions"
+                role="listbox"
+                className="absolute top-full z-10 mt-1 max-h-60 w-full overflow-auto rounded-xl border border-[#d8cfc4] bg-white shadow-lg"
               >
-                Try “{didYouMean}”
-              </button>
+                {suggestions.map((s, i) => (
+                  <li
+                    key={`${s}-${i}`}
+                    id={`sug-${i}`}
+                    role="option"
+                    aria-selected="false"
+                    tabIndex={-1}
+                    className="cursor-pointer px-4 py-3 hover:bg-[#f4ede4]"
+                    onMouseDown={(e) => {
+                      e.preventDefault();
+                      commitSelection(s);
+                    }}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") commitSelection(s);
+                    }}
+                  >
+                    {highlight(s, input)}
+                  </li>
+                ))}
+              </ul>
             )}
           </div>
-        )}
-      </section>
-
-      {/* FEATURED WINE */}
-      <section className="mx-auto mt-16 max-w-5xl px-4">
-        <div className="grid overflow-hidden rounded-3xl border border-[#d8cfc4] bg-white shadow-[0_14px_45px_rgba(75,63,47,0.08)] md:grid-cols-2">
-          <div className="relative min-h-[360px] bg-[#fdfaf3]">
-            <Image
-              src={FEATURED.imagePath}
-              alt={`${FEATURED.name} bottle`}
-              fill
-              className="object-contain p-8"
-              priority
-            />
-          </div>
-
-          <div className="flex flex-col justify-center p-8 text-center md:text-left">
-            <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[#a37c58]">
-              Featured Wine of the Month
-            </p>
-
-            <h2 className="mt-3 text-3xl font-semibold text-[#2f241f] [font-family:var(--font-playfair)]">
-              {FEATURED.name}
-            </h2>
-
-            <p className="mt-2 text-xs text-[#8a7463]">
-              Last updated {featuredUpdatedText}
-            </p>
-
-            <p className="mt-5 text-[17px] leading-8 text-[#6b5b4b]">
-              {FEATURED.blurb}
-            </p>
-
-            <div className="mt-5 flex flex-wrap justify-center gap-2 md:justify-start">
-              {FEATURED.pairingTags.map((tag) => (
-                <span
-                  key={tag}
-                  className="rounded-full border border-[#d8cfc4] bg-[#fdf7ef] px-3 py-1 text-sm"
-                >
-                  {tag}
-                </span>
-              ))}
-            </div>
-
-            <a
-              href={FEATURED.brandUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={trackFeaturedCTA}
-              className="mt-7 inline-block w-fit rounded-full bg-[#a37c58] px-6 py-3 text-sm font-semibold text-white transition hover:brightness-95"
-            >
-              {FEATURED.brandLabel}
-            </a>
-          </div>
         </div>
-      </section>
+      </form>
 
-      {/* EDITORIAL GUIDES */}
-      <section className="mx-auto mt-16 max-w-5xl px-4">
-        <div className="text-center">
-          <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[#a37c58]">
-            Explore Vino Pairings
+      {resultText && (
+        <div
+          className="mt-6 rounded-2xl border-l-4 border-[#a37c58] bg-[#fdf7ef] p-6 shadow-sm animate-fadeIn"
+          role="status"
+          aria-live="polite"
+        >
+          {renderWithStrong(resultText)}
+        </div>
+      )}
+
+      {noResult && (
+        <div className="mt-6 rounded-2xl border border-[#d8cfc4] bg-white p-5 shadow-sm animate-fadeIn">
+          <div className="font-semibold text-[#6e2a2a]">
+            Not finding an exact match?
+          </div>
+
+          <p className="mt-1 text-sm leading-7 text-[#6b5b4b]">
+            Click the <strong>🍷</strong> button in the bottom-right to ask{" "}
+            <strong>Viv, our virtual sommelier</strong>.
           </p>
 
-          <h2 className="mt-3 text-3xl font-semibold text-[#2f241f] md:text-4xl [font-family:var(--font-playfair)]">
-            Guides for Pairing, Pouring, and Gifting Well
+          {didYouMean && (
+            <button
+              className="mt-3 text-sm font-semibold text-[#6e2a2a] underline underline-offset-4"
+              onClick={() => commitSelection(didYouMean)}
+            >
+              Try “{didYouMean}”
+            </button>
+          )}
+        </div>
+      )}
+    </section>
+
+    {/* EDITORIAL GUIDES */}
+    <section className="mx-auto mt-16 max-w-5xl">
+      <div className="text-center">
+        <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[#a37c58]">
+          Explore Vino Pairings
+        </p>
+
+        <h2 className="mt-3 text-3xl font-semibold text-[#2f241f] md:text-4xl [font-family:var(--font-playfair)]">
+          Guides for Pairing, Pouring, and Gifting Well
+        </h2>
+
+        <p className="mx-auto mt-4 max-w-2xl text-[16px] leading-8 text-[#6b5b4b]">
+          Build confidence with helpful wine articles, entertaining tools, and
+          elegant product-style guides.
+        </p>
+      </div>
+
+      <div className="mt-8 grid gap-5 md:grid-cols-2">
+        {featuredGuides.map((guide) => (
+          <Link
+            key={guide.href}
+            href={guide.href}
+            className="rounded-3xl border border-[#d8cfc4] bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-md"
+          >
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#a37c58]">
+              {guide.label}
+            </p>
+
+            <h3 className="mt-3 text-2xl font-semibold text-[#2f241f] [font-family:var(--font-playfair)]">
+              {guide.title}
+            </h3>
+
+            <p className="mt-3 text-sm leading-7 text-[#6b5b4b]">
+              {guide.desc}
+            </p>
+
+            <span className="mt-5 inline-block text-sm font-semibold text-[#6e2a2a] underline underline-offset-4">
+              Read Guide →
+            </span>
+          </Link>
+        ))}
+      </div>
+    </section>
+
+    {/* WINE ESSENTIALS */}
+    <section className="mx-auto mt-16 max-w-5xl rounded-[2rem] border border-[#e6d8c8] bg-[#fffaf4] p-8 shadow-sm md:p-12">
+      <div className="grid gap-10 md:grid-cols-[1.1fr_0.9fr] md:items-center">
+        <div>
+          <p className="text-sm uppercase tracking-[0.25em] text-[#a37c58]">
+            Wine Essentials
+          </p>
+
+          <h2 className="mt-3 text-3xl font-semibold tracking-tight text-[#3b2f2f] md:text-4xl [font-family:var(--font-playfair)]">
+            Start with the tool that makes every bottle feel effortless.
           </h2>
 
-          <p className="mx-auto mt-4 max-w-2xl text-[16px] leading-8 text-[#6b5b4b]">
-            Build confidence with helpful wine articles, entertaining tools, and
-            elegant product-style guides.
+          <p className="mt-5 max-w-2xl text-base leading-8 text-[#6f5d4f]">
+            A beautiful wine experience begins before the first pour. Our
+            beginner-friendly guide highlights elegant corkscrews and wine
+            openers that are simple, dependable, and gift-worthy.
           </p>
-        </div>
 
-        <div className="mt-8 grid gap-5 md:grid-cols-2">
-          {featuredGuides.map((guide) => (
+          <div className="mt-7 flex flex-wrap gap-3">
             <Link
-              key={guide.href}
-              href={guide.href}
-              className="rounded-3xl border border-[#d8cfc4] bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-md"
+              href="/best-wine-opener-for-beginners"
+              className="rounded-full bg-[#a37c58] px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:opacity-90"
             >
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#a37c58]">
-                {guide.label}
-              </p>
-
-              <h3 className="mt-3 text-2xl font-semibold text-[#2f241f] [font-family:var(--font-playfair)]">
-                {guide.title}
-              </h3>
-
-              <p className="mt-3 text-sm leading-7 text-[#6b5b4b]">
-                {guide.desc}
-              </p>
-
-              <span className="mt-5 inline-block text-sm font-semibold text-[#6e2a2a] underline underline-offset-4">
-                Read Guide →
-              </span>
+              View Wine Opener Guide
             </Link>
-          ))}
-        </div>
-      </section>
 
-      {/* PRINTABLE GUIDES */}
-      <section className="mx-auto mt-16 max-w-5xl px-4">
-        <div className="grid overflow-hidden rounded-3xl border border-[#d8cfc4] bg-[#fdfaf3] shadow-sm md:grid-cols-2">
-          <div className="bg-white">
-            <Image
-              src={GLASS_GUIDE.previewImage}
-              alt="Wine Glass Guide preview"
-              width={1400}
-              height={900}
-              className="h-auto w-full"
-              sizes="(min-width: 1024px) 50vw, 100vw"
-            />
-          </div>
-
-          <div className="flex flex-col justify-center p-8 text-center md:text-left">
-            <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[#a37c58]">
-              Printable Wine Guides
-            </p>
-
-            <h2 className="mt-3 text-3xl font-semibold text-[#2f241f] [font-family:var(--font-playfair)]">
-              Learn Wine Beautifully
-            </h2>
-
-            <p className="mt-4 text-[17px] leading-8 text-[#6b5b4b]">
-              Beginner-friendly printable guides designed for kitchens, wine
-              bars, dinner parties, gifting, and everyday confidence.
-            </p>
-
-            <div className="mt-6 flex flex-wrap justify-center gap-3 md:justify-start">
-              <a
-                href={GLASS_GUIDE.paymentLink}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="rounded-full bg-[#a37c58] px-6 py-3 text-sm font-semibold text-white transition hover:brightness-95"
-              >
-                Get Wine Glass Guide
-              </a>
-
-              <Link
-                href="/printable-guides"
-                className="rounded-full border border-[#d8cfc4] bg-white px-6 py-3 text-sm font-semibold text-[#6e2a2a] transition hover:bg-[#f3eadf]"
-              >
-                Browse All Guides
-              </Link>
-            </div>
-
-            <p className="mt-4 text-xs leading-6 text-[#8a7463]">
-              You’ll be redirected to your download after checkout.
-            </p>
+            <Link
+              href="/tips"
+              className="rounded-full border border-[#cdbba8] px-6 py-3 text-sm font-semibold text-[#4b3f2f] transition hover:bg-white"
+            >
+              Watch Tutorial
+            </Link>
           </div>
         </div>
-      </section>
 
-      {/* BRAND TRUST */}
-      <section className="mx-auto mt-16 max-w-4xl px-4 pb-16 text-center">
-        <div className="rounded-3xl border border-[#d8cfc4] bg-white p-8 shadow-sm">
+        <div className="rounded-[1.75rem] border border-[#eadfd3] bg-white p-6 shadow-sm">
+          <p className="text-xs uppercase tracking-[0.22em] text-[#a37c58]">
+            Featured Guide
+          </p>
+
+          <h3 className="mt-3 text-2xl font-semibold text-[#3b2f2f] [font-family:var(--font-playfair)]">
+            Best Wine Opener for Beginners
+          </h3>
+
+          <p className="mt-4 text-sm leading-7 text-[#6f5d4f]">
+            From classic waiter’s corkscrews to elegant electric openers, this
+            guide helps you choose the right first tool with confidence.
+          </p>
+
+          <Link
+            href="/best-wine-opener-for-beginners"
+            className="mt-6 inline-flex text-sm font-semibold text-[#8a633f] underline underline-offset-4"
+          >
+            Read the guide →
+          </Link>
+        </div>
+      </div>
+    </section>
+
+    {/* FEATURED WINE */}
+    <section className="mx-auto mt-16 max-w-5xl">
+      <div className="grid overflow-hidden rounded-3xl border border-[#d8cfc4] bg-white shadow-[0_14px_45px_rgba(75,63,47,0.08)] md:grid-cols-2">
+        <div className="relative min-h-[360px] bg-[#fdfaf3]">
+          <Image
+            src={FEATURED.imagePath}
+            alt={`${FEATURED.name} bottle`}
+            fill
+            className="object-contain p-8"
+            priority
+          />
+        </div>
+
+        <div className="flex flex-col justify-center p-8 text-center md:text-left">
           <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[#a37c58]">
-            Why Vino Pairings
+            Featured Wine of the Month
           </p>
 
           <h2 className="mt-3 text-3xl font-semibold text-[#2f241f] [font-family:var(--font-playfair)]">
-            Wine Should Feel Welcoming
+            {FEATURED.name}
           </h2>
 
-          <p className="mx-auto mt-4 max-w-2xl text-[17px] leading-8 text-[#6b5b4b]">
-            Created by Pamela Terrell, Vino Pairings brings together simple wine
-            guidance, elegant entertaining inspiration, printable resources, and
-            thoughtfully selected wine essentials.
+          <p className="mt-2 text-xs text-[#8a7463]">
+            Last updated {featuredUpdatedText}
           </p>
 
-          <div className="mt-6 flex flex-wrap justify-center gap-3">
-            <Link
-              href="/about"
-              className="rounded-full bg-[#6e2a2a] px-6 py-3 text-sm font-semibold text-white transition hover:bg-[#8a3a3a]"
+          <p className="mt-5 text-[17px] leading-8 text-[#6b5b4b]">
+            {FEATURED.blurb}
+          </p>
+
+          <div className="mt-5 flex flex-wrap justify-center gap-2 md:justify-start">
+            {FEATURED.pairingTags.map((tag) => (
+              <span
+                key={tag}
+                className="rounded-full border border-[#d8cfc4] bg-[#fdf7ef] px-3 py-1 text-sm"
+              >
+                {tag}
+              </span>
+            ))}
+          </div>
+
+          <a
+            href={FEATURED.brandUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={trackFeaturedCTA}
+            className="mt-7 inline-block w-fit rounded-full bg-[#a37c58] px-6 py-3 text-sm font-semibold text-white transition hover:brightness-95"
+          >
+            {FEATURED.brandLabel}
+          </a>
+        </div>
+      </div>
+    </section>
+
+    {/* PRINTABLE GUIDES */}
+    <section className="mx-auto mt-16 max-w-5xl">
+      <div className="grid overflow-hidden rounded-3xl border border-[#d8cfc4] bg-[#fdfaf3] shadow-sm md:grid-cols-2">
+        <div className="bg-white">
+          <Image
+            src={GLASS_GUIDE.previewImage}
+            alt="Wine Glass Guide preview"
+            width={1400}
+            height={900}
+            className="h-auto w-full"
+            sizes="(min-width: 1024px) 50vw, 100vw"
+          />
+        </div>
+
+        <div className="flex flex-col justify-center p-8 text-center md:text-left">
+          <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[#a37c58]">
+            Printable Wine Guides
+          </p>
+
+          <h2 className="mt-3 text-3xl font-semibold text-[#2f241f] [font-family:var(--font-playfair)]">
+            Learn Wine Beautifully
+          </h2>
+
+          <p className="mt-4 text-[17px] leading-8 text-[#6b5b4b]">
+            Beginner-friendly printable guides designed for kitchens, wine
+            bars, dinner parties, gifting, and everyday confidence.
+          </p>
+
+          <div className="mt-6 flex flex-wrap justify-center gap-3 md:justify-start">
+            <a
+              href={GLASS_GUIDE.paymentLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="rounded-full bg-[#a37c58] px-6 py-3 text-sm font-semibold text-white transition hover:brightness-95"
             >
-              About Vino Pairings
-            </Link>
+              Get Wine Glass Guide
+            </a>
 
             <Link
-              href="/sunday"
-              className="rounded-full border border-[#d8cfc4] bg-[#fdfaf3] px-6 py-3 text-sm font-semibold text-[#6e2a2a] transition hover:bg-[#f3eadf]"
+              href="/printable-guides"
+              className="rounded-full border border-[#d8cfc4] bg-white px-6 py-3 text-sm font-semibold text-[#6e2a2a] transition hover:bg-[#f3eadf]"
             >
-              Sunday Pairings
+              Browse All Guides
             </Link>
           </div>
+
+          <p className="mt-4 text-xs leading-6 text-[#8a7463]">
+            You’ll be redirected to your download after checkout.
+          </p>
         </div>
-      </section>
+      </div>
+    </section>
 
-      <style jsx global>{`
-        @keyframes fadeIn {
-          from {
-            opacity: 0;
-            transform: translateY(10px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
+    {/* BRAND TRUST */}
+    <section className="mx-auto mt-16 max-w-4xl pb-16 text-center">
+      <div className="rounded-3xl border border-[#d8cfc4] bg-white p-8 shadow-sm">
+        <p className="text-sm font-semibold uppercase tracking-[0.22em] text-[#a37c58]">
+          Why Vino Pairings
+        </p>
 
-        .animate-fadeIn {
-          animation: fadeIn 0.5s ease-out;
-        }
+        <h2 className="mt-3 text-3xl font-semibold text-[#2f241f] [font-family:var(--font-playfair)]">
+          Wine Should Feel Welcoming
+        </h2>
 
-        .sr-only {
-          position: absolute;
-          width: 1px;
-          height: 1px;
-          padding: 0;
-          margin: -1px;
-          overflow: hidden;
-          clip: rect(0, 0, 0, 0);
-          white-space: nowrap;
-          border: 0;
+        <p className="mx-auto mt-4 max-w-2xl text-[17px] leading-8 text-[#6b5b4b]">
+          Created by Pamela Terrell, Vino Pairings brings together simple wine
+          guidance, elegant entertaining inspiration, printable resources, and
+          thoughtfully selected wine essentials.
+        </p>
+
+        <div className="mt-6 flex flex-wrap justify-center gap-3">
+          <Link
+            href="/about"
+            className="rounded-full bg-[#6e2a2a] px-6 py-3 text-sm font-semibold text-white transition hover:bg-[#8a3a3a]"
+          >
+            About Vino Pairings
+          </Link>
+
+          <Link
+            href="/sunday"
+            className="rounded-full border border-[#d8cfc4] bg-[#fdfaf3] px-6 py-3 text-sm font-semibold text-[#6e2a2a] transition hover:bg-[#f3eadf]"
+          >
+            Sunday Pairings
+          </Link>
+        </div>
+      </div>
+    </section>
+
+    <style jsx global>{`
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
         }
-      `}</style>
-    </div>
-  );
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .animate-fadeIn {
+        animation: fadeIn 0.5s ease-out;
+      }
+
+      .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
+      }
+    `}</style>
+  </div>
+);
+
 }
