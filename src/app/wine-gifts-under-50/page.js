@@ -38,12 +38,14 @@ const gifts = [
     button: "View Corkscrew Guide",
   },
   {
-    title: "Best for Entertaining",
-    name: "Cheese Board & Serving Set",
-    description:
-      "A beautiful serving board creates instant occasion and turns a simple bottle of wine into a thoughtful evening.",
-    bestFor: "Hosts, couples, dinner parties",
-  },
+  title: "Best for Entertaining",
+  name: "Cheese Board & Serving Set",
+  description:
+    "A beautiful cheese board set creates instant occasion and pairs naturally with wine nights, gatherings, and thoughtful hosting.",
+  bestFor: "Hosts, couples, dinner parties",
+  href: "https://amzn.to/4w82fVp",
+  button: "View Gift on Amazon",
+},
   {
     title: "Best Practical Gift",
     name: "Insulated Wine Tumbler Set",
