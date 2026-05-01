@@ -80,12 +80,6 @@ function MealCard({ item }) {
           {item.notes}
         </p>
 
-        {item.source && (
-          <p className="text-sm italic text-[#8a7463]">
-            {item.source}
-          </p>
-        )}
-
         {item.links?.length > 0 && (
           <div className="flex flex-wrap gap-2 pt-1">
             {item.links.map((link, i) => (
@@ -173,7 +167,7 @@ export default function SundayPage() {
         </div>
       </section>
 
-      {/* FEATURE IMAGE */}
+      {/* FEATURE */}
       <section className="mx-auto max-w-6xl px-6 py-10">
         <div className="overflow-hidden rounded-3xl border border-[#d8cfc4] bg-white shadow-sm">
           <div className="relative aspect-[16/8] w-full bg-[#f9f6ef]">
@@ -209,7 +203,7 @@ export default function SundayPage() {
         </div>
       </section>
 
-      {/* AMAZON SECTION */}
+      {/* SUNDAY ESSENTIALS */}
       <section className="mx-auto max-w-5xl px-6 pb-14">
         <div className="rounded-3xl border border-[#d8cfc4] bg-white p-8 shadow-sm">
           <p className="text-sm uppercase tracking-[0.22em] text-[#8a7463]">
@@ -226,11 +220,11 @@ export default function SundayPage() {
                 Elegant Corkscrew
               </h3>
               <p className="mt-2 text-sm leading-7 text-[#6b5645]">
-                A reliable classic for opening bottles smoothly.
+                A polished lever corkscrew that opens bottles smoothly and looks beautiful on display.
               </p>
               <div className="mt-4">
-                <ProductCTA href="YOUR_AFFILIATE_LINK">
-                  View Option
+                <ProductCTA href="https://amzn.to/3OPXS0n">
+                  Open Beautifully
                 </ProductCTA>
               </div>
             </div>
@@ -240,11 +234,11 @@ export default function SundayPage() {
                 Outdoor Wine Tumblers
               </h3>
               <p className="mt-2 text-sm leading-7 text-[#6b5645]">
-                Ideal for lake days, patios, and gatherings.
-              </p>
+  Award-winning insulated tumblers with detachable stems—perfect for lake days, patios, and sunset pours.
+</p>
               <div className="mt-4">
-                <ProductCTA href="YOUR_AFFILIATE_LINK">
-                  View Option
+                <ProductCTA href="https://amzn.to/3OBTJx1">
+                  Shop Wine Tumblers
                 </ProductCTA>
               </div>
             </div>
@@ -254,11 +248,11 @@ export default function SundayPage() {
                 Serving Board
               </h3>
               <p className="mt-2 text-sm leading-7 text-[#6b5645]">
-                Perfect for cheese, fruit, and small bites.
-              </p>
+  A beautiful bamboo serving board with locking lid—perfect for cheese, fruit, snacks, and effortless hosting.
+</p>
               <div className="mt-4">
-                <ProductCTA href="YOUR_AFFILIATE_LINK">
-                  View Option
+                <ProductCTA href="https://amzn.to/3PgItWW">
+                  Shop Serving Board
                 </ProductCTA>
               </div>
             </div>
