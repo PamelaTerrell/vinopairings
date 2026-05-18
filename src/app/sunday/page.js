@@ -168,31 +168,37 @@ export default function SundayPage() {
       </section>
 
       {/* FEATURE */}
-      <section className="mx-auto max-w-6xl px-6 py-10">
-        <div className="overflow-hidden rounded-3xl border border-[#d8cfc4] bg-white shadow-sm">
-          <div className="relative aspect-[16/8] w-full bg-[#f9f6ef]">
-            <Image
-              src={turkeyImg}
-              alt="Wine and sandwich on pontoon"
-              fill
-              priority
-              placeholder="blur"
-              className="object-contain p-4"
-            />
-          </div>
+<section className="mx-auto max-w-7xl px-6 py-14">
+  <div className="overflow-hidden rounded-[2rem] border border-[#d8cfc4] bg-white shadow-md">
+    <div className="relative aspect-[16/7] w-full bg-[#f9f6ef]">
+      <Image
+        src={turkeyImg}
+        alt="Wine and sandwich on pontoon"
+        fill
+        priority
+        placeholder="blur"
+        className="object-cover"
+        sizes="(min-width: 1280px) 1200px, 100vw"
+      />
+    </div>
 
-          <div className="px-8 py-8 text-center">
-            <h2 className="text-3xl font-semibold [font-family:var(--font-playfair)] text-[#2f241f]">
-              This Week’s Mood
-            </h2>
+    <div className="px-8 py-10 text-center md:px-14 md:py-12">
+      <p className="mb-3 text-xs uppercase tracking-[0.28em] text-[#8a7463]">
+        This Week’s Mood
+      </p>
 
-            <p className="mx-auto mt-4 max-w-2xl text-[17px] leading-8 text-[#6b5645]">
-              Lake breeze, bright Sauvignon Blanc, and the reminder that simple
-              pleasures often create the best memories.
-            </p>
-          </div>
-        </div>
-      </section>
+      <h2 className="text-4xl font-semibold leading-tight text-[#2f241f] md:text-5xl [font-family:var(--font-playfair)]">
+        Lake Breeze & Sauvignon Blanc
+      </h2>
+
+      <p className="mx-auto mt-5 max-w-3xl text-[19px] leading-9 text-[#6b5645] md:text-[21px]">
+        Lake breeze, bright Sauvignon Blanc, and the reminder that simple
+        pleasures often create the best memories.
+      </p>
+    </div>
+  </div>
+</section>
+        
 
       {/* GALLERY */}
       <section className="mx-auto max-w-6xl px-6 pb-14">
