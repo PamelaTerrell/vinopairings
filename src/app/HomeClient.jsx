@@ -7,6 +7,7 @@ import Image from "next/image";
 export default function HomeClient() {
   const [input, setInput] = useState("");
   const [type, setType] = useState("dish");
+  const [committedQuery, setCommittedQuery] = useState("");
   const [resultText, setResultText] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const [didYouMean, setDidYouMean] = useState("");
@@ -509,28 +510,35 @@ export default function HomeClient() {
   };
 
   const commitSelection = (value) => {
-    setInput(value);
-    const { found, text } = computeResult(value, type);
-    setResultText(text);
-    const s = buildSuggestions(value, type, 6);
-    setDidYouMean(found ? "" : s[0] || "");
-    setSuggestions([]);
-    setVivAutoOpened(false);
-  };
+  setInput(value);
+  setSuggestions([]);
+  setVivAutoOpened(false);
+};
 
   useEffect(() => {
     const id = setTimeout(() => {
-      const { found, text } = computeResult(input, type);
-      setResultText(text);
       const s = buildSuggestions(input, type, 6);
-      setDidYouMean(found ? "" : s[0] || "");
       setSuggestions(s);
     }, 120);
 
     return () => clearTimeout(id);
   }, [input, type]);
 
-  const noResult = input.trim().length >= 2 && !resultText;
+  useEffect(() => {
+    if (!committedQuery.trim()) {
+      setResultText("");
+      setDidYouMean("");
+      return;
+    }
+
+    const { found, text } = computeResult(committedQuery, type);
+    setResultText(text);
+
+    const s = buildSuggestions(committedQuery, type, 6);
+    setDidYouMean(found ? "" : s[0] || "");
+  }, [committedQuery, type]);
+
+  const noResult = committedQuery.trim().length >= 2 && !resultText;
 
   useEffect(() => {
     if (!noResult || vivAutoOpened || !isLargeScreen()) return;
@@ -545,11 +553,11 @@ export default function HomeClient() {
   }, [noResult, vivAutoOpened]);
 
   useEffect(() => {
-    const noText = input.trim().length < 2;
+    const noText = committedQuery.trim().length < 2;
     const hasResult = !!resultText;
 
     if (noText || hasResult) setVivAutoOpened(false);
-  }, [input, resultText]);
+  }, [committedQuery, resultText]);
 
   return (
     <div className="min-h-screen bg-[#f9f6ef] text-[#4b3f2f] font-body">
@@ -557,10 +565,14 @@ export default function HomeClient() {
         Vino Pairings: Wine Pairing Guides, Wine Tips, Printables, and Wine Essentials
       </h1>
 
-    {/* PAIRING FINDER */}
+      {/* PAIRING FINDER */}
       <section id="pairing-finder" className="mx-auto mt-12 max-w-4xl px-4 md:px-8">
         <form
-          onSubmit={(e) => e.preventDefault()}
+          onSubmit={(e) => {
+            e.preventDefault();
+            setCommittedQuery(input.trim());
+            setSuggestions([]);
+          }}
           className="rounded-[2.25rem] border border-[#d8cfc4] bg-white/90 p-7 shadow-[0_20px_60px_rgba(75,63,47,0.1)] backdrop-blur md:p-10"
           aria-labelledby="pairing-title"
         >
@@ -611,7 +623,12 @@ export default function HomeClient() {
                     : "e.g., Chardonnay, Pinot Noir, Cabernet Sauvignon"
                 }
                 value={input}
-                onChange={(e) => setInput(e.target.value)}
+                onChange={(e) => {
+                  setInput(e.target.value);
+                  setCommittedQuery("");
+                  setResultText("");
+                  setDidYouMean("");
+                }}
                 onFocus={() => setSuggestions(buildSuggestions(input, type))}
                 onBlur={() => setTimeout(() => setSuggestions([]), 120)}
                 className="rounded-2xl border border-[#d8cfc4] bg-[#fdfaf3] p-4 outline-none focus:ring-2 focus:ring-[#a37c58]"
@@ -652,6 +669,15 @@ export default function HomeClient() {
               )}
             </div>
           </div>
+
+          <div className="mt-6 flex justify-center">
+            <button
+              type="submit"
+              className="rounded-full bg-[#6e2a2a] px-7 py-3 text-sm font-semibold uppercase tracking-[0.18em] text-white shadow-md transition hover:bg-[#572020]"
+            >
+              Find Pairing
+            </button>
+          </div>
         </form>
 
         {resultText && (
@@ -691,8 +717,7 @@ export default function HomeClient() {
             )}
           </div>
         )}
-        </section>
-
+      </section>
 
       {/* LUXURY HERO */}
       <section className="relative overflow-hidden px-4 py-6 md:px-8 md:py-10">
@@ -745,11 +770,6 @@ export default function HomeClient() {
           </div>
         </div>
       </section>
-
-    
-           
-
-       
 
       {/* EDITORIAL GUIDES */}
       <section className="mx-auto mt-20 max-w-6xl px-4 md:px-8">
