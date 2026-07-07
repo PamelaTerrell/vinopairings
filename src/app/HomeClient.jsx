@@ -557,59 +557,7 @@ export default function HomeClient() {
         Vino Pairings: Wine Pairing Guides, Wine Tips, Printables, and Wine Essentials
       </h1>
 
-      {/* LUXURY HERO */}
-      <section className="relative overflow-hidden px-4 py-6 md:px-8 md:py-10">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,#fff7e8_0%,transparent_35%),radial-gradient(circle_at_bottom_right,#ead8c2_0%,transparent_38%)]" />
-
-        <div className="relative mx-auto grid max-w-7xl overflow-hidden rounded-[2.75rem] border border-[#e1d2c0] bg-[#fdfaf3] shadow-[0_30px_90px_rgba(75,63,47,0.16)] lg:grid-cols-[0.78fr_1.22fr]">
-          <div className="relative z-10 flex flex-col justify-center px-7 py-12 md:px-12 lg:px-14">
-            <p className="text-xs font-semibold uppercase tracking-[0.38em] text-[#a37c58]">
-              Wine · Food · Elegance
-            </p>
-
-            <h2 className="mt-5 text-5xl font-semibold leading-[0.95] tracking-tight text-[#2f241f] md:text-7xl [font-family:var(--font-playfair)]">
-              Pair the right wine with the moment.
-            </h2>
-
-            <p className="mt-6 max-w-xl text-[18px] leading-8 text-[#6b5645]">
-              Elegant wine pairings, thoughtful gift guides, beginner wine tips,
-              and beautiful table essentials — designed to make every bottle feel
-              effortless.
-            </p>
-
-            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-              <a
-                href="#pairing-finder"
-                className="inline-flex justify-center rounded-full bg-[#6e2a2a] px-7 py-3 text-sm font-semibold text-white shadow-md transition hover:bg-[#8a3a3a]"
-              >
-                Find a Pairing
-              </a>
-
-              <Link
-                href="/best-wines-for-pasta"
-                className="inline-flex justify-center rounded-full border border-[#cdbba8] bg-white/75 px-7 py-3 text-sm font-semibold text-[#4b3f2f] shadow-sm transition hover:bg-white"
-              >
-                Explore Pasta Pairings
-              </Link>
-            </div>
-          </div>
-
-          <div className="relative min-h-[430px] bg-[#efe3d6] lg:min-h-[680px] xl:min-h-[720px]">
-            <Image
-              src="/vino-home-hero.png"
-              alt="Elegant wine and food pairing table with pasta, wine glasses, and warm candlelight"
-              fill
-              priority
-              className="object-cover object-[58%_center] lg:object-[68%_center]"
-              sizes="(min-width: 1024px) 55vw, 100vw"
-            />
-
-            <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-black/10 to-transparent lg:bg-gradient-to-r lg:from-[#fdfaf3]/65 lg:via-transparent lg:to-black/15" />
-          </div>
-        </div>
-      </section>
-
-      {/* PAIRING FINDER */}
+    {/* PAIRING FINDER */}
       <section id="pairing-finder" className="mx-auto mt-12 max-w-4xl px-4 md:px-8">
         <form
           onSubmit={(e) => e.preventDefault()}
@@ -743,7 +691,65 @@ export default function HomeClient() {
             )}
           </div>
         )}
+        </section>
+
+
+      {/* LUXURY HERO */}
+      <section className="relative overflow-hidden px-4 py-6 md:px-8 md:py-10">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,#fff7e8_0%,transparent_35%),radial-gradient(circle_at_bottom_right,#ead8c2_0%,transparent_38%)]" />
+
+        <div className="relative mx-auto grid max-w-7xl overflow-hidden rounded-[2.75rem] border border-[#e1d2c0] bg-[#fdfaf3] shadow-[0_30px_90px_rgba(75,63,47,0.16)] lg:grid-cols-[0.78fr_1.22fr]">
+          <div className="relative z-10 flex flex-col justify-center px-7 py-12 md:px-12 lg:px-14">
+            <p className="text-xs font-semibold uppercase tracking-[0.38em] text-[#a37c58]">
+              Wine · Food · Elegance
+            </p>
+
+            <h2 className="mt-5 text-5xl font-semibold leading-[0.95] tracking-tight text-[#2f241f] md:text-7xl [font-family:var(--font-playfair)]">
+              Pair the right wine with the moment.
+            </h2>
+
+            <p className="mt-6 max-w-xl text-[18px] leading-8 text-[#6b5645]">
+              Elegant wine pairings, thoughtful gift guides, beginner wine tips,
+              and beautiful table essentials — designed to make every bottle feel
+              effortless.
+            </p>
+
+            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+              <a
+                href="#pairing-finder"
+                className="inline-flex justify-center rounded-full bg-[#6e2a2a] px-7 py-3 text-sm font-semibold text-white shadow-md transition hover:bg-[#8a3a3a]"
+              >
+                Find a Pairing
+              </a>
+
+              <Link
+                href="/best-wines-for-pasta"
+                className="inline-flex justify-center rounded-full border border-[#cdbba8] bg-white/75 px-7 py-3 text-sm font-semibold text-[#4b3f2f] shadow-sm transition hover:bg-white"
+              >
+                Explore Pasta Pairings
+              </Link>
+            </div>
+          </div>
+
+          <div className="relative min-h-[430px] bg-[#efe3d6] lg:min-h-[680px] xl:min-h-[720px]">
+            <Image
+              src="/vino-home-hero.png"
+              alt="Elegant wine and food pairing table with pasta, wine glasses, and warm candlelight"
+              fill
+              priority
+              className="object-cover object-[58%_center] lg:object-[68%_center]"
+              sizes="(min-width: 1024px) 55vw, 100vw"
+            />
+
+            <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-black/10 to-transparent lg:bg-gradient-to-r lg:from-[#fdfaf3]/65 lg:via-transparent lg:to-black/15" />
+          </div>
+        </div>
       </section>
+
+    
+           
+
+       
 
       {/* EDITORIAL GUIDES */}
       <section className="mx-auto mt-20 max-w-6xl px-4 md:px-8">
