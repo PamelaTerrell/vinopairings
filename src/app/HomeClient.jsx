@@ -35,15 +35,15 @@ export default function HomeClient() {
   }).format(new Date(FEATURED_UPDATED_ISO));
 
   const FEATURED = {
-    name: "Le FATbastard Chardonnay (2022)",
-    brand: "Le FATbastard",
-    imagePath: "/lefatbastard.png",
-    brandUrl: "https://www.fatbastardwine.com",
-    brandLabel: "Visit Brand Website",
-    pairingTags: ["Roast chicken", "Lobster", "Mac & cheese", "Mushroom risotto"],
-    blurb:
-      "A plush, full-bodied Chardonnay—beautiful with roast chicken, creamy pastas, buttery seafood, and cozy dinners that deserve something a little richer.",
-  };
+  name: "Josh Cellars Seaswept",
+  brand: "Josh Cellars",
+  imagePath: "/josh-seaswept-pammys-place.png",
+  brandUrl: "https://www.joshcellars.com",
+  brandLabel: "Visit Brand Website",
+  pairingTags: ["Shrimp", "Seafood pasta", "Grilled chicken", "Summer salads"],
+  blurb:
+    "A crisp, coastal-inspired white blend of Sauvignon Blanc and Pinot Grigio—fresh, bright, and lovely with seafood, summer salads, light pastas, and warm-weather patio dinners.",
+};
 
   const featuredGuides = [
     {
@@ -719,6 +719,64 @@ export default function HomeClient() {
         )}
       </section>
 
+
+      {/* FEATURED WINE */}
+<section className="mx-auto mt-20 max-w-6xl px-4 md:px-8">
+  <div className="grid overflow-hidden rounded-[2.5rem] border border-[#d8cfc4] bg-white shadow-[0_24px_80px_rgba(75,63,47,0.12)] md:grid-cols-2">
+    <div className="relative min-h-[420px] bg-[#fdfaf3] md:min-h-[520px]">
+      <Image
+        src={FEATURED.imagePath}
+        alt={`${FEATURED.name} with wine glasses at Pammy's Place`}
+        fill
+        className="object-cover"
+        priority
+        sizes="(min-width: 768px) 50vw, 100vw"
+      />
+    </div>
+
+    <div className="flex flex-col justify-center p-8 text-center md:p-12 md:text-left">
+      <p className="text-sm font-semibold uppercase tracking-[0.24em] text-[#a37c58]">
+        Featured Wine of the Month
+      </p>
+
+      <h2 className="mt-3 text-4xl font-semibold text-[#2f241f] [font-family:var(--font-playfair)]">
+        {FEATURED.name}
+      </h2>
+
+      <p className="mt-2 text-xs text-[#8a7463]">
+        Last updated {featuredUpdatedText}
+      </p>
+
+      <p className="mt-5 text-[17px] leading-8 text-[#6b5b4b]">
+        {FEATURED.blurb}
+      </p>
+
+      <div className="mt-5 flex flex-wrap justify-center gap-2 md:justify-start">
+        {FEATURED.pairingTags.map((tag) => (
+          <span
+            key={tag}
+            className="rounded-full border border-[#d8cfc4] bg-[#fdf7ef] px-3 py-1 text-sm"
+          >
+            {tag}
+          </span>
+        ))}
+      </div>
+
+      <a
+        href={FEATURED.brandUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        onClick={trackFeaturedCTA}
+        className="mt-7 inline-block w-fit rounded-full bg-[#a37c58] px-6 py-3 text-sm font-semibold text-white transition hover:brightness-95"
+      >
+        {FEATURED.brandLabel}
+      </a>
+    </div>
+  </div>
+</section>
+
+
+      
       {/* LUXURY HERO */}
       <section className="relative overflow-hidden px-4 py-6 md:px-8 md:py-10">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,#fff7e8_0%,transparent_35%),radial-gradient(circle_at_bottom_right,#ead8c2_0%,transparent_38%)]" />
@@ -770,6 +828,7 @@ export default function HomeClient() {
           </div>
         </div>
       </section>
+
 
       {/* EDITORIAL GUIDES */}
       <section className="mx-auto mt-20 max-w-6xl px-4 md:px-8">
@@ -874,59 +933,7 @@ export default function HomeClient() {
         </div>
       </section>
 
-      {/* FEATURED WINE */}
-      <section className="mx-auto mt-20 max-w-6xl px-4 md:px-8">
-        <div className="grid overflow-hidden rounded-[2.5rem] border border-[#d8cfc4] bg-white shadow-[0_24px_80px_rgba(75,63,47,0.12)] md:grid-cols-2">
-          <div className="relative min-h-[420px] bg-[#fdfaf3]">
-            <Image
-              src={FEATURED.imagePath}
-              alt={`${FEATURED.name} bottle`}
-              fill
-              className="object-contain p-10"
-              priority
-            />
-          </div>
-
-          <div className="flex flex-col justify-center p-8 text-center md:p-12 md:text-left">
-            <p className="text-sm font-semibold uppercase tracking-[0.24em] text-[#a37c58]">
-              Featured Wine of the Month
-            </p>
-
-            <h2 className="mt-3 text-4xl font-semibold text-[#2f241f] [font-family:var(--font-playfair)]">
-              {FEATURED.name}
-            </h2>
-
-            <p className="mt-2 text-xs text-[#8a7463]">
-              Last updated {featuredUpdatedText}
-            </p>
-
-            <p className="mt-5 text-[17px] leading-8 text-[#6b5b4b]">
-              {FEATURED.blurb}
-            </p>
-
-            <div className="mt-5 flex flex-wrap justify-center gap-2 md:justify-start">
-              {FEATURED.pairingTags.map((tag) => (
-                <span
-                  key={tag}
-                  className="rounded-full border border-[#d8cfc4] bg-[#fdf7ef] px-3 py-1 text-sm"
-                >
-                  {tag}
-                </span>
-              ))}
-            </div>
-
-            <a
-              href={FEATURED.brandUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={trackFeaturedCTA}
-              className="mt-7 inline-block w-fit rounded-full bg-[#a37c58] px-6 py-3 text-sm font-semibold text-white transition hover:brightness-95"
-            >
-              {FEATURED.brandLabel}
-            </a>
-          </div>
-        </div>
-      </section>
+    
 
       {/* PRINTABLE GUIDES */}
       <section className="mx-auto mt-20 max-w-6xl px-4 md:px-8">
