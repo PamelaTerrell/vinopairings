@@ -1,181 +1,227 @@
 // src/app/best-corkscrews/page.js
+
+import Image from "next/image";
 import Link from "next/link";
+import Script from "next/script";
 
 export const metadata = {
   title: "Best Corkscrews for Wine Lovers | Vino Pairings",
   description:
-    "A refined guide to the best corkscrews for beginners, wine lovers, dinner parties, gifting, and elegant home entertaining.",
-  alternates: { canonical: "/best-corkscrews" },
+    "A refined guide to choosing the best corkscrew for beginners, wine lovers, dinner parties, and elegant home entertaining.",
+  alternates: {
+    canonical: "/best-corkscrews",
+  },
   openGraph: {
     title: "Best Corkscrews for Wine Lovers | Vino Pairings",
     description:
-      "A polished guide to choosing the best corkscrew for wine lovers, beginners, and home entertaining.",
+      "Compare wing corkscrews, waiter’s corkscrews, and electric wine openers and find the style that best fits the way you enjoy wine.",
     type: "article",
     url: "https://vinopairings.com/best-corkscrews",
+    siteName: "Vino Pairings",
+    images: [
+      {
+        url: "/best-corkscrews-guide.png",
+        width: 1024,
+        height: 1536,
+        alt: "Vino Pairings guide comparing wing corkscrews, waiter’s corkscrews, and electric wine openers",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Best Corkscrews for Wine Lovers | Vino Pairings",
+    description:
+      "A polished guide to wing corkscrews, waiter’s corkscrews, and electric wine openers.",
+    images: ["/best-corkscrews-guide.png"],
   },
 };
 
-const amazonLink = "https://www.amazon.com/dp/B07YBVR46Y?tag=vinopairings-20";
+const articleSchema = {
+  "@context": "https://schema.org",
+  "@type": "Article",
+  headline: "Best Corkscrews for Wine Lovers",
+  description:
+    "A guide to choosing between wing corkscrews, waiter’s corkscrews, and electric wine openers.",
+  image: "https://vinopairings.com/best-corkscrews-guide.png",
+  mainEntityOfPage: {
+    "@type": "WebPage",
+    "@id": "https://vinopairings.com/best-corkscrews",
+  },
+  publisher: {
+    "@type": "Organization",
+    name: "Vino Pairings",
+    url: "https://vinopairings.com",
+  },
+};
 
-const corkscrews = [
+const openerTypes = [
   {
-    title: "Best Beginner Pick",
-    name: "Beneno Premium Wing Corkscrew",
-    description:
-      "A familiar wing-style corkscrew with an easy motion: twist, lift, and press the wings down. It is a practical first choice for casual wine lovers.",
-    bestFor: "Beginners, casual home use, and simple everyday bottles",
-    href: amazonLink,
-    button: "Check Price on Amazon",
+    title: "Wing Corkscrew",
+    bestFor: "Best for beginners",
+    text: "A familiar design with visible movement and helpful leverage. It is easy to understand and reassuring for first-time wine drinkers.",
   },
   {
-    title: "Best Classic Style",
-    name: "Waiter’s Corkscrew",
-    description:
-      "A compact, restaurant-style corkscrew that feels polished once you learn the technique. It is elegant, small, and easy to store.",
-    bestFor: "Dinner parties, bar carts, and people who want a classic wine ritual",
-    href: "/tips",
-    button: "Learn the Technique",
+    title: "Waiter’s Corkscrew",
+    bestFor: "Best classic style",
+    text: "Compact, elegant, and versatile. It takes a little practice, but it is one of the most useful corkscrews to learn.",
   },
   {
-    title: "Best Effortless Option",
-    name: "Electric Wine Opener",
-    description:
-      "A helpful choice for anyone who wants less twisting and pulling. Electric openers can feel especially convenient for hosting or gifting.",
-    bestFor: "Convenience, gifting, frequent entertaining, and easy opening",
-    href: "/best-wine-opener-for-beginners",
-    button: "View Beginner Guide",
+    title: "Electric Opener",
+    bestFor: "Best effortless option",
+    text: "A convenient choice for frequent entertaining or anyone who prefers less twisting and pulling.",
   },
+];
+
+const qualities = [
+  "Comfortable grip",
+  "Smooth spiral",
+  "Sturdy hinge or leverage",
+  "Built-in foil cutter",
+  "Durable construction",
+  "Easy storage",
 ];
 
 export default function BestCorkscrewsPage() {
   return (
-    <main className="min-h-screen bg-[#f9f6ef] text-[#4b3f2f]">
-      <section className="mx-auto max-w-5xl px-6 py-14">
+    <>
+      <Script
+        id="best-corkscrews-schema"
+        type="application/ld+json"
+        strategy="afterInteractive"
+      >
+        {JSON.stringify(articleSchema)}
+      </Script>
+
+      <article className="mx-auto max-w-5xl">
         {/* HERO */}
-        <header className="rounded-[2rem] border border-[#d8cfc4] bg-gradient-to-b from-[#fdfaf3] to-[#f7efe5] p-8 text-center shadow-sm md:p-12">
-          <p className="text-sm uppercase tracking-[0.22em] text-[#8a7463]">
-            Wine Tools
+        <header className="pt-4">
+          <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#a37c58]">
+            Vino Pairings Guide
           </p>
 
-          <h1 className="mt-4 text-4xl font-semibold tracking-tight text-[#2f241f] md:text-5xl [font-family:var(--font-playfair)]">
+          <h1 className="mt-4 max-w-4xl text-4xl font-semibold leading-[1.08] text-[#2f241f] md:text-5xl lg:text-6xl">
             Best Corkscrews for Wine Lovers
           </h1>
 
-          <p className="mx-auto mt-5 max-w-2xl text-[18px] leading-8 text-[#6b5645]">
-            The right corkscrew makes opening wine feel smoother, cleaner, and
-            more graceful. This refined guide helps you choose one for everyday
-            bottles, hosting, gifting, and your first confident pour.
+          <p className="mt-5 max-w-3xl text-lg leading-8 text-[#6b5645]">
+            The right corkscrew can make opening wine feel smoother, easier,
+            and more enjoyable. This guide compares the most useful opener
+            styles so you can choose one that fits the way you enjoy wine at
+            home.
           </p>
-
-          <p className="mt-4 text-sm text-[#8a7463]">
-            By Pamela Terrell · Updated April 2026
-          </p>
-
-          <div className="mt-7 flex flex-col justify-center gap-3 sm:flex-row">
-            <a
-              href={amazonLink}
-              target="_blank"
-              rel="nofollow sponsored noopener noreferrer"
-              className="inline-flex justify-center rounded-full bg-[#a37c58] px-7 py-3 text-sm font-semibold text-white transition hover:opacity-90"
-            >
-              See Beginner Pick on Amazon
-            </a>
-
-            <Link
-              href="/tips"
-              className="inline-flex justify-center rounded-full border border-[#cdbba8] px-7 py-3 text-sm font-semibold text-[#4b3f2f] transition hover:bg-white"
-            >
-              Watch Corkscrew Tutorial
-            </Link>
-          </div>
         </header>
 
-        {/* DISCLOSURE */}
-        <p className="mt-6 rounded-2xl border border-[#eadfd3] bg-white px-5 py-4 text-xs leading-6 text-[#8a7463] shadow-sm">
-          Disclosure: As an Amazon Associate, Vino Pairings earns from
-          qualifying purchases. Product recommendations are selected
-          independently.
-        </p>
+        {/* MAIN INFOGRAPHIC */}
+        <figure className="mt-9">
+          <div className="overflow-hidden rounded-[2rem] border border-[#eadfd3] bg-[#fffaf4] shadow-[0_18px_55px_rgba(74,55,40,0.08)]">
+            <Image
+              src="/best-corkscrews-guide.png"
+              alt="Illustrated Vino Pairings guide comparing a wing corkscrew, waiter’s corkscrew, and electric opener"
+              width={1024}
+              height={1536}
+              priority
+              quality={90}
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 90vw, 960px"
+              className="h-auto w-full"
+            />
+          </div>
 
-        {/* FEATURED PRODUCT */}
-        <section className="mt-10 rounded-[2rem] border border-[#d8cfc4] bg-white p-7 shadow-sm md:p-9">
-          <p className="text-sm uppercase tracking-[0.18em] text-[#8a7463]">
-            Featured Pick
+          <figcaption className="mx-auto mt-3 max-w-2xl text-center text-xs leading-5 text-[#8a7463]">
+            A visual guide to three common wine-opening styles: wing
+            corkscrew, waiter&apos;s corkscrew, and electric opener.
+          </figcaption>
+        </figure>
+
+        {/* SHORT ANSWER */}
+        <section className="mt-14 rounded-[2rem] border border-[#d8cfc4] bg-[#fdfaf3] p-6 md:p-9">
+          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[#a37c58]">
+            A Good Place to Start
           </p>
 
-          <div className="mt-6 grid gap-8 md:grid-cols-[0.85fr_1.15fr] md:items-center">
-            <div className="flex min-h-[260px] items-center justify-center rounded-[1.5rem] border border-[#eadfd3] bg-[#fdfaf3] p-6">
-              <div className="text-center">
-                <p className="text-5xl">🍷</p>
-                <p className="mt-3 text-sm text-[#8a7463]">
-                  Beginner-Friendly Corkscrew
-                </p>
-              </div>
-            </div>
-
+          <div className="mt-4 grid gap-6 md:grid-cols-[1.2fr_0.8fr] md:items-center">
             <div>
-              <h2 className="text-3xl font-semibold text-[#2f241f] [font-family:var(--font-playfair)]">
-                Beneno Premium Wing Corkscrew
+              <h2 className="text-3xl font-semibold text-[#2f241f]">
+                A wing corkscrew is one of the easiest styles to learn.
               </h2>
 
-              <p className="mt-4 text-[17px] leading-8 text-[#6b5645]">
-                For beginners and casual wine lovers, a wing corkscrew is one of
-                the easiest styles to understand. The motion feels familiar, the
-                leverage is helpful, and it makes a dependable first wine tool
-                for the home.
+              <p className="mt-4 leading-8 text-[#6b5645]">
+                Its movement is easy to see: twist the spiral into the cork,
+                let the wings rise, then press them down to lift the cork from
+                the bottle.
               </p>
 
-              <div className="mt-5 grid gap-3 sm:grid-cols-2">
-                <Feature label="Best For" text="First-time wine drinkers" />
-                <Feature label="Why It Works" text="Simple wing-style motion" />
-              </div>
+              <p className="mt-4 leading-8 text-[#6b5645]">
+                Once you feel comfortable, a waiter&apos;s corkscrew is a useful
+                next skill because it is compact, elegant, and easy to store.
+              </p>
+            </div>
 
-              <ul className="mt-5 space-y-2 text-sm leading-7 text-[#6b5645]">
-                <li>• Easy to understand for beginners</li>
-                <li>• Helpful leverage when removing corks</li>
-                <li>• Practical for kitchens, bar carts, and casual hosting</li>
-                <li>• Affordable enough for a first wine tool</li>
+            <div className="rounded-[1.5rem] border border-[#eadfd3] bg-white p-5">
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#a37c58]">
+                Beginner-Friendly
+              </p>
+
+              <p className="mt-2 text-xl font-semibold text-[#2f241f]">
+                Wing Corkscrew
+              </p>
+
+              <ul className="mt-4 space-y-3 text-sm leading-6 text-[#6b5645]">
+                <li>✓ Easy to understand</li>
+                <li>✓ Helpful leverage</li>
+                <li>✓ Requires little practice</li>
+                <li>✓ Practical for casual hosting</li>
               </ul>
-
-              <div className="mt-6 flex flex-col gap-3 sm:flex-row">
-                <a
-                  href={amazonLink}
-                  target="_blank"
-                  rel="nofollow sponsored noopener noreferrer"
-                  className="inline-flex justify-center rounded-full bg-[#a37c58] px-7 py-3 text-sm font-semibold text-white transition hover:opacity-90"
-                >
-                  Check Price on Amazon
-                </a>
-
-                <Link
-                  href="/best-wine-opener-for-beginners"
-                  className="inline-flex justify-center rounded-full border border-[#d8cfc4] px-7 py-3 text-sm font-semibold text-[#4b3f2f] transition hover:bg-[#fdfaf3]"
-                >
-                  View Beginner Guide
-                </Link>
-              </div>
             </div>
           </div>
         </section>
 
-        {/* WHAT TO LOOK FOR */}
-        <section className="mt-10 rounded-3xl border border-[#d8cfc4] bg-[#fdfaf3] p-7 shadow-sm">
-          <h2 className="text-2xl font-semibold text-[#2f241f] [font-family:var(--font-playfair)]">
-            What to Look For in a Good Corkscrew
+        {/* OPENER TYPES */}
+        <section className="mt-14">
+          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[#a37c58]">
+            Compare the Styles
+          </p>
+
+          <h2 className="mt-3 text-3xl font-semibold text-[#2f241f]">
+            Which corkscrew fits you best?
           </h2>
 
-          <div className="mt-5 grid gap-4 md:grid-cols-2">
-            {[
-              "Comfortable grip",
-              "Smooth spiral",
-              "Sturdy hinge or leverage",
-              "Built-in foil cutter",
-              "Durable metal construction",
-              "Easy storage",
-            ].map((item) => (
+          <div className="mt-7 grid gap-5 md:grid-cols-3">
+            {openerTypes.map((item) => (
+              <article
+                key={item.title}
+                className="rounded-[1.5rem] border border-[#d8cfc4] bg-white p-6 shadow-sm"
+              >
+                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#a37c58]">
+                  {item.bestFor}
+                </p>
+
+                <h3 className="mt-3 text-2xl font-semibold text-[#2f241f]">
+                  {item.title}
+                </h3>
+
+                <p className="mt-3 leading-7 text-[#6b5645]">
+                  {item.text}
+                </p>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        {/* WHAT TO LOOK FOR */}
+        <section className="mt-14 rounded-[2rem] border border-[#d8cfc4] bg-[#fdfaf3] p-6 md:p-9">
+          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[#a37c58]">
+            What to Look For
+          </p>
+
+          <h2 className="mt-3 text-3xl font-semibold text-[#2f241f]">
+            Features that make a corkscrew easier to use
+          </h2>
+
+          <div className="mt-7 grid gap-4 sm:grid-cols-2">
+            {qualities.map((item) => (
               <div
                 key={item}
-                className="rounded-2xl border border-[#eee2d6] bg-white px-5 py-4 text-[#6b5645]"
+                className="rounded-2xl border border-[#eadfd3] bg-white px-5 py-4 text-[#6b5645]"
               >
                 {item}
               </div>
@@ -183,123 +229,140 @@ export default function BestCorkscrewsPage() {
           </div>
         </section>
 
-        {/* PICKS */}
-        <section className="mt-10 grid gap-6">
-          {corkscrews.map((item) => (
-            <article
-              key={item.title}
-              className="rounded-3xl border border-[#d8cfc4] bg-white p-7 shadow-sm"
-            >
-              <p className="text-sm uppercase tracking-[0.18em] text-[#8a7463]">
-                {item.title}
-              </p>
-
-              <h2 className="mt-3 text-2xl font-semibold text-[#2f241f] [font-family:var(--font-playfair)]">
-                {item.name}
+        {/* CHOOSING GUIDE */}
+        <section className="mt-14 grid gap-10 lg:grid-cols-[1fr_0.75fr]">
+          <div className="space-y-10">
+            <div>
+              <h2 className="text-3xl font-semibold text-[#2f241f]">
+                Choose a wing corkscrew if...
               </h2>
 
-              <p className="mt-3 text-[17px] leading-8 text-[#6b5645]">
-                {item.description}
+              <p className="mt-4 leading-8 text-[#6b5645]">
+                You want the easiest visual learning curve and appreciate a
+                tool that makes the opening process obvious while you use it.
               </p>
+            </div>
 
-              <p className="mt-4 rounded-2xl bg-[#fdf7ef] px-5 py-4 text-sm text-[#6b5645]">
-                <strong className="text-[#2f241f]">Best for:</strong>{" "}
-                {item.bestFor}
+            <div>
+              <h2 className="text-3xl font-semibold text-[#2f241f]">
+                Choose a waiter&apos;s corkscrew if...
+              </h2>
+
+              <p className="mt-4 leading-8 text-[#6b5645]">
+                You want a compact, classic opener and are willing to learn a
+                simple lever technique. It is especially useful for dinner
+                parties, travel, and small bar carts.
               </p>
+            </div>
 
-              <div className="mt-5">
-                {item.href.startsWith("http") ? (
-                  <a
-                    href={item.href}
-                    target="_blank"
-                    rel="nofollow sponsored noopener noreferrer"
-                    className="inline-flex rounded-full bg-[#6e2a2a] px-6 py-3 text-sm font-semibold text-white transition hover:bg-[#8a3a3a]"
-                  >
-                    {item.button}
-                  </a>
-                ) : (
-                  <Link
-                    href={item.href}
-                    className="inline-flex rounded-full bg-[#6e2a2a] px-6 py-3 text-sm font-semibold text-white transition hover:bg-[#8a3a3a]"
-                  >
-                    {item.button}
-                  </Link>
-                )}
-              </div>
-            </article>
-          ))}
-        </section>
+            <div>
+              <h2 className="text-3xl font-semibold text-[#2f241f]">
+                Choose an electric opener if...
+              </h2>
 
-        {/* BUYER COPY */}
-        <section className="mt-10 rounded-3xl border border-[#d8cfc4] bg-[#fdfaf3] p-7 shadow-sm">
-          <h2 className="text-2xl font-semibold text-[#2f241f] [font-family:var(--font-playfair)]">
-            Which Corkscrew Should You Choose?
-          </h2>
-
-          <div className="mt-5 space-y-5 text-[17px] leading-8 text-[#6b5645]">
-            <p>
-              Choose a <strong className="text-[#2f241f]">wing corkscrew</strong>{" "}
-              if you want the easiest visual learning curve. It is familiar,
-              affordable, and reassuring for beginners.
-            </p>
-
-            <p>
-              Choose a{" "}
-              <strong className="text-[#2f241f]">waiter’s corkscrew</strong> if
-              you want the classic wine-service experience. It takes a little
-              more practice, but it feels elegant and compact.
-            </p>
-
-            <p>
-              Choose an{" "}
-              <strong className="text-[#2f241f]">electric opener</strong> if you
-              want convenience, effortless opening, or a polished gift for a wine
-              lover.
-            </p>
+              <p className="mt-4 leading-8 text-[#6b5645]">
+                Convenience matters most to you or you prefer to minimize
+                twisting and pulling. Electric openers can also be useful when
+                opening several bottles while entertaining.
+              </p>
+            </div>
           </div>
+
+          {/* QUICK SUMMARY */}
+          <aside className="h-fit rounded-[2rem] border border-[#d8cfc4] bg-white p-6 md:p-8">
+            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#a37c58]">
+              Quick Comparison
+            </p>
+
+            <h2 className="mt-3 text-3xl font-semibold text-[#2f241f]">
+              At a glance
+            </h2>
+
+            <div className="mt-7">
+              <ComparisonRow
+                label="Easiest to learn"
+                value="Wing corkscrew"
+              />
+
+              <ComparisonRow
+                label="Most compact"
+                value="Waiter’s corkscrew"
+              />
+
+              <ComparisonRow
+                label="Least physical effort"
+                value="Electric opener"
+              />
+
+              <ComparisonRow
+                label="Best skill to learn"
+                value="Waiter’s corkscrew"
+              />
+
+              <ComparisonRow
+                label="Best starting point"
+                value="Wing corkscrew"
+                last
+              />
+            </div>
+          </aside>
         </section>
 
         {/* FINAL CTA */}
-        <section className="mt-10 rounded-3xl border border-[#d8cfc4] bg-white p-7 text-center shadow-sm">
-          <h2 className="text-2xl font-semibold text-[#2f241f] [font-family:var(--font-playfair)]">
+        <section className="mt-16 rounded-[2rem] bg-[#3b2f2f] p-7 text-white md:p-10">
+          <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[#d9b98f]">
             Learn the Technique
-          </h2>
-
-          <p className="mx-auto mt-3 max-w-2xl text-[17px] leading-8 text-[#6b5645]">
-            A good corkscrew helps, but the technique matters too. Watch the
-            simple tutorial for opening a bottle smoothly and confidently.
           </p>
 
-          <div className="mt-6 flex flex-col justify-center gap-3 sm:flex-row">
+          <h2 className="mt-3 max-w-2xl text-3xl font-semibold md:text-4xl">
+            A little practice makes every bottle easier.
+          </h2>
+
+          <p className="mt-4 max-w-2xl leading-8 text-white/80">
+            Learn how to position the corkscrew, use leverage, and remove a
+            cork smoothly without making the experience feel complicated.
+          </p>
+
+          <div className="mt-7 flex flex-col gap-3 sm:flex-row">
             <Link
               href="/tips"
-              className="inline-flex justify-center rounded-full bg-[#6e2a2a] px-7 py-3 font-semibold text-white transition hover:bg-[#8a3a3a]"
+              className="inline-flex justify-center rounded-full bg-[#f3eadf] px-6 py-3 text-sm font-semibold text-[#3b2f2f] transition hover:bg-white"
             >
-              Watch Corkscrew Tutorial
+              Explore Wine Tips
             </Link>
 
-            <a
-              href={amazonLink}
-              target="_blank"
-              rel="nofollow sponsored noopener noreferrer"
-              className="inline-flex justify-center rounded-full border border-[#d8cfc4] px-7 py-3 font-semibold text-[#4b3f2f] transition hover:bg-[#fdfaf3]"
+            <Link
+              href="/best-wine-opener-for-beginners"
+              className="inline-flex justify-center rounded-full border border-white/30 px-6 py-3 text-sm font-semibold text-white transition hover:bg-white/10"
             >
-              Check Price on Amazon
-            </a>
+              Beginner Opener Guide
+            </Link>
           </div>
         </section>
-      </section>
-    </main>
+
+        <p className="mx-auto mt-8 max-w-2xl text-center text-xs leading-6 text-[#8a7463]">
+          Vino Pairings provides approachable wine guidance for everyday
+          enjoyment, entertaining, and learning.
+        </p>
+      </article>
+    </>
   );
 }
 
-function Feature({ label, text }) {
+function ComparisonRow({ label, value, last = false }) {
   return (
-    <div className="rounded-2xl border border-[#eadfd3] bg-[#fdfaf3] p-4">
-      <p className="text-xs uppercase tracking-[0.2em] text-[#8a7463]">
+    <div
+      className={`grid grid-cols-[1fr_auto] gap-5 py-4 ${
+        last ? "" : "border-b border-[#eadfd3]"
+      }`}
+    >
+      <span className="text-sm leading-6 text-[#8a7463]">
         {label}
-      </p>
-      <p className="mt-2 text-sm font-medium text-[#2f241f]">{text}</p>
+      </span>
+
+      <span className="text-right text-sm font-semibold leading-6 text-[#2f241f]">
+        {value}
+      </span>
     </div>
   );
 }
