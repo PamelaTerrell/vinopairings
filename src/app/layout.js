@@ -1,23 +1,15 @@
 // src/app/layout.js
+
 import "./globals.css";
-import { Inter, Playfair_Display } from "next/font/google";
-import NavBar from "./components/NavBar";
-import { Analytics } from "@vercel/analytics/react";
-import Script from "next/script";
-import GtagPageView from "./GtagPageView";
+import Link from "next/link";
 import dynamic from "next/dynamic";
+import Script from "next/script";
+
+import { Analytics } from "@vercel/analytics/react";
+
+import NavBar from "./components/NavBar";
 import CookieNotice from "./components/CookieNotice";
-
-const inter = Inter({
-  subsets: ["latin"],
-  variable: "--font-inter",
-});
-
-const playfair = Playfair_Display({
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-  variable: "--font-playfair",
-});
+import GtagPageView from "./GtagPageView";
 
 const GA_ID =
   process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || "G-SRJRLWGF89";
@@ -32,62 +24,84 @@ const ClientPortal = dynamic(() => import("./components/ClientPortal"), {
 
 export const metadata = {
   metadataBase: new URL("https://vinopairings.com"),
+
   title: {
-    default: "Vino Pairings | Wine Pairing Guides & Elegant Wine Tips",
+    default: "Vino Pairings | Wine, Pairing & Everyday Elegance",
     template: "%s | Vino Pairings",
   },
+
   description:
-    "Elegant wine pairing guides, wine tips, entertaining ideas, wine regions, and practical guidance for enjoying wine with confidence.",
+    "Thoughtful wine pairing guides, wine regions, entertaining inspiration, and approachable guidance for enjoying wine with confidence.",
+
   openGraph: {
     type: "website",
     url: "https://vinopairings.com",
     siteName: "Vino Pairings",
-    title: "Vino Pairings | Wine Pairing Guides & Elegant Wine Tips",
+    title: "Vino Pairings | Wine, Pairing & Everyday Elegance",
     description:
-      "Discover elegant wine pairing guides, wine tips, entertaining ideas, wine regions, and practical guidance for enjoying wine with confidence.",
+      "Thoughtful wine pairing guides, wine regions, entertaining inspiration, and approachable guidance for enjoying wine with confidence.",
     images: [
       {
         url: "/wineog.png",
         width: 1200,
         height: 630,
-        alt: "Vino Pairings wine glass and elegant wine pairing inspiration",
+        alt: "Vino Pairings wine and entertaining inspiration",
       },
     ],
   },
+
   twitter: {
     card: "summary_large_image",
-    title: "Vino Pairings | Wine Pairing Guides & Elegant Wine Tips",
+    title: "Vino Pairings | Wine, Pairing & Everyday Elegance",
     description:
-      "Elegant wine pairing guides, wine tips, entertaining ideas, wine regions, and practical guidance for enjoying wine with confidence.",
+      "Thoughtful wine pairing guides, wine regions, entertaining inspiration, and approachable guidance for enjoying wine with confidence.",
     images: ["/wineog.png"],
   },
 };
 
+const websiteSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: "Vino Pairings",
+  url: "https://vinopairings.com",
+  description:
+    "Thoughtful wine pairing guides, wine regions, entertaining inspiration, and approachable guidance for enjoying wine with confidence.",
+  publisher: {
+    "@type": "Organization",
+    name: "Stabile USA",
+    url: "https://stabileusa.com",
+  },
+};
+
+const footerExplore = [
+  { label: "Wine Pairings", href: "/" },
+  { label: "Wine Regions", href: "/regions" },
+  { label: "Wine Tips", href: "/tips" },
+  { label: "Sunday Wine", href: "/sunday" },
+];
+
+const footerGuides = [
+  { label: "Corkscrew Guide", href: "/best-corkscrews" },
+  { label: "Wine Glass Guide", href: "/best-wine-glasses" },
+  { label: "Wine Gifts", href: "/wine-gifts-under-50" },
+];
+
+const footerAbout = [
+  { label: "About", href: "/about" },
+  { label: "History", href: "/history" },
+  { label: "Contact", href: "/contact" },
+];
+
 export default function RootLayout({ children }) {
   return (
-    <html
-      lang="en"
-      className={`${inter.variable} ${playfair.variable}`}
-    >
+    <html lang="en">
       <head>
         <Script
           id="website-jsonld"
           type="application/ld+json"
           strategy="afterInteractive"
         >
-          {JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "WebSite",
-            name: "Vino Pairings",
-            url: "https://vinopairings.com",
-            description:
-              "Elegant wine pairing guides, wine tips, entertaining ideas, wine regions, and practical guidance for enjoying wine with confidence.",
-            publisher: {
-              "@type": "Organization",
-              name: "Stabile USA",
-              url: "https://stabileusa.com",
-            },
-          })}
+          {JSON.stringify(websiteSchema)}
         </Script>
 
         {GA_ID && (
@@ -100,125 +114,133 @@ export default function RootLayout({ children }) {
             <Script id="gtag-init" strategy="afterInteractive">
               {`
                 window.dataLayer = window.dataLayer || [];
-                function gtag(){dataLayer.push(arguments);}
+
+                function gtag() {
+                  window.dataLayer.push(arguments);
+                }
+
                 window.gtag = window.gtag || gtag;
+
                 gtag('js', new Date());
-                gtag('config', '${GA_ID}', { send_page_view: false });
+
+                gtag('config', '${GA_ID}', {
+                  send_page_view: false
+                });
               `}
             </Script>
           </>
         )}
       </head>
 
-      <body
-        className={`${inter.className} bg-[#f9f6ef] text-[#4b3f2f]`}
-      >
+      <body className="bg-[#f8f4ee] text-[#46372f] antialiased">
         <NavBar />
 
-        <main className="mx-auto max-w-5xl px-4 py-6">
+        <main className="mx-auto w-full max-w-[1180px] px-4 py-8 sm:px-6 md:py-10 lg:px-8">
           {children}
         </main>
 
-        <footer className="mt-14 border-t border-[#d8cfc4] bg-[#fdfaf3] px-6 py-10 text-center text-sm text-[#6b5b4b]">
-          <div className="mx-auto max-w-4xl space-y-5">
-            <p className="text-base font-semibold text-[#4b3f2f]">
-              Vino Pairings
-            </p>
+        <footer className="mt-24 border-t border-[#d8c8ba] bg-[#eee6dc]">
+          <div className="mx-auto max-w-6xl px-6 pb-10 pt-16 lg:px-8">
+            {/* BRAND STATEMENT */}
+            <div className="grid gap-12 border-b border-[#d2c1b2] pb-14 lg:grid-cols-[1.3fr_0.7fr] lg:items-end">
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-[0.32em] text-[#9a7659]">
+                  Vino Pairings
+                </p>
 
-            <p className="mx-auto max-w-2xl leading-7">
-              Elegant wine pairing guides, entertaining inspiration,
-              wine regions, practical wine tips, and approachable ways
-              to enjoy wine with confidence.
-            </p>
+                <h2 className="mt-4 max-w-3xl text-4xl leading-[1.08] text-[#2d211c] md:text-5xl font-editorial">
+                  Wine should feel{" "}
+                  <span className="italic text-[#7d4a3d]">
+                    approachable,
+                  </span>{" "}
+                  beautiful, and worth lingering over.
+                </h2>
 
-            <p className="text-xs text-[#7a6b57]">
-              Vino Pairings is part of the Stabile USA family of digital
-              brands.
-            </p>
+                <p className="mt-6 max-w-2xl text-[16px] leading-8 text-[#6d594c]">
+                  Thoughtful pairing guides, wine regions, entertaining
+                  inspiration, and simple rituals for enjoying wine with
+                  confidence.
+                </p>
+              </div>
 
-            <p className="text-sm">
-              Contact:{" "}
-              <a
-                href="mailto:hello@vinopairings.com"
-                className="underline underline-offset-4 hover:text-[#6e2a2a]"
+              <div className="lg:text-right">
+                <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[#9a7659]">
+                  Correspondence
+                </p>
+
+                <a
+                  href="mailto:hello@vinopairings.com"
+                  className="mt-3 inline-block text-lg font-medium text-[#3a2c25] underline decoration-[#b79579]/60 underline-offset-4 transition hover:text-[#7d4a3d]"
+                >
+                  hello@vinopairings.com
+                </a>
+              </div>
+            </div>
+
+            {/* FOOTER LINKS */}
+            <div className="grid gap-10 py-12 sm:grid-cols-2 lg:grid-cols-4">
+              <FooterColumn heading="Explore" links={footerExplore} />
+              <FooterColumn heading="Guides" links={footerGuides} />
+              <FooterColumn heading="About" links={footerAbout} />
+
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[#9a7659]">
+                  Stabile USA
+                </p>
+
+                <p className="mt-4 max-w-xs text-sm leading-7 text-[#6d594c]">
+                  Vino Pairings is an independent digital publication within
+                  the Stabile USA family of brands.
+                </p>
+
+                <a
+                  href="https://stabileusa.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-5 inline-flex items-center text-sm font-semibold text-[#7d4a3d] transition hover:text-[#4f2f29]"
+                >
+                  Visit Stabile USA
+                  <span aria-hidden="true" className="ml-2">
+                    ↗
+                  </span>
+                </a>
+              </div>
+            </div>
+
+            {/* LOWER FOOTER */}
+            <div className="flex flex-col gap-5 border-t border-[#d2c1b2] pt-7 text-xs text-[#806d60] md:flex-row md:items-center md:justify-between">
+              <p>
+                © 2026 Vino Pairings. Please enjoy wine responsibly.
+              </p>
+
+              <nav
+                aria-label="Legal navigation"
+                className="flex flex-wrap gap-x-5 gap-y-2"
               >
-                hello@vinopairings.com
-              </a>
-            </p>
+                <Link
+                  href="/privacy"
+                  className="transition hover:text-[#7d4a3d]"
+                >
+                  Privacy
+                </Link>
 
-            <nav
-              aria-label="Footer navigation"
-              className="flex flex-wrap justify-center gap-x-5 gap-y-2 pt-1"
-            >
-              <a
-                href="/about"
-                className="underline underline-offset-4 hover:text-[#6e2a2a]"
-              >
-                About
-              </a>
+                <Link
+                  href="/terms"
+                  className="transition hover:text-[#7d4a3d]"
+                >
+                  Terms
+                </Link>
 
-              <a
-                href="/history"
-                className="underline underline-offset-4 hover:text-[#6e2a2a]"
-              >
-                History
-              </a>
-
-              <a
-                href="/regions"
-                className="underline underline-offset-4 hover:text-[#6e2a2a]"
-              >
-                Regions
-              </a>
-
-              <a
-                href="/tips"
-                className="underline underline-offset-4 hover:text-[#6e2a2a]"
-              >
-                Tips
-              </a>
-
-              <a
-                href="/sunday"
-                className="underline underline-offset-4 hover:text-[#6e2a2a]"
-              >
-                Sunday
-              </a>
-
-              <a
-                href="/privacy"
-                className="underline underline-offset-4 hover:text-[#6e2a2a]"
-              >
-                Privacy
-              </a>
-
-              <a
-                href="/terms"
-                className="underline underline-offset-4 hover:text-[#6e2a2a]"
-              >
-                Terms
-              </a>
-
-              <a
-                href="/contact"
-                className="underline underline-offset-4 hover:text-[#6e2a2a]"
-              >
-                Contact
-              </a>
-
-              <a
-                href="https://pamelajterrell.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="underline underline-offset-4 hover:text-[#6e2a2a]"
-              >
-                Creator
-              </a>
-            </nav>
-
-            <p className="pt-2 text-xs text-[#8a7a68]">
-              &copy; 2026 Vino Pairings. Please enjoy wine responsibly.
-            </p>
+                <a
+                  href="https://pamelajterrell.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="transition hover:text-[#7d4a3d]"
+                >
+                  Creator
+                </a>
+              </nav>
+            </div>
           </div>
         </footer>
 
@@ -239,5 +261,30 @@ export default function RootLayout({ children }) {
         <CookieNotice />
       </body>
     </html>
+  );
+}
+
+function FooterColumn({ heading, links }) {
+  return (
+    <div>
+      <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[#9a7659]">
+        {heading}
+      </p>
+
+      <nav
+        aria-label={`${heading} footer navigation`}
+        className="mt-4 flex flex-col items-start gap-3"
+      >
+        {links.map((link) => (
+          <Link
+            key={link.href}
+            href={link.href}
+            className="text-sm text-[#5f4d42] transition hover:text-[#7d4a3d]"
+          >
+            {link.label}
+          </Link>
+        ))}
+      </nav>
+    </div>
   );
 }

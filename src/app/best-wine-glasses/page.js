@@ -1,218 +1,491 @@
 // src/app/best-wine-glasses/page.js
+
 import Image from "next/image";
 import Link from "next/link";
+import Script from "next/script";
 
 export const metadata = {
   title: "Best Wine Glasses for Everyday Elegance | Vino Pairings",
   description:
     "A refined guide to choosing wine glasses for red wine, white wine, sparkling wine, everyday meals, and elegant home entertaining.",
-  alternates: { canonical: "/best-wine-glasses" },
+  alternates: {
+    canonical: "/best-wine-glasses",
+  },
   openGraph: {
     title: "Best Wine Glasses for Everyday Elegance | Vino Pairings",
     description:
-      "A simple, elegant guide to choosing the best wine glasses for everyday meals, entertaining, and gifting.",
+      "A polished guide to choosing universal, red, white, sparkling, and stemless wine glasses.",
     type: "article",
     url: "https://vinopairings.com/best-wine-glasses",
+    siteName: "Vino Pairings",
+    images: [
+      {
+        url: "/wine-glasses-hero.png",
+        width: 1200,
+        height: 900,
+        alt: "Elegant collection of wine glasses arranged on a softly lit table",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Best Wine Glasses for Everyday Elegance | Vino Pairings",
+    description:
+      "A refined guide to choosing the right wine glass for the way you enjoy wine.",
+    images: ["/wine-glasses-hero.png"],
   },
 };
 
-const glasses = [
+const glassStyles = [
   {
-    title: "Best Overall",
-    name: "Universal Wine Glass",
+    number: "01",
+    eyebrow: "The Everyday Essential",
+    title: "Universal Wine Glass",
     description:
-      "A versatile glass that works beautifully for many reds, whites, and rosés. If you only want one dependable style, this is the best place to begin.",
-    bestFor: "Everyday wine, casual dinners, and simple entertaining",
+      "A graceful all-purpose glass that works beautifully for many reds, whites, and rosés. If you want one dependable shape for most occasions, this is the place to begin.",
+    note: "Best for everyday wine, casual dinners, and simple entertaining.",
   },
   {
-    title: "Best for Red Wine",
-    name: "Large Bowl Red Wine Glass",
+    number: "02",
+    eyebrow: "For Fuller Reds",
+    title: "Large Bowl Red Wine Glass",
     description:
-      "A wider bowl gives red wine more room to open, helping aromas feel fuller and the wine taste smoother.",
-    bestFor: "Cabernet Sauvignon, Merlot, Pinot Noir, Syrah, and red blends",
+      "A broader bowl gives red wine more room to meet the air, helping aromas feel more expressive and the drinking experience more generous.",
+    note: "Especially suited to Cabernet Sauvignon, Merlot, Syrah, Pinot Noir, and red blends.",
   },
   {
-    title: "Best for White Wine",
-    name: "Smaller Bowl White Wine Glass",
+    number: "03",
+    eyebrow: "For Fresh Whites",
+    title: "Smaller Bowl White Wine Glass",
     description:
-      "A slightly smaller glass helps preserve freshness, brightness, and delicate aromas in chilled white wines.",
-    bestFor: "Sauvignon Blanc, Chardonnay, Pinot Grigio, Riesling, and Albariño",
+      "A slightly smaller bowl helps preserve freshness and keeps delicate aromas feeling focused, especially when the wine is served chilled.",
+    note: "A natural fit for Sauvignon Blanc, Chardonnay, Riesling, Pinot Grigio, and Albariño.",
   },
   {
-    title: "Best for Sparkling Wine",
-    name: "Tulip or Flute Glass",
+    number: "04",
+    eyebrow: "For Celebration",
+    title: "Tulip or Flute Glass",
     description:
-      "A narrower sparkling glass helps keep bubbles lively while still allowing enough space for aroma.",
-    bestFor: "Champagne, Prosecco, Cava, and sparkling rosé",
+      "A narrower profile helps preserve lively bubbles while still allowing enough room for aroma, especially in sparkling wine served at the table.",
+    note: "Best for Champagne, Prosecco, Cava, and sparkling rosé.",
   },
   {
-    title: "Best for Outdoors",
-    name: "Stemless Wine Glass or Tumbler",
+    number: "05",
+    eyebrow: "For Relaxed Evenings",
+    title: "Stemless Glass or Tumbler",
     description:
-      "Stemless glasses or insulated wine tumblers are practical for patios, picnics, lake days, and casual gatherings.",
-    bestFor: "Outdoor entertaining, travel, patios, and relaxed evenings",
+      "A practical choice for patios, picnics, lake days, and casual gatherings where traditional stemware may feel too delicate.",
+    note: "Best for outdoor entertaining, travel, and easygoing wine moments.",
   },
 ];
 
-const features = [
-  "Clear glass that lets the wine color show",
-  "Comfortable weight in the hand",
-  "A bowl shape that suits the wine style",
-  "Thin enough rim for pleasant sipping",
-  "Easy cleaning and storage",
-  "Durability for everyday use",
+const glassQualities = [
+  {
+    number: "01",
+    title: "Clear Glass",
+    text: "The glass should let the color of the wine remain part of the experience.",
+  },
+  {
+    number: "02",
+    title: "Comfortable Weight",
+    text: "Good glassware should feel balanced rather than heavy or awkward in the hand.",
+  },
+  {
+    number: "03",
+    title: "Thoughtful Bowl Shape",
+    text: "The shape helps guide aroma toward the nose and influences how the wine feels while drinking.",
+  },
+  {
+    number: "04",
+    title: "A Pleasant Rim",
+    text: "A thinner rim can make the sip feel cleaner and more refined.",
+  },
+  {
+    number: "05",
+    title: "Easy Care",
+    text: "Everyday glassware should be simple enough to clean and store without becoming precious.",
+  },
+  {
+    number: "06",
+    title: "Everyday Durability",
+    text: "The most useful glasses are elegant enough for guests and practical enough for a Tuesday night.",
+  },
 ];
+
+const articleSchema = {
+  "@context": "https://schema.org",
+  "@type": "Article",
+  headline: "Best Wine Glasses for Everyday Elegance",
+  description:
+    "A refined guide to choosing wine glasses for red wine, white wine, sparkling wine, and everyday entertaining.",
+  image: "https://vinopairings.com/wine-glasses-hero.png",
+  mainEntityOfPage: {
+    "@type": "WebPage",
+    "@id": "https://vinopairings.com/best-wine-glasses",
+  },
+  publisher: {
+    "@type": "Organization",
+    name: "Vino Pairings",
+    url: "https://vinopairings.com",
+  },
+};
 
 export default function BestWineGlassesPage() {
   return (
-    <main className="min-h-screen bg-[#f9f6ef] text-[#4b3f2f]">
-      <section className="mx-auto max-w-6xl px-4 py-10 md:px-8 md:py-14">
+    <>
+      <Script
+        id="best-wine-glasses-schema"
+        type="application/ld+json"
+        strategy="afterInteractive"
+      >
+        {JSON.stringify(articleSchema)}
+      </Script>
+
+      <article className="mx-auto max-w-6xl">
         {/* HERO */}
-        <header className="overflow-hidden rounded-[2.75rem] border border-[#d8cfc4] bg-[#fdfaf3] shadow-[0_28px_90px_rgba(75,63,47,0.14)]">
+        <header className="overflow-hidden rounded-[2.75rem] bg-[#f4eee6]">
           <div className="grid lg:grid-cols-[0.9fr_1.1fr]">
-            <div className="flex flex-col justify-center px-7 py-12 md:px-12">
-              <p className="text-xs font-semibold uppercase tracking-[0.35em] text-[#a37c58]">
-                Wine Tools
-              </p>
+            <div className="relative flex items-center px-7 py-14 md:px-12 md:py-16 lg:px-14">
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(163,124,88,0.14),transparent_38%)]" />
 
-              <h1 className="mt-5 text-5xl font-semibold leading-[0.95] tracking-tight text-[#2f241f] md:text-7xl [font-family:var(--font-playfair)]">
-                Best Wine Glasses for Everyday Elegance
-              </h1>
+              <div className="relative z-10 max-w-xl">
+                <p className="text-xs font-semibold uppercase tracking-[0.34em] text-[#9a7659]">
+                  The Vino Pairings Glassware Edit
+                </p>
 
-              <p className="mt-6 max-w-xl text-[18px] leading-8 text-[#6b5645]">
-                The right wine glass can make an ordinary pour feel more
-                graceful. Whether you enjoy red wine, white wine, sparkling
-                wine, or relaxed outdoor gatherings, thoughtful glassware helps
-                elevate the moment.
-              </p>
+                <h1 className="mt-5 text-5xl font-semibold leading-[1.02] text-[#2c211c] md:text-7xl [font-family:var(--font-playfair)]">
+                  The Glass
+                  <span className="mt-1 block italic text-[#7d4a3d]">
+                    Shapes the Moment
+                  </span>
+                </h1>
 
-              <p className="mt-5 text-sm text-[#8a7463]">
-                By Pamela Terrell · Updated April 2026
-              </p>
+                <p className="mt-7 text-lg leading-8 text-[#665246]">
+                  The right glass can make an ordinary pour feel more
+                  considered. Here&apos;s how to choose wine glasses that suit
+                  both the wine and the way you actually live.
+                </p>
+
+                <div className="mt-8 h-px w-24 bg-[#b99573]" />
+              </div>
             </div>
 
             <div className="relative min-h-[420px] lg:min-h-[620px]">
               <Image
                 src="/wine-glasses-hero.png"
-                alt="Elegant collection of unique wine glasses on a softly lit marble table"
+                alt="Elegant collection of wine glasses on a softly lit marble table"
                 fill
                 priority
                 className="object-cover object-center"
                 sizes="(min-width: 1024px) 55vw, 100vw"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent lg:bg-gradient-to-r lg:from-[#fdfaf3]/35 lg:via-transparent lg:to-transparent" />
+
+              <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent lg:bg-gradient-to-r lg:from-[#f4eee6]/25 lg:via-transparent lg:to-transparent" />
             </div>
           </div>
         </header>
 
-        {/* LOOK FOR */}
-        <section className="mt-12 rounded-[2.25rem] border border-[#d8cfc4] bg-white p-7 shadow-sm md:p-10">
-          <p className="text-sm font-semibold uppercase tracking-[0.25em] text-[#a37c58]">
-            Buying Basics
+        {/* EDITORIAL INTRO */}
+        <section className="mx-auto mt-20 max-w-3xl text-center">
+          <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#9a7659]">
+            Everyday Elegance
           </p>
 
-          <h2 className="mt-3 text-3xl font-semibold text-[#2f241f] md:text-4xl [font-family:var(--font-playfair)]">
-            What to Look For in a Good Wine Glass
+          <h2 className="mt-4 text-4xl font-semibold leading-tight text-[#2c211c] md:text-5xl [font-family:var(--font-playfair)]">
+            Beautiful glassware should feel special without feeling precious.
           </h2>
 
-          <div className="mt-7 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-            {features.map((item) => (
-              <div
-                key={item}
-                className="rounded-2xl border border-[#eee2d6] bg-[#fdfaf3] px-5 py-4 text-sm leading-7 text-[#6b5645]"
+          <p className="mt-6 text-[17px] leading-8 text-[#665246]">
+            You do not need a cabinet full of shapes to enjoy wine well. A few
+            thoughtful glasses can carry you from weeknight dinner to a
+            celebratory bottle with guests.
+          </p>
+        </section>
+
+        {/* START HERE */}
+        <section className="mt-20 grid gap-12 border-y border-[#d7c7b7] py-14 lg:grid-cols-[1.15fr_0.85fr] lg:items-center">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#9a7659]">
+              If You Buy One Style
+            </p>
+
+            <h2 className="mt-4 text-4xl font-semibold leading-tight text-[#2c211c] [font-family:var(--font-playfair)]">
+              Start with a universal wine glass.
+            </h2>
+
+            <p className="mt-5 max-w-2xl text-[17px] leading-8 text-[#665246]">
+              A well-shaped universal glass is versatile enough for many reds,
+              whites, and rosés while still feeling polished enough for a
+              dinner table.
+            </p>
+
+            <p className="mt-4 max-w-2xl text-[17px] leading-8 text-[#665246]">
+              It is especially useful when you want beautiful glassware without
+              storing a different shape for every bottle.
+            </p>
+          </div>
+
+          <aside className="rounded-[2rem] bg-[#eee5db] p-7 md:p-9">
+            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#9a7659]">
+              The Essential
+            </p>
+
+            <h3 className="mt-3 text-3xl font-semibold text-[#2c211c] [font-family:var(--font-playfair)]">
+              Universal Wine Glass
+            </h3>
+
+            <div className="mt-6 space-y-4 text-sm leading-6 text-[#665246]">
+              <p>✓ Works with reds and whites</p>
+              <p>✓ Elegant enough for guests</p>
+              <p>✓ Practical for everyday meals</p>
+              <p>✓ Simplifies storage</p>
+            </div>
+          </aside>
+        </section>
+
+        {/* GLASS STYLES */}
+        <section className="mt-20">
+          <div className="border-b border-[#cfbda9] pb-5">
+            <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#9a7659]">
+              Five Useful Shapes
+            </p>
+
+            <h2 className="mt-3 text-4xl font-semibold text-[#2c211c] md:text-5xl [font-family:var(--font-playfair)]">
+              Choose the glass for the way you pour.
+            </h2>
+          </div>
+
+          <div className="mt-10 grid gap-x-10 gap-y-12 lg:grid-cols-2">
+            {glassStyles.map((glass) => (
+              <article
+                key={glass.title}
+                className="border-t border-[#cdbba8] pt-6"
               >
-                {item}
-              </div>
+                <div className="flex items-center justify-between gap-4">
+                  <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#9a7659]">
+                    {glass.eyebrow}
+                  </p>
+
+                  <span className="text-sm text-[#b6a18e]">
+                    {glass.number}
+                  </span>
+                </div>
+
+                <h3 className="mt-4 text-3xl font-semibold text-[#2c211c] [font-family:var(--font-playfair)]">
+                  {glass.title}
+                </h3>
+
+                <p className="mt-4 leading-8 text-[#665246]">
+                  {glass.description}
+                </p>
+
+                <p className="mt-5 text-sm leading-6 text-[#8a7463]">
+                  {glass.note}
+                </p>
+              </article>
             ))}
           </div>
         </section>
 
-        {/* GLASSES */}
-        <section className="mt-12 grid gap-6">
-          {glasses.map((item) => (
-            <article
-              key={item.title}
-              className="rounded-[2rem] border border-[#d8cfc4] bg-white p-7 shadow-sm transition hover:-translate-y-1 hover:shadow-xl md:p-8"
-            >
-              <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[#a37c58]">
-                {item.title}
-              </p>
-
-              <h2 className="mt-3 text-3xl font-semibold text-[#2f241f] [font-family:var(--font-playfair)]">
-                {item.name}
-              </h2>
-
-              <p className="mt-4 text-[17px] leading-8 text-[#6b5645]">
-                {item.description}
-              </p>
-
-              <p className="mt-5 rounded-2xl border border-[#eee2d6] bg-[#fdf7ef] px-5 py-4 text-sm leading-7 text-[#6b5645]">
-                <strong className="text-[#2f241f]">Best for:</strong>{" "}
-                {item.bestFor}
-              </p>
-            </article>
-          ))}
+        {/* PULL QUOTE */}
+        <section className="my-20 border-y border-[#d7c7b7] py-12 text-center">
+          <p className="mx-auto max-w-4xl text-3xl font-medium leading-snug text-[#47352c] md:text-5xl [font-family:var(--font-playfair)]">
+            “The best wine glass is the one that makes you notice the wine, not
+            the glass.”
+          </p>
         </section>
 
-        {/* RECOMMENDATION */}
-        <section className="mt-12 rounded-[2.25rem] border border-[#d8cfc4] bg-[#2f241f] p-8 text-white shadow-[0_24px_80px_rgba(75,63,47,0.16)] md:p-12">
-          <p className="text-sm font-semibold uppercase tracking-[0.25em] text-[#d8b98c]">
-            Our Current Recommendation
+        {/* WHAT TO LOOK FOR */}
+        <section className="rounded-[2.5rem] bg-[#eee5db] px-7 py-12 md:px-12 md:py-16">
+          <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#9a7659]">
+            What Matters Most
           </p>
 
-          <h2 className="mt-3 text-3xl font-semibold md:text-4xl [font-family:var(--font-playfair)]">
-            Start with universal wine glasses first.
+          <h2 className="mt-4 max-w-3xl text-4xl font-semibold leading-tight text-[#2c211c] md:text-5xl [font-family:var(--font-playfair)]">
+            Six details that make glassware feel better.
           </h2>
 
-          <p className="mt-5 text-[17px] leading-8 text-white/75">
-            If you are just starting your collection, choose a set of universal
-            wine glasses first. They are flexible enough for weeknight dinners,
-            small gatherings, red wines, white wines, and rosés.
-          </p>
-
-          <p className="mt-4 text-[17px] leading-8 text-white/75">
-            Later, you can add larger red wine glasses, sparkling wine glasses,
-            or outdoor wine tumblers depending on how you most often enjoy wine.
-          </p>
+          <div className="mt-10 grid gap-x-12 gap-y-0 md:grid-cols-2">
+            {glassQualities.map((item) => (
+              <QualityPoint key={item.title} {...item} />
+            ))}
+          </div>
         </section>
 
-        {/* CTA */}
-        <section className="mt-12 rounded-[2.25rem] border border-[#d8cfc4] bg-white p-8 text-center shadow-sm md:p-10">
-          <p className="text-sm font-semibold uppercase tracking-[0.25em] text-[#a37c58]">
+        {/* HOW TO BUILD A COLLECTION */}
+        <section className="mt-20 grid gap-12 lg:grid-cols-[0.75fr_1.25fr] lg:items-start">
+          <div className="lg:sticky lg:top-28">
+            <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#9a7659]">
+              Build Slowly
+            </p>
+
+            <h2 className="mt-4 text-4xl font-semibold leading-tight text-[#2c211c] [font-family:var(--font-playfair)]">
+              You do not need every shape at once.
+            </h2>
+
+            <p className="mt-5 leading-8 text-[#665246]">
+              Start with the glass that matches the way you drink most often,
+              then add specialized pieces only when they genuinely improve the
+              experience.
+            </p>
+          </div>
+
+          <div className="border-t border-[#cfbda9]">
+            <CollectionRow
+              title="Begin with universal glasses"
+              text="They cover the widest range of wines and work beautifully for everyday meals and guests."
+            />
+
+            <CollectionRow
+              title="Add red wine glasses next"
+              text="If you frequently drink fuller reds, a larger bowl can make aromas feel more expressive."
+            />
+
+            <CollectionRow
+              title="Add sparkling glasses if you celebrate often"
+              text="A tulip or flute gives sparkling wine its own sense of occasion."
+            />
+
+            <CollectionRow
+              title="Keep something casual for outdoors"
+              text="Stemless glasses or tumblers are useful when durability matters more than formality."
+            />
+          </div>
+        </section>
+
+        {/* QUICK GUIDE */}
+        <section className="mt-20 grid gap-10 lg:grid-cols-[0.8fr_1.2fr]">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#9a7659]">
+              At a Glance
+            </p>
+
+            <h2 className="mt-4 text-4xl font-semibold text-[#2c211c] [font-family:var(--font-playfair)]">
+              The quick glass guide.
+            </h2>
+          </div>
+
+          <div className="border-t border-[#cfbda9]">
+            <ComparisonRow
+              label="Best all-around choice"
+              value="Universal glass"
+            />
+
+            <ComparisonRow
+              label="Best for fuller reds"
+              value="Large bowl"
+            />
+
+            <ComparisonRow
+              label="Best for chilled whites"
+              value="Smaller bowl"
+            />
+
+            <ComparisonRow
+              label="Best for sparkling wine"
+              value="Tulip or flute"
+            />
+
+            <ComparisonRow
+              label="Best for outdoors"
+              value="Stemless or tumbler"
+              last
+            />
+          </div>
+        </section>
+
+        {/* FINAL CTA */}
+        <section className="mt-20 overflow-hidden rounded-[2.5rem] bg-[#2d211c] px-7 py-14 text-center text-white md:px-14 md:py-16">
+          <p className="text-xs font-semibold uppercase tracking-[0.3em] text-[#d9b98f]">
             Pair the Glass with the Moment
           </p>
 
-          <h2 className="mt-3 text-3xl font-semibold text-[#2f241f] md:text-4xl [font-family:var(--font-playfair)]">
+          <h2 className="mx-auto mt-4 max-w-3xl text-4xl font-semibold leading-tight md:text-5xl [font-family:var(--font-playfair)]">
             Make every pour feel intentional.
           </h2>
 
-          <p className="mx-auto mt-4 max-w-2xl text-[17px] leading-8 text-[#6b5645]">
-            Once your glassware is ready, explore simple wine pairings for
-            everyday meals, dinner parties, and relaxed evenings at home.
+          <p className="mx-auto mt-6 max-w-2xl text-[17px] leading-8 text-white/75">
+            Once your glassware is ready, explore wine pairings, corkscrew
+            techniques, and simple ways to make the table feel a little more
+            special.
           </p>
 
-          <div className="mt-7 flex flex-wrap justify-center gap-3">
+          <div className="mt-8 flex flex-wrap justify-center gap-3">
             <Link
               href="/"
-              className="inline-block rounded-full bg-[#6e2a2a] px-7 py-3 font-semibold text-white shadow-sm transition hover:bg-[#8a3a3a]"
+              className="inline-flex items-center justify-center rounded-full bg-[#b58a63] px-7 py-3 text-sm font-semibold text-white transition hover:bg-[#c69a72]"
             >
-              Explore Wine Pairings →
+              Explore Wine Pairings
+              <span aria-hidden="true" className="ml-2">
+                →
+              </span>
             </Link>
 
             <Link
               href="/best-corkscrews"
-              className="inline-block rounded-full border border-[#d8cfc4] bg-[#fdfaf3] px-7 py-3 font-semibold text-[#6e2a2a] transition hover:bg-[#f3eadf]"
+              className="inline-flex items-center justify-center rounded-full border border-white/25 px-7 py-3 text-sm font-semibold text-white transition hover:bg-white/10"
             >
-              View Corkscrew Guide →
+              Corkscrew Guide
             </Link>
           </div>
         </section>
 
-        <p className="mt-8 text-xs leading-6 text-[#8a7463]">
-          Disclosure: Product recommendations are selected independently. Vino
-          Pairings may participate in affiliate programs in the future.
+        <p className="mx-auto mt-8 max-w-2xl text-center text-xs leading-6 text-[#8a7463]">
+          Vino Pairings offers approachable guidance for wine, entertaining,
+          pairing, and the small rituals that make every pour feel more
+          special.
         </p>
-      </section>
-    </main>
+      </article>
+    </>
+  );
+}
+
+function QualityPoint({ number, title, text }) {
+  return (
+    <article className="border-t border-[#cfbda9] py-8">
+      <p className="text-xs tracking-[0.2em] text-[#ad927a]">
+        {number}
+      </p>
+
+      <h3 className="mt-3 text-2xl font-semibold text-[#2c211c] [font-family:var(--font-playfair)]">
+        {title}
+      </h3>
+
+      <p className="mt-3 max-w-xl leading-8 text-[#665246]">
+        {text}
+      </p>
+    </article>
+  );
+}
+
+function CollectionRow({ title, text }) {
+  return (
+    <article className="grid gap-3 border-b border-[#cfbda9] py-7 sm:grid-cols-[220px_1fr]">
+      <h3 className="text-xl font-semibold text-[#2c211c] [font-family:var(--font-playfair)]">
+        {title}
+      </h3>
+
+      <p className="leading-8 text-[#665246]">
+        {text}
+      </p>
+    </article>
+  );
+}
+
+function ComparisonRow({ label, value, last = false }) {
+  return (
+    <div
+      className={`grid grid-cols-[1fr_auto] gap-5 py-5 ${
+        last ? "" : "border-b border-[#cfbda9]"
+      }`}
+    >
+      <span className="text-sm leading-6 text-[#8a7463]">
+        {label}
+      </span>
+
+      <span className="text-right text-sm font-semibold leading-6 text-[#2c211c]">
+        {value}
+      </span>
+    </div>
   );
 }
