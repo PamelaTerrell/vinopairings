@@ -19,7 +19,8 @@ const playfair = Playfair_Display({
   variable: "--font-playfair",
 });
 
-const GA_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || "G-SRJRLWGF89";
+const GA_ID =
+  process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || "G-SRJRLWGF89";
 
 const ChatWidget = dynamic(() => import("./components/ChatWidget"), {
   ssr: false,
@@ -36,14 +37,14 @@ export const metadata = {
     template: "%s | Vino Pairings",
   },
   description:
-    "Elegant wine pairing guides, wine tips, entertaining ideas, wine gift guides, and thoughtfully selected wine accessories.",
+    "Elegant wine pairing guides, wine tips, entertaining ideas, wine regions, and practical guidance for enjoying wine with confidence.",
   openGraph: {
     type: "website",
     url: "https://vinopairings.com",
     siteName: "Vino Pairings",
     title: "Vino Pairings | Wine Pairing Guides & Elegant Wine Tips",
     description:
-      "Discover elegant wine pairing guides, wine tips, entertaining ideas, wine gift guides, and thoughtfully selected wine accessories.",
+      "Discover elegant wine pairing guides, wine tips, entertaining ideas, wine regions, and practical guidance for enjoying wine with confidence.",
     images: [
       {
         url: "/wineog.png",
@@ -57,18 +58,18 @@ export const metadata = {
     card: "summary_large_image",
     title: "Vino Pairings | Wine Pairing Guides & Elegant Wine Tips",
     description:
-      "Elegant wine pairing guides, wine tips, entertaining ideas, wine gift guides, and thoughtfully selected wine accessories.",
+      "Elegant wine pairing guides, wine tips, entertaining ideas, wine regions, and practical guidance for enjoying wine with confidence.",
     images: ["/wineog.png"],
   },
 };
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className={`${inter.variable} ${playfair.variable}`}>
+    <html
+      lang="en"
+      className={`${inter.variable} ${playfair.variable}`}
+    >
       <head>
-        <link rel="preconnect" href="https://www.googletagmanager.com" />
-        <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
-
         <Script
           id="website-jsonld"
           type="application/ld+json"
@@ -80,7 +81,7 @@ export default function RootLayout({ children }) {
             name: "Vino Pairings",
             url: "https://vinopairings.com",
             description:
-              "Elegant wine pairing guides, wine tips, entertaining ideas, wine gift guides, and thoughtfully selected wine accessories.",
+              "Elegant wine pairing guides, wine tips, entertaining ideas, wine regions, and practical guidance for enjoying wine with confidence.",
             publisher: {
               "@type": "Organization",
               name: "Stabile USA",
@@ -109,10 +110,14 @@ export default function RootLayout({ children }) {
         )}
       </head>
 
-      <body className={`${inter.className} bg-[#f9f6ef] text-[#4b3f2f]`}>
+      <body
+        className={`${inter.className} bg-[#f9f6ef] text-[#4b3f2f]`}
+      >
         <NavBar />
 
-        <main className="mx-auto max-w-5xl px-4 py-6">{children}</main>
+        <main className="mx-auto max-w-5xl px-4 py-6">
+          {children}
+        </main>
 
         <footer className="mt-14 border-t border-[#d8cfc4] bg-[#fdfaf3] px-6 py-10 text-center text-sm text-[#6b5b4b]">
           <div className="mx-auto max-w-4xl space-y-5">
@@ -121,16 +126,14 @@ export default function RootLayout({ children }) {
             </p>
 
             <p className="mx-auto max-w-2xl leading-7">
-              Elegant wine pairing guides, entertaining inspiration, wine gift
-              guides, and thoughtfully selected wine accessories.
-            </p>
-
-            <p className="text-xs leading-6 text-[#7a6b57]">
-              As an Amazon Associate I earn from qualifying purchases.
+              Elegant wine pairing guides, entertaining inspiration,
+              wine regions, practical wine tips, and approachable ways
+              to enjoy wine with confidence.
             </p>
 
             <p className="text-xs text-[#7a6b57]">
-              Vino Pairings is part of the Stabile USA family of digital brands.
+              Vino Pairings is part of the Stabile USA family of digital
+              brands.
             </p>
 
             <p className="text-sm">
@@ -147,51 +150,59 @@ export default function RootLayout({ children }) {
               aria-label="Footer navigation"
               className="flex flex-wrap justify-center gap-x-5 gap-y-2 pt-1"
             >
-              <a href="/about" className="underline underline-offset-4 hover:text-[#6e2a2a]">
+              <a
+                href="/about"
+                className="underline underline-offset-4 hover:text-[#6e2a2a]"
+              >
                 About
               </a>
 
-              <a href="/history" className="underline underline-offset-4 hover:text-[#6e2a2a]">
+              <a
+                href="/history"
+                className="underline underline-offset-4 hover:text-[#6e2a2a]"
+              >
                 History
               </a>
 
-              <a href="/regions" className="underline underline-offset-4 hover:text-[#6e2a2a]">
+              <a
+                href="/regions"
+                className="underline underline-offset-4 hover:text-[#6e2a2a]"
+              >
                 Regions
               </a>
 
-              <a href="/tips" className="underline underline-offset-4 hover:text-[#6e2a2a]">
+              <a
+                href="/tips"
+                className="underline underline-offset-4 hover:text-[#6e2a2a]"
+              >
                 Tips
               </a>
 
-              <a href="/sunday" className="underline underline-offset-4 hover:text-[#6e2a2a]">
+              <a
+                href="/sunday"
+                className="underline underline-offset-4 hover:text-[#6e2a2a]"
+              >
                 Sunday
               </a>
 
-              <a href="/best-corkscrews" className="underline underline-offset-4 hover:text-[#6e2a2a]">
-                Corkscrews
-              </a>
-
-              <a href="/best-wine-glasses" className="underline underline-offset-4 hover:text-[#6e2a2a]">
-                Glasses
-              </a>
-
-              <a href="/wine-gifts-under-50" className="underline underline-offset-4 hover:text-[#6e2a2a]">
-                Gifts
-              </a>
-
-              <a href="/disclosure" className="underline underline-offset-4 hover:text-[#6e2a2a]">
-                Disclosure
-              </a>
-
-              <a href="/privacy" className="underline underline-offset-4 hover:text-[#6e2a2a]">
+              <a
+                href="/privacy"
+                className="underline underline-offset-4 hover:text-[#6e2a2a]"
+              >
                 Privacy
               </a>
 
-              <a href="/terms" className="underline underline-offset-4 hover:text-[#6e2a2a]">
+              <a
+                href="/terms"
+                className="underline underline-offset-4 hover:text-[#6e2a2a]"
+              >
                 Terms
               </a>
 
-              <a href="/contact" className="underline underline-offset-4 hover:text-[#6e2a2a]">
+              <a
+                href="/contact"
+                className="underline underline-offset-4 hover:text-[#6e2a2a]"
+              >
                 Contact
               </a>
 
@@ -215,7 +226,12 @@ export default function RootLayout({ children }) {
         <Analytics />
 
         <ClientPortal>
-          <div style={{ position: "relative", zIndex: 2147483647 }}>
+          <div
+            style={{
+              position: "relative",
+              zIndex: 2147483647,
+            }}
+          >
             <ChatWidget />
           </div>
         </ClientPortal>
