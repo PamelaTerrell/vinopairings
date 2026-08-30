@@ -1,9 +1,12 @@
 // src/app/terms/page.js
+
 export const metadata = {
   title: "Terms of Use | Vino Pairings",
   description:
-    "Terms of use for Vino Pairings, including site content, external links, affiliate relationships, and responsible wine enjoyment.",
-  alternates: { canonical: "/terms" },
+    "Terms of use for Vino Pairings, including site content, digital products, external links, intellectual property, and responsible wine enjoyment.",
+  alternates: {
+    canonical: "/terms",
+  },
 };
 
 export default function TermsPage() {
@@ -22,35 +25,38 @@ export default function TermsPage() {
 
             <p className="mx-auto mt-4 max-w-2xl text-base leading-relaxed text-[#6b5b4b] md:text-lg">
               Please read these terms before using Vino Pairings. By accessing
-              this website, you agree to the terms below.
+              or using this website, you agree to the terms below.
             </p>
 
             <p className="mt-4 text-sm text-[#8a7463]">
-              Last updated: April 2026
+              Last updated: August 2026
             </p>
 
             <div className="mx-auto mt-6 h-[2px] w-24 bg-gradient-to-r from-transparent via-[#a37c58] to-transparent" />
           </header>
 
           <section className="space-y-8 px-8 py-10 leading-8">
+            {/* USE OF WEBSITE */}
             <div>
               <h2 className="text-2xl font-semibold text-[#6e2a2a] [font-family:var(--font-playfair)]">
                 Use of This Website
               </h2>
 
               <p className="mt-3">
-                Vino Pairings provides wine pairing ideas, wine tips,
-                entertaining inspiration, product guides, and related lifestyle
-                content for informational and educational purposes.
+                Vino Pairings provides wine pairing ideas, wine education,
+                entertaining inspiration, tutorials, printable resources, wine
+                guides, and related lifestyle content for informational and
+                educational purposes.
               </p>
 
               <p className="mt-3">
-                You agree to use this website lawfully and respectfully, and not
-                to misuse, copy, disrupt, or interfere with the site or its
-                content.
+                You agree to use this website lawfully and respectfully and not
+                to misuse, copy, disrupt, damage, interfere with, or attempt to
+                gain unauthorized access to the website or its content.
               </p>
             </div>
 
+            {/* INFORMATIONAL USE */}
             <div>
               <h2 className="text-2xl font-semibold text-[#6e2a2a] [font-family:var(--font-playfair)]">
                 Informational Use Only
@@ -58,17 +64,39 @@ export default function TermsPage() {
 
               <p className="mt-3">
                 The content on Vino Pairings is provided for general
-                informational purposes only. Wine preferences, pairings, product
-                choices, and entertaining suggestions are subjective and may vary
-                by personal taste.
+                informational and educational purposes only. Wine preferences,
+                food pairings, serving suggestions, entertaining ideas, and
+                recommendations are subjective and may vary according to
+                personal taste and individual circumstances.
               </p>
 
               <p className="mt-3">
-                Nothing on this site should be considered professional,
-                medical, legal, or financial advice.
+                Nothing on this website should be considered professional,
+                medical, legal, financial, or other specialized advice.
               </p>
             </div>
 
+            {/* PAIRING FINDER */}
+            <div>
+              <h2 className="text-2xl font-semibold text-[#6e2a2a] [font-family:var(--font-playfair)]">
+                Pairing Finder & Interactive Features
+              </h2>
+
+              <p className="mt-3">
+                Vino Pairings may provide interactive tools, including the
+                Pairing Finder and virtual wine guidance features, to help
+                visitors explore food and wine combinations.
+              </p>
+
+              <p className="mt-3">
+                These suggestions are provided for general guidance and
+                enjoyment. Wine and food preferences are highly personal, and no
+                particular pairing or recommendation is guaranteed to suit every
+                visitor.
+              </p>
+            </div>
+
+            {/* RESPONSIBLE ALCOHOL USE */}
             <div>
               <h2 className="text-2xl font-semibold text-[#6e2a2a] [font-family:var(--font-playfair)]">
                 Responsible Alcohol Use
@@ -82,72 +110,155 @@ export default function TermsPage() {
               </p>
 
               <p className="mt-3">
-                Do not drink and drive. If you choose to consume alcohol, please
-                do so safely and responsibly.
+                Do not drink and drive or operate machinery while impaired. If
+                you choose to consume alcohol, please do so safely and
+                responsibly.
               </p>
             </div>
 
+            {/* DIGITAL PRODUCTS */}
             <div>
               <h2 className="text-2xl font-semibold text-[#6e2a2a] [font-family:var(--font-playfair)]">
-                Affiliate Links & Product Mentions
+                Digital Products & Printable Guides
               </h2>
 
               <p className="mt-3">
-                Vino Pairings may participate in affiliate programs and may earn
-                commissions from qualifying purchases made through links on this
-                website, at no additional cost to you.
+                Vino Pairings may offer original digital products, including
+                printable wine guides and other downloadable resources.
               </p>
 
               <p className="mt-3">
-                Product recommendations and mentions are selected independently
-                based on usefulness, relevance, editorial judgment, and fit for
-                the Vino Pairings audience.
+                Digital products are intended for personal use unless otherwise
+                stated. Purchasing a digital product does not transfer ownership
+                of the underlying design, text, artwork, or other intellectual
+                property.
+              </p>
+
+              <p className="mt-3">
+                You may download and use purchased materials for your own
+                personal use, but you may not reproduce, resell, distribute,
+                publish, upload, share, or commercially exploit them without
+                written permission from Vino Pairings.
               </p>
             </div>
 
+            {/* PAYMENTS */}
+            <div>
+              <h2 className="text-2xl font-semibold text-[#6e2a2a] [font-family:var(--font-playfair)]">
+                Payments
+              </h2>
+
+              <p className="mt-3">
+                Payments for digital products may be processed through a
+                third-party payment provider. Vino Pairings does not directly
+                store complete payment card information.
+              </p>
+
+              <p className="mt-3">
+                Transactions may also be subject to the payment provider&apos;s
+                own terms, privacy practices, and policies.
+              </p>
+            </div>
+
+            {/* EXTERNAL LINKS */}
             <div>
               <h2 className="text-2xl font-semibold text-[#6e2a2a] [font-family:var(--font-playfair)]">
                 External Links
               </h2>
 
               <p className="mt-3">
-                This website may contain links to third-party websites,
-                retailers, brands, or services. Vino Pairings is not responsible
-                for the content, policies, availability, pricing, or practices of
-                external websites.
+                This website may contain links to third-party websites, wine
+                brands, services, or other external resources. These links are
+                provided for convenience and informational purposes.
               </p>
 
               <p className="mt-3">
-                Visiting external sites is at your own discretion.
+                Vino Pairings does not control and is not responsible for the
+                content, policies, availability, pricing, accuracy, security, or
+                practices of external websites.
+              </p>
+
+              <p className="mt-3">
+                Visiting or using an external website is at your own discretion
+                and is subject to that website&apos;s own terms and policies.
               </p>
             </div>
 
+            {/* INTELLECTUAL PROPERTY */}
             <div>
               <h2 className="text-2xl font-semibold text-[#6e2a2a] [font-family:var(--font-playfair)]">
                 Intellectual Property
               </h2>
 
               <p className="mt-3">
-                Unless otherwise noted, the text, layout, design, branding, and
-                original content on Vino Pairings belong to Vino Pairings and/or
-                its creator. You may not copy, reproduce, republish, or reuse
-                substantial portions of this site without permission.
+                Unless otherwise noted, the original text, pairing resources,
+                guides, downloadable materials, layout, design, branding,
+                graphics, and other original content on Vino Pairings belong to
+                Vino Pairings and/or its creator.
+              </p>
+
+              <p className="mt-3">
+                You may not copy, reproduce, republish, distribute, modify,
+                sell, or reuse substantial portions of this website or its
+                original materials without prior permission, except where
+                permitted by applicable law.
               </p>
             </div>
 
+            {/* TRADEMARKS */}
             <div>
               <h2 className="text-2xl font-semibold text-[#6e2a2a] [font-family:var(--font-playfair)]">
-                No Guarantees
+                Third-Party Names & Trademarks
               </h2>
 
               <p className="mt-3">
-                We make reasonable efforts to keep information accurate and
-                current, but we do not guarantee that all content, product
-                details, prices, links, or availability will always be complete,
-                accurate, or up to date.
+                Wine names, winery names, company names, trademarks, logos, and
+                other third-party intellectual property referenced on Vino
+                Pairings remain the property of their respective owners.
+              </p>
+
+              <p className="mt-3">
+                References to a wine, winery, brand, or other third party do not
+                imply sponsorship, endorsement, or an official relationship
+                unless expressly stated.
               </p>
             </div>
 
+            {/* NO GUARANTEES */}
+            <div>
+              <h2 className="text-2xl font-semibold text-[#6e2a2a] [font-family:var(--font-playfair)]">
+                Accuracy & No Guarantees
+              </h2>
+
+              <p className="mt-3">
+                Vino Pairings makes reasonable efforts to provide useful and
+                accurate information, but we do not guarantee that all content,
+                links, product information, wine details, recommendations, or
+                other information will always be complete, accurate, current,
+                or available.
+              </p>
+
+              <p className="mt-3">
+                Information may be updated, corrected, removed, or changed at
+                any time without notice.
+              </p>
+            </div>
+
+            {/* AVAILABILITY */}
+            <div>
+              <h2 className="text-2xl font-semibold text-[#6e2a2a] [font-family:var(--font-playfair)]">
+                Website Availability
+              </h2>
+
+              <p className="mt-3">
+                We do not guarantee that Vino Pairings or any particular feature
+                will always be available, uninterrupted, secure, or free from
+                errors. Features, content, and services may be modified,
+                suspended, or discontinued from time to time.
+              </p>
+            </div>
+
+            {/* CHANGES */}
             <div>
               <h2 className="text-2xl font-semibold text-[#6e2a2a] [font-family:var(--font-playfair)]">
                 Changes to These Terms
@@ -155,10 +266,17 @@ export default function TermsPage() {
 
               <p className="mt-3">
                 Vino Pairings may update these Terms of Use from time to time.
-                Updates will be posted on this page with a revised date.
+                Any changes will be posted on this page along with a revised
+                &quot;Last updated&quot; date.
+              </p>
+
+              <p className="mt-3">
+                Continued use of the website after updated terms are posted
+                constitutes acceptance of the revised terms.
               </p>
             </div>
 
+            {/* CONTACT */}
             <div className="rounded-2xl border border-[#d8cfc4] bg-[#f9f6ef] px-6 py-5">
               <p className="text-sm md:text-base">
                 Questions about these terms? Contact{" "}

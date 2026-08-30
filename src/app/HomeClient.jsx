@@ -15,6 +15,7 @@ export default function HomeClient() {
 
   const isLargeScreen = () => {
     if (typeof window === "undefined") return false;
+
     return (
       window.matchMedia("(min-width: 1024px)").matches &&
       window.matchMedia("(pointer: fine)").matches
@@ -27,23 +28,21 @@ export default function HomeClient() {
     previewImage: "/wine-glass-guide-preview.png",
   };
 
-  const FEATURED_UPDATED_ISO = "2026-02-27";
-  const featuredUpdatedText = new Intl.DateTimeFormat(undefined, {
-    year: "numeric",
-    month: "short",
-    day: "2-digit",
-  }).format(new Date(FEATURED_UPDATED_ISO));
-
   const FEATURED = {
-  name: "Josh Cellars Seaswept",
-  brand: "Josh Cellars",
-  imagePath: "/josh-seaswept-pammys-place.png",
-  brandUrl: "https://www.joshcellars.com",
-  brandLabel: "Visit Brand Website",
-  pairingTags: ["Shrimp", "Seafood pasta", "Grilled chicken", "Summer salads"],
-  blurb:
-    "A crisp, coastal-inspired white blend of Sauvignon Blanc and Pinot Grigio—fresh, bright, and lovely with seafood, summer salads, light pastas, and warm-weather patio dinners.",
-};
+    name: "Josh Cellars Seaswept",
+    brand: "Josh Cellars",
+    imagePath: "/josh-seaswept-pammys-place.png",
+    brandUrl: "https://www.joshcellars.com",
+    brandLabel: "Visit Brand Website",
+    pairingTags: [
+      "Shrimp",
+      "Seafood pasta",
+      "Grilled chicken",
+      "Summer salads",
+    ],
+    blurb:
+      "A crisp, coastal-inspired white blend of Sauvignon Blanc and Pinot Grigio—fresh, bright, and lovely with seafood, summer salads, light pastas, and warm-weather patio dinners.",
+  };
 
   const featuredGuides = [
     {
@@ -55,7 +54,7 @@ export default function HomeClient() {
     {
       title: "Best Corkscrews for Wine Lovers",
       href: "/best-corkscrews",
-      desc: "A refined guide to choosing a corkscrew for everyday bottles, entertaining, and gifting.",
+      desc: "A refined guide to choosing a corkscrew for everyday bottles, entertaining, and easy opening.",
       label: "Wine Essential",
     },
     {
@@ -64,11 +63,59 @@ export default function HomeClient() {
       desc: "Choose glasses for red, white, sparkling, and relaxed outdoor wine moments.",
       label: "Wine Essential",
     },
+  ];
+
+  const popularPairings = [
     {
-      title: "Best Wine Gifts Under $50",
-      href: "/wine-gifts-under-50",
-      desc: "Thoughtful wine gift ideas for hosts, birthdays, holidays, and housewarmings.",
-      label: "Gift Guide",
+      dish: "steak",
+      label: "Steak",
+      wine: "Cabernet Sauvignon",
+    },
+    {
+      dish: "salmon",
+      label: "Salmon",
+      wine: "Pinot Noir",
+    },
+    {
+      dish: "pasta",
+      label: "Pasta",
+      wine: "Sangiovese",
+    },
+    {
+      dish: "shrimp",
+      label: "Shrimp",
+      wine: "Vermentino",
+    },
+    {
+      dish: "spicy",
+      label: "Spicy Food",
+      wine: "Riesling",
+    },
+    {
+      dish: "pizza",
+      label: "Pizza",
+      wine: "Barbera",
+    },
+  ];
+
+  const exploreGuides = [
+    {
+      title: "Best Wines for Pasta Night",
+      href: "/best-wines-for-pasta",
+      eyebrow: "Food & Wine",
+      desc: "Find the right bottle for tomato sauces, creamy pasta, pesto, seafood, and more.",
+    },
+    {
+      title: "Best Wine Opener for Beginners",
+      href: "/best-wine-opener-for-beginners",
+      eyebrow: "Wine Basics",
+      desc: "Learn which opener styles are easiest to use and what makes each one different.",
+    },
+    {
+      title: "Wine Tips & Tutorials",
+      href: "/tips",
+      eyebrow: "Learn Wine",
+      desc: "Build confidence with practical, beginner-friendly wine guidance and tutorials.",
     },
   ];
 
@@ -87,14 +134,17 @@ export default function HomeClient() {
       window.gtag("event", "cta_click", {
         cta_id: "featured_wine_brand_site",
         cta_location: "featured_wine_top",
-        link_domain: "fatbastardwine.com",
+        link_domain: "joshcellars.com",
       });
     }
   };
 
   const strip = (s) => s.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+
   const normalize = (s) => strip(s.trim().toLowerCase());
-  const escapeRegExp = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
+  const escapeRegExp = (s) =>
+    s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
   const STOP = new Set([
     "and",
@@ -125,19 +175,23 @@ export default function HomeClient() {
   const containsEither = (a, b) => {
     const na = normalize(a);
     const nb = normalize(b);
+
     return na.includes(nb) || nb.includes(na);
   };
 
   const levenshtein = (a, b) => {
     const s = normalize(a);
     const t = normalize(b);
+
     const m = s.length;
     const n = t.length;
 
     if (m === 0) return n;
     if (n === 0) return m;
 
-    const dp = Array.from({ length: m + 1 }, () => Array(n + 1).fill(0));
+    const dp = Array.from({ length: m + 1 }, () =>
+      Array(n + 1).fill(0)
+    );
 
     for (let i = 0; i <= m; i++) dp[i][0] = i;
     for (let j = 0; j <= n; j++) dp[0][j] = j;
@@ -145,6 +199,7 @@ export default function HomeClient() {
     for (let i = 1; i <= m; i++) {
       for (let j = 1; j <= n; j++) {
         const cost = s[i - 1] === t[j - 1] ? 0 : 1;
+
         dp[i][j] = Math.min(
           dp[i - 1][j] + 1,
           dp[i][j - 1] + 1,
@@ -162,13 +217,16 @@ export default function HomeClient() {
     const cSet = new Set(cTok);
 
     let exactOverlap = 0;
+
     qTok.forEach((t) => {
       if (cSet.has(t)) exactOverlap++;
     });
 
     let prefixOverlap = 0;
+
     qTok.forEach((qt) => {
       if (qt.length < 2) return;
+
       for (const ct of cTok) {
         if (ct.startsWith(qt)) {
           prefixOverlap++;
@@ -177,7 +235,11 @@ export default function HomeClient() {
       }
     });
 
-    const uniqueCoverage = Math.min(qTok.length, exactOverlap + prefixOverlap);
+    const uniqueCoverage = Math.min(
+      qTok.length,
+      exactOverlap + prefixOverlap
+    );
+
     const containBonus = containsEither(query, candidate) ? 1 : 0;
     const dist = levenshtein(query, candidate);
     const invDist = 1 / (1 + dist);
@@ -201,7 +263,9 @@ export default function HomeClient() {
     if (qTok.some((t) => cSet.has(t))) return true;
 
     return qTok.some(
-      (qt) => qt.length >= 2 && cTok.some((ct) => ct.startsWith(qt))
+      (qt) =>
+        qt.length >= 2 &&
+        cTok.some((ct) => ct.startsWith(qt))
     );
   };
 
@@ -402,31 +466,42 @@ export default function HomeClient() {
 
   const reversePairings = useMemo(() => {
     const acc = {};
+
     Object.entries(pairings).forEach(([dish, wine]) => {
       if (!acc[wine]) acc[wine] = [];
       acc[wine].push(dish);
     });
+
     return acc;
   }, [pairings]);
 
   const getCandidates = (mode) =>
-    mode === "dish" ? Object.keys(pairings) : Object.keys(reversePairings);
+    mode === "dish"
+      ? Object.keys(pairings)
+      : Object.keys(reversePairings);
 
   const buildSuggestions = (q, mode, limit = 6) => {
     const nq = normalize(q);
+
     if (!nq || nq.length < 2) return [];
 
     return getCandidates(mode)
-      .filter((c) => hasAnyTokenSignal(q, c))
-      .map((c) => ({ c, s: scoreCandidate(q, c) }))
-      .sort((a, b) => b.s - a.s)
+      .filter((candidate) => hasAnyTokenSignal(q, candidate))
+      .map((candidate) => ({
+        candidate,
+        score: scoreCandidate(q, candidate),
+      }))
+      .sort((a, b) => b.score - a.score)
       .slice(0, limit)
-      .map(({ c }) => c);
+      .map(({ candidate }) => candidate);
   };
 
   const computeResult = (q, mode) => {
     const nq = normalize(q);
-    if (!nq || nq.length < 2) return { found: false, text: "" };
+
+    if (!nq || nq.length < 2) {
+      return { found: false, text: "" };
+    }
 
     if (mode === "dish") {
       const dishes = Object.keys(pairings);
@@ -439,7 +514,9 @@ export default function HomeClient() {
         }))
         .sort((a, b) => b.score - a.score)[0];
 
-      if (!bestDish) return { found: false, text: "" };
+      if (!bestDish) {
+        return { found: false, text: "" };
+      }
 
       return {
         found: true,
@@ -458,7 +535,9 @@ export default function HomeClient() {
         }))
         .sort((a, b) => b.score - a.score)[0];
 
-      if (!bestWine) return { found: false, text: "" };
+      if (!bestWine) {
+        return { found: false, text: "" };
+      }
 
       const dishes = reversePairings[bestWine.wine]
         .map((dish) => `**${dish}**`)
@@ -475,21 +554,31 @@ export default function HomeClient() {
 
   const renderWithStrong = (text) => {
     const parts = text.split(/(\*\*.*?\*\*)/g);
-    return parts.map((part, i) => {
-      const m = part.match(/^\*\*(.*?)\*\*$/);
-      if (m) return <strong key={i}>{m[1]}</strong>;
-      return <span key={i}>{part}</span>;
+
+    return parts.map((part, index) => {
+      const match = part.match(/^\*\*(.*?)\*\*$/);
+
+      if (match) {
+        return <strong key={index}>{match[1]}</strong>;
+      }
+
+      return <span key={index}>{part}</span>;
     });
   };
 
   const highlight = (s, q) => {
     const toks = tokenize(q);
+
     if (!toks.length) return <span>{s}</span>;
 
     const lastIdx = toks.length - 1;
+
     const parts = toks.map((t, i) => {
-      const esc = escapeRegExp(t);
-      return i === lastIdx ? `\\b${esc}\\w*` : `\\b${esc}\\b`;
+      const escaped = escapeRegExp(t);
+
+      return i === lastIdx
+        ? `\\b${escaped}\\w*`
+        : `\\b${escaped}\\b`;
     });
 
     const splitRe = new RegExp(`(${parts.join("|")})`, "gi");
@@ -497,12 +586,16 @@ export default function HomeClient() {
 
     return (
       <span>
-        {chunks.map((part, i) => {
-          const testRe = new RegExp(`^(?:${parts.join("|")})$`, "i");
+        {chunks.map((part, index) => {
+          const testRe = new RegExp(
+            `^(?:${parts.join("|")})$`,
+            "i"
+          );
+
           return testRe.test(part) ? (
-            <strong key={i}>{part}</strong>
+            <strong key={index}>{part}</strong>
           ) : (
-            <span key={i}>{part}</span>
+            <span key={index}>{part}</span>
           );
         })}
       </span>
@@ -510,15 +603,31 @@ export default function HomeClient() {
   };
 
   const commitSelection = (value) => {
-  setInput(value);
-  setSuggestions([]);
-  setVivAutoOpened(false);
-};
+    setInput(value);
+    setSuggestions([]);
+    setVivAutoOpened(false);
+  };
+
+  const choosePopularPairing = (dish) => {
+    setType("dish");
+    setInput(dish);
+    setCommittedQuery(dish);
+    setSuggestions([]);
+    setDidYouMean("");
+    setVivAutoOpened(false);
+
+    document
+      .getElementById("pairing-finder")
+      ?.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+  };
 
   useEffect(() => {
     const id = setTimeout(() => {
-      const s = buildSuggestions(input, type, 6);
-      setSuggestions(s);
+      const nextSuggestions = buildSuggestions(input, type, 6);
+      setSuggestions(nextSuggestions);
     }, 120);
 
     return () => clearTimeout(id);
@@ -531,20 +640,42 @@ export default function HomeClient() {
       return;
     }
 
-    const { found, text } = computeResult(committedQuery, type);
+    const { found, text } = computeResult(
+      committedQuery,
+      type
+    );
+
     setResultText(text);
 
-    const s = buildSuggestions(committedQuery, type, 6);
-    setDidYouMean(found ? "" : s[0] || "");
+    const nextSuggestions = buildSuggestions(
+      committedQuery,
+      type,
+      6
+    );
+
+    setDidYouMean(
+      found ? "" : nextSuggestions[0] || ""
+    );
   }, [committedQuery, type]);
 
-  const noResult = committedQuery.trim().length >= 2 && !resultText;
+  const noResult =
+    committedQuery.trim().length >= 2 && !resultText;
 
   useEffect(() => {
-    if (!noResult || vivAutoOpened || !isLargeScreen()) return;
+    if (
+      !noResult ||
+      vivAutoOpened ||
+      !isLargeScreen()
+    ) {
+      return;
+    }
 
-    const btn = document.querySelector('button[title="Chat with Viv"]');
-    const isPressed = btn?.getAttribute("aria-pressed") === "true";
+    const btn = document.querySelector(
+      'button[title="Chat with Viv"]'
+    );
+
+    const isPressed =
+      btn?.getAttribute("aria-pressed") === "true";
 
     if (!isPressed) {
       btn?.click();
@@ -556,17 +687,23 @@ export default function HomeClient() {
     const noText = committedQuery.trim().length < 2;
     const hasResult = !!resultText;
 
-    if (noText || hasResult) setVivAutoOpened(false);
+    if (noText || hasResult) {
+      setVivAutoOpened(false);
+    }
   }, [committedQuery, resultText]);
 
   return (
     <div className="min-h-screen bg-[#f9f6ef] text-[#4b3f2f] font-body">
       <h1 className="sr-only">
-        Vino Pairings: Wine Pairing Guides, Wine Tips, Printables, and Wine Essentials
+        Vino Pairings: Wine Pairing Guides, Wine Tips,
+        Printables, and Wine Essentials
       </h1>
 
       {/* PAIRING FINDER */}
-      <section id="pairing-finder" className="mx-auto mt-12 max-w-4xl px-4 md:px-8">
+      <section
+        id="pairing-finder"
+        className="mx-auto mt-12 max-w-4xl scroll-mt-8 px-4 md:px-8"
+      >
         <form
           onSubmit={(e) => {
             e.preventDefault();
@@ -588,20 +725,31 @@ export default function HomeClient() {
           </h2>
 
           <p className="mx-auto mt-4 max-w-2xl text-center text-base leading-8 text-[#6b5b4b]">
-            Enter a dish to find a wine, or enter a wine to discover foods that
-            pair beautifully with it.
+            Enter a dish to find a wine, or enter a wine
+            to discover foods that pair beautifully with
+            it.
           </p>
 
           <div className="mt-8 grid gap-5 md:grid-cols-[190px_1fr]">
             <div className="flex flex-col gap-2">
-              <label className="font-medium" htmlFor="type">
+              <label
+                className="font-medium"
+                htmlFor="type"
+              >
                 Search by
               </label>
 
               <select
                 id="type"
                 value={type}
-                onChange={(e) => setType(e.target.value)}
+                onChange={(e) => {
+                  setType(e.target.value);
+                  setInput("");
+                  setCommittedQuery("");
+                  setResultText("");
+                  setSuggestions([]);
+                  setDidYouMean("");
+                }}
                 className="rounded-2xl border border-[#d8cfc4] bg-[#fdfaf3] p-4 outline-none focus:ring-2 focus:ring-[#a37c58]"
               >
                 <option value="dish">Dish</option>
@@ -610,8 +758,13 @@ export default function HomeClient() {
             </div>
 
             <div className="relative flex flex-col gap-2">
-              <label className="font-medium" htmlFor="query">
-                {type === "dish" ? "Enter a dish" : "Enter a wine"}
+              <label
+                className="font-medium"
+                htmlFor="query"
+              >
+                {type === "dish"
+                  ? "Enter a dish"
+                  : "Enter a wine"}
               </label>
 
               <input
@@ -629,15 +782,30 @@ export default function HomeClient() {
                   setResultText("");
                   setDidYouMean("");
                 }}
-                onFocus={() => setSuggestions(buildSuggestions(input, type))}
-                onBlur={() => setTimeout(() => setSuggestions([]), 120)}
+                onFocus={() =>
+                  setSuggestions(
+                    buildSuggestions(input, type)
+                  )
+                }
+                onBlur={() =>
+                  setTimeout(
+                    () => setSuggestions([]),
+                    120
+                  )
+                }
                 className="rounded-2xl border border-[#d8cfc4] bg-[#fdfaf3] p-4 outline-none focus:ring-2 focus:ring-[#a37c58]"
                 inputMode="search"
                 autoComplete="off"
                 aria-autocomplete="list"
                 aria-controls="suggestions"
-                aria-expanded={suggestions.length > 0}
-                aria-activedescendant={suggestions.length ? "sug-0" : undefined}
+                aria-expanded={
+                  suggestions.length > 0
+                }
+                aria-activedescendant={
+                  suggestions.length
+                    ? "sug-0"
+                    : undefined
+                }
               />
 
               {suggestions.length > 0 && (
@@ -646,25 +814,32 @@ export default function HomeClient() {
                   role="listbox"
                   className="absolute top-full z-10 mt-2 max-h-60 w-full overflow-auto rounded-2xl border border-[#d8cfc4] bg-white shadow-xl"
                 >
-                  {suggestions.map((s, i) => (
-                    <li
-                      key={`${s}-${i}`}
-                      id={`sug-${i}`}
-                      role="option"
-                      aria-selected="false"
-                      tabIndex={-1}
-                      className="cursor-pointer px-4 py-3 hover:bg-[#f4ede4]"
-                      onMouseDown={(e) => {
-                        e.preventDefault();
-                        commitSelection(s);
-                      }}
-                      onKeyDown={(e) => {
-                        if (e.key === "Enter") commitSelection(s);
-                      }}
-                    >
-                      {highlight(s, input)}
-                    </li>
-                  ))}
+                  {suggestions.map(
+                    (suggestion, index) => (
+                      <li
+                        key={`${suggestion}-${index}`}
+                        id={`sug-${index}`}
+                        role="option"
+                        aria-selected="false"
+                        tabIndex={-1}
+                        className="cursor-pointer px-4 py-3 hover:bg-[#f4ede4]"
+                        onMouseDown={(e) => {
+                          e.preventDefault();
+                          commitSelection(suggestion);
+                        }}
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter") {
+                            commitSelection(suggestion);
+                          }
+                        }}
+                      >
+                        {highlight(
+                          suggestion,
+                          input
+                        )}
+                      </li>
+                    )
+                  )}
                 </ul>
               )}
             </div>
@@ -703,14 +878,21 @@ export default function HomeClient() {
             </div>
 
             <p className="mt-1 text-sm leading-7 text-[#6b5b4b]">
-              Click the <strong>🍷</strong> button in the bottom-right to ask{" "}
-              <strong>Viv, our virtual sommelier</strong>.
+              Click the <strong>🍷</strong> button in
+              the bottom-right to ask{" "}
+              <strong>
+                Viv, our virtual sommelier
+              </strong>
+              .
             </p>
 
             {didYouMean && (
               <button
+                type="button"
                 className="mt-3 text-sm font-semibold text-[#6e2a2a] underline underline-offset-4"
-                onClick={() => commitSelection(didYouMean)}
+                onClick={() =>
+                  commitSelection(didYouMean)
+                }
               >
                 Try “{didYouMean}”
               </button>
@@ -719,64 +901,103 @@ export default function HomeClient() {
         )}
       </section>
 
+      {/* POPULAR PAIRINGS */}
+      <section className="mx-auto mt-8 max-w-5xl px-4 md:px-8">
+        <div className="rounded-[2rem] border border-[#e2d8cd] bg-white/70 px-6 py-7 shadow-sm">
+          <div className="text-center">
+            <p className="text-xs font-semibold uppercase tracking-[0.26em] text-[#a37c58]">
+              Not Sure Where to Start?
+            </p>
+
+            <h2 className="mt-2 text-2xl font-semibold text-[#2f241f] [font-family:var(--font-playfair)]">
+              Try a Popular Pairing
+            </h2>
+
+            <p className="mx-auto mt-2 max-w-2xl text-sm leading-7 text-[#6b5b4b]">
+              Choose a favorite dish and let the Pairing
+              Finder show you a wine that works
+              beautifully with it.
+            </p>
+          </div>
+
+          <div className="mt-6 flex flex-wrap justify-center gap-3">
+            {popularPairings.map((pairing) => (
+              <button
+                key={pairing.dish}
+                type="button"
+                onClick={() =>
+                  choosePopularPairing(pairing.dish)
+                }
+                className="group rounded-full border border-[#d8cfc4] bg-[#fdfaf3] px-5 py-3 text-left transition hover:-translate-y-0.5 hover:border-[#a37c58] hover:bg-white hover:shadow-md"
+              >
+                <span className="font-semibold text-[#4b3f2f]">
+                  {pairing.label}
+                </span>
+
+                <span className="mx-2 text-[#b49a80]">
+                  +
+                </span>
+
+                <span className="text-sm text-[#6e2a2a]">
+                  {pairing.wine}
+                </span>
+              </button>
+            ))}
+          </div>
+        </div>
+      </section>
 
       {/* FEATURED WINE */}
-<section className="mx-auto mt-20 max-w-6xl px-4 md:px-8">
-  <div className="grid overflow-hidden rounded-[2.5rem] border border-[#d8cfc4] bg-white shadow-[0_24px_80px_rgba(75,63,47,0.12)] md:grid-cols-2">
-    <div className="relative min-h-[420px] bg-[#fdfaf3] md:min-h-[520px]">
-      <Image
-        src={FEATURED.imagePath}
-        alt={`${FEATURED.name} with wine glasses at Pammy's Place`}
-        fill
-        className="object-cover"
-        priority
-        sizes="(min-width: 768px) 50vw, 100vw"
-      />
-    </div>
+      <section className="mx-auto mt-20 max-w-6xl px-4 md:px-8">
+        <div className="grid overflow-hidden rounded-[2.5rem] border border-[#d8cfc4] bg-white shadow-[0_24px_80px_rgba(75,63,47,0.12)] md:grid-cols-2">
+          <div className="relative min-h-[420px] bg-[#fdfaf3] md:min-h-[520px]">
+            <Image
+              src={FEATURED.imagePath}
+              alt={`${FEATURED.name} with wine glasses at Pammy's Place`}
+              fill
+              className="object-cover"
+              priority
+              sizes="(min-width: 768px) 50vw, 100vw"
+            />
+          </div>
 
-    <div className="flex flex-col justify-center p-8 text-center md:p-12 md:text-left">
-      <p className="text-sm font-semibold uppercase tracking-[0.24em] text-[#a37c58]">
-        Featured Wine of the Month
-      </p>
+          <div className="flex flex-col justify-center p-8 text-center md:p-12 md:text-left">
+            <p className="text-sm font-semibold uppercase tracking-[0.24em] text-[#a37c58]">
+              Featured Wine
+            </p>
 
-      <h2 className="mt-3 text-4xl font-semibold text-[#2f241f] [font-family:var(--font-playfair)]">
-        {FEATURED.name}
-      </h2>
+            <h2 className="mt-3 text-4xl font-semibold text-[#2f241f] [font-family:var(--font-playfair)]">
+              {FEATURED.name}
+            </h2>
 
-      <p className="mt-2 text-xs text-[#8a7463]">
-        Last updated {featuredUpdatedText}
-      </p>
+            <p className="mt-5 text-[17px] leading-8 text-[#6b5b4b]">
+              {FEATURED.blurb}
+            </p>
 
-      <p className="mt-5 text-[17px] leading-8 text-[#6b5b4b]">
-        {FEATURED.blurb}
-      </p>
+            <div className="mt-5 flex flex-wrap justify-center gap-2 md:justify-start">
+              {FEATURED.pairingTags.map((tag) => (
+                <span
+                  key={tag}
+                  className="rounded-full border border-[#d8cfc4] bg-[#fdf7ef] px-3 py-1 text-sm"
+                >
+                  {tag}
+                </span>
+              ))}
+            </div>
 
-      <div className="mt-5 flex flex-wrap justify-center gap-2 md:justify-start">
-        {FEATURED.pairingTags.map((tag) => (
-          <span
-            key={tag}
-            className="rounded-full border border-[#d8cfc4] bg-[#fdf7ef] px-3 py-1 text-sm"
-          >
-            {tag}
-          </span>
-        ))}
-      </div>
+            <a
+              href={FEATURED.brandUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={trackFeaturedCTA}
+              className="mt-7 inline-block w-fit self-center rounded-full bg-[#a37c58] px-6 py-3 text-sm font-semibold text-white transition hover:brightness-95 md:self-start"
+            >
+              {FEATURED.brandLabel}
+            </a>
+          </div>
+        </div>
+      </section>
 
-      <a
-        href={FEATURED.brandUrl}
-        target="_blank"
-        rel="noopener noreferrer"
-        onClick={trackFeaturedCTA}
-        className="mt-7 inline-block w-fit rounded-full bg-[#a37c58] px-6 py-3 text-sm font-semibold text-white transition hover:brightness-95"
-      >
-        {FEATURED.brandLabel}
-      </a>
-    </div>
-  </div>
-</section>
-
-
-      
       {/* LUXURY HERO */}
       <section className="relative overflow-hidden px-4 py-6 md:px-8 md:py-10">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,#fff7e8_0%,transparent_35%),radial-gradient(circle_at_bottom_right,#ead8c2_0%,transparent_38%)]" />
@@ -792,9 +1013,11 @@ export default function HomeClient() {
             </h2>
 
             <p className="mt-6 max-w-xl text-[18px] leading-8 text-[#6b5645]">
-              Elegant wine pairings, thoughtful gift guides, beginner wine tips,
-              and beautiful table essentials — designed to make every bottle feel
-              effortless.
+              Approachable wine pairings,
+              beginner-friendly guidance, practical wine
+              tips, and elegant entertaining inspiration —
+              designed to make choosing and enjoying wine
+              feel effortless.
             </p>
 
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
@@ -829,6 +1052,74 @@ export default function HomeClient() {
         </div>
       </section>
 
+      {/* HOW VINO PAIRINGS WORKS */}
+      <section className="mx-auto mt-16 max-w-6xl px-4 md:px-8">
+        <div className="text-center">
+          <p className="text-sm font-semibold uppercase tracking-[0.28em] text-[#a37c58]">
+            Simple Wine Guidance
+          </p>
+
+          <h2 className="mt-3 text-4xl font-semibold text-[#2f241f] md:text-5xl [font-family:var(--font-playfair)]">
+            Wine doesn&apos;t have to be complicated.
+          </h2>
+
+          <p className="mx-auto mt-4 max-w-2xl text-[17px] leading-8 text-[#6b5b4b]">
+            Start with what you&apos;re eating, discover a
+            pairing, and learn as much — or as little — as
+            you want along the way.
+          </p>
+        </div>
+
+        <div className="mt-10 grid gap-5 md:grid-cols-3">
+          <div className="rounded-[2rem] border border-[#d8cfc4] bg-white p-7 text-center shadow-sm">
+            <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-[#f4ede4] text-lg font-semibold text-[#6e2a2a]">
+              1
+            </div>
+
+            <h3 className="mt-5 text-2xl font-semibold text-[#2f241f] [font-family:var(--font-playfair)]">
+              Start With a Dish
+            </h3>
+
+            <p className="mt-3 text-sm leading-7 text-[#6b5b4b]">
+              Tell the Pairing Finder what&apos;s on the
+              menu, from steak and salmon to pizza, pasta,
+              curry, and dessert.
+            </p>
+          </div>
+
+          <div className="rounded-[2rem] border border-[#d8cfc4] bg-white p-7 text-center shadow-sm">
+            <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-[#f4ede4] text-lg font-semibold text-[#6e2a2a]">
+              2
+            </div>
+
+            <h3 className="mt-5 text-2xl font-semibold text-[#2f241f] [font-family:var(--font-playfair)]">
+              Find Your Wine
+            </h3>
+
+            <p className="mt-3 text-sm leading-7 text-[#6b5b4b]">
+              Get an approachable wine suggestion without
+              needing to know regions, vintages, or
+              complicated wine terminology.
+            </p>
+          </div>
+
+          <div className="rounded-[2rem] border border-[#d8cfc4] bg-white p-7 text-center shadow-sm">
+            <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-[#f4ede4] text-lg font-semibold text-[#6e2a2a]">
+              3
+            </div>
+
+            <h3 className="mt-5 text-2xl font-semibold text-[#2f241f] [font-family:var(--font-playfair)]">
+              Explore & Learn
+            </h3>
+
+            <p className="mt-3 text-sm leading-7 text-[#6b5b4b]">
+              Explore guides and tutorials when you want
+              to understand more about pairing, serving,
+              opening, and enjoying wine.
+            </p>
+          </div>
+        </div>
+      </section>
 
       {/* EDITORIAL GUIDES */}
       <section className="mx-auto mt-20 max-w-6xl px-4 md:px-8">
@@ -838,16 +1129,17 @@ export default function HomeClient() {
           </p>
 
           <h2 className="mt-3 text-4xl font-semibold text-[#2f241f] md:text-5xl [font-family:var(--font-playfair)]">
-            Guides for Pairing, Pouring, and Gifting Well
+            Guides for Pairing, Pouring, and Enjoying Wine
           </h2>
 
           <p className="mx-auto mt-4 max-w-2xl text-[17px] leading-8 text-[#6b5b4b]">
-            Build confidence with polished wine articles, entertaining tools, and
-            elegant product-style guides.
+            Build confidence with approachable wine
+            articles, pairing guides, practical tutorials,
+            and elegant entertaining ideas.
           </p>
         </div>
 
-        <div className="mt-10 grid gap-5 md:grid-cols-2">
+        <div className="mt-10 grid gap-5 md:grid-cols-3">
           {featuredGuides.map((guide) => (
             <Link
               key={guide.href}
@@ -874,6 +1166,67 @@ export default function HomeClient() {
         </div>
       </section>
 
+      {/* BEGINNER PATH + VIV */}
+      <section className="mx-auto mt-20 max-w-6xl px-4 md:px-8">
+        <div className="grid gap-6 md:grid-cols-2">
+          <div className="rounded-[2.5rem] border border-[#d8cfc4] bg-[#fffaf4] p-8 shadow-sm md:p-10">
+            <p className="text-sm font-semibold uppercase tracking-[0.26em] text-[#a37c58]">
+              New to Wine?
+            </p>
+
+            <h2 className="mt-3 text-4xl font-semibold text-[#2f241f] [font-family:var(--font-playfair)]">
+              Start here. No wine expertise required.
+            </h2>
+
+            <p className="mt-5 text-[16px] leading-8 text-[#6b5b4b]">
+              Learn the basics without the intimidation —
+              from opening a bottle and choosing a glass
+              to understanding common wine styles and
+              finding food pairings you&apos;ll actually
+              enjoy.
+            </p>
+
+            <div className="mt-7 flex flex-wrap gap-3">
+              <Link
+                href="/tips"
+                className="rounded-full bg-[#6e2a2a] px-6 py-3 text-sm font-semibold text-white transition hover:bg-[#572020]"
+              >
+                Explore Wine Tips
+              </Link>
+
+              <Link
+                href="/best-wine-opener-for-beginners"
+                className="rounded-full border border-[#cdbba8] bg-white px-6 py-3 text-sm font-semibold text-[#4b3f2f] transition hover:bg-[#f3eadf]"
+              >
+                Beginner Opener Guide
+              </Link>
+            </div>
+          </div>
+
+          <div className="rounded-[2.5rem] border border-[#d8cfc4] bg-[#2f241f] p-8 text-white shadow-sm md:p-10">
+            <p className="text-sm font-semibold uppercase tracking-[0.26em] text-[#d8b98c]">
+              Meet Viv
+            </p>
+
+            <h2 className="mt-3 text-4xl font-semibold [font-family:var(--font-playfair)]">
+              Need a little more help?
+            </h2>
+
+            <p className="mt-5 text-[16px] leading-8 text-white/75">
+              Ask Viv, the Vino Pairings virtual
+              sommelier, when your dish isn&apos;t in the
+              Pairing Finder or when you want a little
+              more guidance choosing what to pour.
+            </p>
+
+            <p className="mt-6 text-sm leading-7 text-white/60">
+              Look for the 🍷 button in the bottom-right
+              corner whenever you need her.
+            </p>
+          </div>
+        </div>
+      </section>
+
       {/* WINE ESSENTIALS */}
       <section className="mx-auto mt-20 max-w-6xl px-4 md:px-8">
         <div className="grid overflow-hidden rounded-[2.5rem] border border-[#e6d8c8] bg-[#fffaf4] shadow-[0_20px_70px_rgba(75,63,47,0.1)] md:grid-cols-[1.1fr_0.9fr]">
@@ -883,13 +1236,16 @@ export default function HomeClient() {
             </p>
 
             <h2 className="mt-3 text-4xl font-semibold tracking-tight text-[#3b2f2f] md:text-5xl [font-family:var(--font-playfair)]">
-              Start with the tool that makes every bottle feel effortless.
+              Start with the tool that makes every bottle
+              feel effortless.
             </h2>
 
             <p className="mt-5 max-w-2xl text-base leading-8 text-[#6f5d4f]">
-              A beautiful wine experience begins before the first pour. Our
-              beginner-friendly guide highlights elegant corkscrews and wine
-              openers that are simple, dependable, and gift-worthy.
+              A beautiful wine experience begins before
+              the first pour. Our beginner-friendly guide
+              explores corkscrews and wine openers that
+              are simple, dependable, and comfortable to
+              use.
             </p>
 
             <div className="mt-7 flex flex-wrap gap-3">
@@ -919,8 +1275,10 @@ export default function HomeClient() {
             </h3>
 
             <p className="mt-4 text-sm leading-7 text-[#6f5d4f]">
-              From classic waiter’s corkscrews to elegant electric openers, this
-              guide helps you choose the right first tool with confidence.
+              From classic waiter&apos;s corkscrews to
+              elegant electric openers, this guide helps
+              you understand the options and choose the
+              right first tool with confidence.
             </p>
 
             <Link
@@ -933,15 +1291,13 @@ export default function HomeClient() {
         </div>
       </section>
 
-    
-
       {/* PRINTABLE GUIDES */}
       <section className="mx-auto mt-20 max-w-6xl px-4 md:px-8">
         <div className="grid overflow-hidden rounded-[2.5rem] border border-[#d8cfc4] bg-[#fdfaf3] shadow-[0_20px_70px_rgba(75,63,47,0.1)] md:grid-cols-2">
           <div className="bg-white">
             <Image
               src={GLASS_GUIDE.previewImage}
-              alt="Wine Glass Guide preview"
+              alt="Wine Glass Guide printable preview"
               width={1400}
               height={900}
               className="h-full w-full object-cover"
@@ -959,8 +1315,13 @@ export default function HomeClient() {
             </h2>
 
             <p className="mt-4 text-[17px] leading-8 text-[#6b5b4b]">
-              Beginner-friendly printable guides designed for kitchens, wine
-              bars, dinner parties, gifting, and everyday confidence.
+              Beginner-friendly printable guides designed
+              for kitchens, wine bars, dinner parties,
+              entertaining, and everyday confidence.
+            </p>
+
+            <p className="mt-4 text-sm font-semibold text-[#6e2a2a]">
+              {GLASS_GUIDE.priceLabel}
             </p>
 
             <div className="mt-6 flex flex-wrap justify-center gap-3 md:justify-start">
@@ -982,9 +1343,55 @@ export default function HomeClient() {
             </div>
 
             <p className="mt-4 text-xs leading-6 text-[#8a7463]">
-              You’ll be redirected to your download after checkout.
+              You&apos;ll be redirected to your download
+              after checkout.
             </p>
           </div>
+        </div>
+      </section>
+
+      {/* CONTINUE EXPLORING */}
+      <section className="mx-auto mt-20 max-w-6xl px-4 md:px-8">
+        <div className="text-center">
+          <p className="text-sm font-semibold uppercase tracking-[0.28em] text-[#a37c58]">
+            Continue Exploring
+          </p>
+
+          <h2 className="mt-3 text-4xl font-semibold text-[#2f241f] md:text-5xl [font-family:var(--font-playfair)]">
+            Build your wine confidence.
+          </h2>
+
+          <p className="mx-auto mt-4 max-w-2xl text-[17px] leading-8 text-[#6b5b4b]">
+            Explore practical guides designed to make
+            choosing, opening, serving, and pairing wine
+            feel more natural.
+          </p>
+        </div>
+
+        <div className="mt-9 grid gap-5 md:grid-cols-3">
+          {exploreGuides.map((guide) => (
+            <Link
+              key={guide.href}
+              href={guide.href}
+              className="group rounded-[2rem] border border-[#d8cfc4] bg-white p-7 shadow-sm transition hover:-translate-y-1 hover:shadow-xl"
+            >
+              <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#a37c58]">
+                {guide.eyebrow}
+              </p>
+
+              <h3 className="mt-3 text-2xl font-semibold text-[#2f241f] [font-family:var(--font-playfair)]">
+                {guide.title}
+              </h3>
+
+              <p className="mt-3 text-sm leading-7 text-[#6b5b4b]">
+                {guide.desc}
+              </p>
+
+              <span className="mt-6 inline-block text-sm font-semibold text-[#6e2a2a] underline underline-offset-4">
+                Explore →
+              </span>
+            </Link>
+          ))}
         </div>
       </section>
 
@@ -1000,9 +1407,11 @@ export default function HomeClient() {
           </h2>
 
           <p className="mx-auto mt-5 max-w-2xl text-[17px] leading-8 text-white/75">
-            Created by Pamela Terrell, Vino Pairings brings together simple wine
-            guidance, elegant entertaining inspiration, printable resources, and
-            thoughtfully selected wine essentials.
+            Created by Pamela Terrell, Vino Pairings
+            brings together approachable wine guidance,
+            food pairings, elegant entertaining
+            inspiration, printable resources, and
+            practical wine essentials.
           </p>
 
           <div className="mt-7 flex flex-wrap justify-center gap-3">
@@ -1029,6 +1438,7 @@ export default function HomeClient() {
             opacity: 0;
             transform: translateY(10px);
           }
+
           to {
             opacity: 1;
             transform: translateY(0);

@@ -4,32 +4,35 @@
 import HomeClient from "./HomeClient";
 
 export const metadata = {
-  title: "Vino Pairings | Wine Pairing Guides, Gifts & Entertaining Ideas",
+  title: "Wine Pairing Made Easy | Food & Wine Guides | Vino Pairings",
   description:
-    "Discover elegant wine and food pairings, beginner-friendly wine tips, wine gift guides, corkscrew tutorials, and entertaining essentials.",
+    "Make wine pairing easy with approachable food and wine guides, beginner-friendly wine tips, corkscrew tutorials, and elegant entertaining inspiration.",
+
   alternates: {
     canonical: "https://vinopairings.com/",
   },
+
   openGraph: {
     type: "website",
     url: "https://vinopairings.com/",
-    title: "Vino Pairings | Wine Pairing Guides & Elegant Entertaining",
+    title: "Wine Pairing Made Easy | Vino Pairings",
     description:
-      "Find wine pairings, beginner wine tips, gift guides, corkscrew tutorials, and elegant entertaining ideas.",
+      "Approachable food and wine pairings, beginner wine tips, corkscrew help, and elegant entertaining inspiration.",
     images: [
       {
         url: "/wineog.png",
         width: 1200,
         height: 630,
-        alt: "Vino Pairings wine and food pairing guide",
+        alt: "Vino Pairings food and wine pairing guides",
       },
     ],
   },
+
   twitter: {
     card: "summary_large_image",
-    title: "Vino Pairings | Wine Pairing Guides & Gifts",
+    title: "Wine Pairing Made Easy | Vino Pairings",
     description:
-      "Elegant wine pairings, beginner tips, gift guides, and entertaining ideas.",
+      "Approachable wine pairings, beginner tips, corkscrew help, and entertaining inspiration.",
     images: ["/wineog.png"],
   },
 };
