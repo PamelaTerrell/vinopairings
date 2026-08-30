@@ -1,4 +1,5 @@
 // src/app/tips/page.js
+
 import Link from "next/link";
 import TrackedVideoCard from "../components/TrackedVideoCard";
 import TipsCTA from "../components/TipsCTA";
@@ -7,7 +8,9 @@ export const metadata = {
   title: "How to Use a Corkscrew | Wine Tips & Tutorials | Vino Pairings",
   description:
     "Learn how to open a wine bottle properly using a classic corkscrew, with simple wine-opening tips from Vino Pairings.",
-  alternates: { canonical: "/tips" },
+  alternates: {
+    canonical: "/tips",
+  },
   openGraph: {
     title: "How to Use a Corkscrew | Wine Tips & Tutorials",
     description:
@@ -20,6 +23,7 @@ export const metadata = {
 export default function TipsPage() {
   return (
     <div className="mx-auto max-w-3xl space-y-10 text-[#3b2f2f]">
+      {/* HEADER */}
       <header className="space-y-5">
         <p className="text-sm uppercase tracking-[0.22em] text-[#8a7463]">
           Wine Tips & Tutorials
@@ -39,10 +43,11 @@ export default function TipsPage() {
         </p>
 
         <p className="text-sm text-[#8a7463]">
-          By Pamela Terrell · Updated April 2026
+          By Pamela Terrell · Updated August 2026
         </p>
       </header>
 
+      {/* VIDEO */}
       <TrackedVideoCard
         src="/wine-opener.mp4"
         poster="/wine-thumbnail.png"
@@ -51,6 +56,7 @@ export default function TipsPage() {
         pagePath="/tips"
       />
 
+      {/* TUTORIAL COPY */}
       <section className="max-w-2xl space-y-5 text-[17px] leading-8 text-[#6b5645]">
         <p>
           A well-opened bottle sets the tone for the entire wine experience.
@@ -71,65 +77,60 @@ export default function TipsPage() {
         </p>
       </section>
 
-      
+      {/* BEGINNER OPENER GUIDE */}
+      <section className="rounded-2xl border border-[#d8cfc4] bg-white p-6 shadow-sm">
+        <div className="space-y-5">
+          <p className="text-sm uppercase tracking-[0.18em] text-[#8a7463]">
+            Wine Essentials
+          </p>
 
-       <section className="rounded-2xl border border-[#d8cfc4] bg-white p-6 shadow-sm">
-  <div className="space-y-5">
-    <p className="text-sm uppercase tracking-[0.18em] text-[#8a7463]">
-      Recommended Wine Tool
-    </p>
+          <h2 className="text-2xl font-medium text-[#2f241f] md:text-3xl [font-family:var(--font-playfair)]">
+            Need the Right Corkscrew First?
+          </h2>
 
-    <h2 className="text-2xl font-medium text-[#2f241f] md:text-3xl [font-family:var(--font-playfair)]">
-      Need the Right Corkscrew First?
-    </h2>
+          <p className="text-[17px] leading-8 text-[#6b5645]">
+            If you are new to opening wine, the right tool can make the process
+            feel much easier. Our beginner-friendly guide explains the most
+            common corkscrew styles and helps you understand which options are
+            simplest and most comfortable to use.
+          </p>
 
-    <p className="text-[17px] leading-8 text-[#6b5645]">
-      If you are new to opening wine, the right tool can make the process feel
-      much easier. Our beginner-friendly guide explains which corkscrews are
-      easiest to use and includes a trusted Amazon pick for first-time wine
-      lovers.
-    </p>
+          <div className="rounded-xl border border-[#eee2d6] bg-[#fdf7ef] p-5">
+            <h3 className="font-medium text-[#2f241f]">
+              Best Wine Opener for Beginners
+            </h3>
 
-    <div className="rounded-xl border border-[#eee2d6] bg-[#fdf7ef] p-5">
-      <h3 className="font-medium text-[#2f241f]">
-        Best Wine Opener for Beginners
-      </h3>
+            <p className="mt-2 text-sm leading-7 text-[#6b5645]">
+              Learn about wing corkscrews, waiter&apos;s corkscrews, lever
+              openers, electric options, and other beginner-friendly tools for
+              opening wine with confidence.
+            </p>
 
-      <p className="mt-2 text-sm leading-7 text-[#6b5645]">
-        A simple guide to beginner-friendly wine openers, including wing
-        corkscrews, waiter’s corkscrews, and easy tools for opening your first
-        bottles with confidence.
-      </p>
+            <Link
+              href="/best-wine-opener-for-beginners"
+              className="mt-4 inline-block rounded-full bg-[#6e2a2a] px-5 py-3 text-sm font-medium text-white transition hover:bg-[#8a3a3a]"
+            >
+              View Beginner Wine Opener Guide →
+            </Link>
+          </div>
+        </div>
+      </section>
 
-      <Link
-        href="/best-wine-opener-for-beginners"
-        className="mt-4 inline-block rounded-full bg-[#6e2a2a] px-5 py-3 text-sm font-medium text-white transition hover:bg-[#8a3a3a]"
-      >
-        View Beginner Wine Opener Guide →
-      </Link>
-    </div>
-
-    <p className="text-xs leading-6 text-[#8a7463]">
-      Disclosure: As an Amazon Associate I earn from qualifying purchases. This
-      page may contain affiliate links, which means Vino Pairings may earn a
-      commission at no additional cost to you.
-    </p>
-  </div>
-</section>
-  
-
+      {/* NEXT STEP */}
       <section className="rounded-2xl border border-[#d8cfc4] bg-[#fdf7ef] p-6 shadow-sm">
         <h2 className="text-2xl font-medium tracking-tight text-[#2f241f] md:text-3xl [font-family:var(--font-playfair)]">
           Now that the bottle is open…
         </h2>
 
         <p className="mt-3 max-w-2xl text-[17px] leading-8 text-[#6b5645]">
-          Discover wines worth savoring and thoughtful pairings that elevate
-          your next meal.
+          Discover approachable wine pairings and practical guidance for
+          choosing what to pour with your next meal.
         </p>
 
         <div className="mt-5">
-          <TipsCTA href="/">Explore Wine Pairings →</TipsCTA>
+          <TipsCTA href="/">
+            Explore Wine Pairings →
+          </TipsCTA>
         </div>
       </section>
     </div>

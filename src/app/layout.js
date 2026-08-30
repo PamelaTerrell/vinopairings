@@ -1,9 +1,11 @@
 // src/app/layout.js
 
 import "./globals.css";
+
 import Link from "next/link";
 import dynamic from "next/dynamic";
 import Script from "next/script";
+import { Suspense } from "react";
 
 import { Analytics } from "@vercel/analytics/react";
 
@@ -106,6 +108,34 @@ export default function RootLayout({ children }) {
 
         {GA_ID && (
           <>
+            {/* Set consent before Google Analytics initializes */}
+            <Script id="google-consent-default" strategy="beforeInteractive">
+              {`
+                window.dataLayer = window.dataLayer || [];
+
+                function gtag() {
+                  window.dataLayer.push(arguments);
+                }
+
+                window.gtag = window.gtag || gtag;
+
+                try {
+                  var choice = localStorage.getItem('vino_cookie_choice');
+
+                  gtag('consent', 'default', {
+                    analytics_storage:
+                      choice === 'accepted' ? 'granted' : 'denied',
+                    wait_for_update: 500
+                  });
+                } catch (e) {
+                  gtag('consent', 'default', {
+                    analytics_storage: 'denied',
+                    wait_for_update: 500
+                  });
+                }
+              `}
+            </Script>
+
             <Script
               src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
               strategy="afterInteractive"
@@ -244,7 +274,13 @@ export default function RootLayout({ children }) {
           </div>
         </footer>
 
-        {GA_ID && <GtagPageView />}
+        {/* Isolate useSearchParams so static pages stay static */}
+        {GA_ID && (
+          <Suspense fallback={null}>
+            <GtagPageView />
+          </Suspense>
+        )}
+
         <Analytics />
 
         <ClientPortal>
