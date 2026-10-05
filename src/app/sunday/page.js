@@ -8,86 +8,171 @@ import salmonImg from "./assets/salmon.png";
 import clueImg from "./assets/clue.png";
 import turkeyImg from "./assets/turkeysandwich.png";
 import whiteshellsImg from "./assets/whiteshells.png";
+import stuffedChickenImg from "./assets/stuffedchicken-chardonnay.jpg";
 
 export const metadata = {
   title:
     "Sunday Pairings | Real Meals, Wine & Lifestyle Inspiration | Vino Pairings",
   description:
-    "A weekly collection of real meals, thoughtful wine pairings, and elegant everyday inspiration from Pamela Terrell of Vino Pairings.",
+    "Sunday Pairings from Vino Pairings — real meals, thoughtful wine pairings, relaxed entertaining ideas, and beautiful everyday moments shared by Pamela Terrell.",
   alternates: {
     canonical: "/sunday",
   },
   openGraph: {
     title: "Sunday Pairings | Vino Pairings",
     description:
-      "Real meals, real wines, and beautiful everyday moments shared weekly.",
+      "Real meals, thoughtful wines, and beautiful everyday moments worth savoring.",
     type: "website",
     url: "https://vinopairings.com/sunday",
   },
 };
 
-function InternalCTA({ href, children }) {
+const gallery = [
+  {
+    src: stuffedChickenImg,
+    dish: "Stuffed Chicken Breast with Coconut Quinoa Rice",
+    wine: "Kendall-Jackson Chardonnay",
+    date: "This Sunday",
+    notes:
+      "Savory stuffed chicken breast with coconut quinoa rice meets a creamy, refreshing Chardonnay. Rich enough to feel comforting, bright enough to keep the whole plate beautifully balanced.",
+    alt: "Stuffed chicken breast with coconut quinoa rice beside a glass and bottle of Kendall-Jackson Chardonnay",
+    links: [
+      {
+        label: "Visit Kendall-Jackson",
+        href: "https://www.kj.com/",
+      },
+    ],
+    featured: true,
+  },
+  {
+    src: turkeyImg,
+    dish: "Turkey Sandwich on the Lake",
+    wine: "Bogle Sauvignon Blanc",
+    date: "Sunday Escape",
+    notes:
+      "A relaxed pontoon afternoon with crisp Sauvignon Blanc and a simple turkey sandwich. Proof that a memorable pairing does not have to be complicated.",
+    alt: "Turkey sandwich and white wine enjoyed on a pontoon boat",
+    links: [
+      {
+        label: "Visit Bogle Winery",
+        href: "https://www.boglewinery.com/",
+      },
+    ],
+  },
+  {
+    src: whiteshellsImg,
+    dish: "White Cheddar Shells & Bacon-Wrapped Filet",
+    wine: "Cabernet-Merlot",
+    date: "Comfort Dinner",
+    notes:
+      "Creamy white cheddar shells, seared zucchini, and rich beef make an easy comfort dinner feel just a little more special with a smooth red blend.",
+    alt: "White cheddar pasta shells, zucchini, and bacon-wrapped filet dinner",
+  },
+  {
+    src: clueImg,
+    dish: "CLUE: Wine Lovers Edition",
+    wine: "Cabernet Sauvignon",
+    date: "Game Night",
+    notes:
+      "Sometimes the pairing is not about the meal at all. A cozy game night, a generous pour of Cabernet, and nowhere else you need to be.",
+    alt: "Wine Lovers edition of Clue beside a glass of red wine",
+  },
+  {
+    src: salmonImg,
+    dish: "Salmon with Asparagus & Rice-Quinoa Blend",
+    wine: "GEN5 Pinot Noir",
+    date: "Sunday Dinner",
+    notes:
+      "Fresh salmon, tender asparagus, and a rice-quinoa blend make an elegant but approachable dinner, finished with a bright Pinot Noir.",
+    alt: "Salmon with asparagus and rice-quinoa blend served with wine",
+  },
+];
+
+function ArrowIcon() {
+  return (
+    <span aria-hidden="true" className="transition-transform group-hover:translate-x-1">
+      →
+    </span>
+  );
+}
+
+function InternalTextLink({ href, children }) {
   return (
     <Link
       href={href}
-      className="inline-flex items-center gap-2 rounded-full bg-[#a37c58] px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:brightness-95"
+      className="group inline-flex items-center gap-2 text-sm font-semibold text-[#733c35] transition hover:text-[#4b2723]"
+    >
+      {children}
+      <ArrowIcon />
+    </Link>
+  );
+}
+
+function ExternalTextLink({ href, children }) {
+  return (
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="group inline-flex items-center gap-2 text-sm font-semibold text-[#733c35] transition hover:text-[#4b2723]"
+    >
+      {children}
+      <ArrowIcon />
+    </a>
+  );
+}
+
+function PrimaryLink({ href, children }) {
+  return (
+    <Link
+      href={href}
+      className="inline-flex items-center justify-center rounded-full bg-[#6f302d] px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:-translate-y-0.5 hover:bg-[#582522] hover:shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-[#6f302d] focus-visible:ring-offset-4"
     >
       {children}
     </Link>
   );
 }
 
-function ExternalCTA({ href, children }) {
+function MealCard({ item, index }) {
   return (
-    <a
-      href={href}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="inline-flex items-center gap-2 rounded-full bg-[#a37c58] px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:brightness-95"
-    >
-      {children}
-    </a>
-  );
-}
-
-function MealCard({ item }) {
-  return (
-    <article className="overflow-hidden rounded-2xl border border-[#d8cfc4] bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-lg">
-      <div className="relative aspect-[4/3] w-full bg-[#f9f6ef]">
+    <article className="group overflow-hidden rounded-[1.75rem] border border-[#e3d8ca] bg-[#fffdf9] shadow-[0_12px_35px_rgba(65,45,34,0.05)] transition duration-300 hover:-translate-y-1 hover:shadow-[0_18px_45px_rgba(65,45,34,0.09)]">
+      <div className="relative aspect-[4/3] overflow-hidden bg-[#eee6db]">
         <Image
           src={item.src}
           alt={item.alt}
           fill
-          priority
+          priority={index < 2}
           placeholder="blur"
-          className="object-contain p-3"
-          sizes="(min-width: 1024px) 33vw, 100vw"
+          className="object-cover transition duration-700 group-hover:scale-[1.025]"
+          sizes="(min-width: 1024px) 50vw, 100vw"
         />
 
-        <span className="absolute left-3 top-3 rounded-full bg-[#6e2a2a] px-3 py-1 text-xs font-semibold text-white shadow">
+        <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black/35 to-transparent" />
+
+        <span className="absolute left-4 top-4 rounded-full border border-white/40 bg-[#fffdf9]/90 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.16em] text-[#63322d] shadow-sm backdrop-blur">
           {item.wine}
         </span>
       </div>
 
-      <div className="space-y-3 p-5">
-        <p className="text-xs uppercase tracking-[0.18em] text-[#8a7463]">
+      <div className="p-6 sm:p-7">
+        <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[#9a7d65]">
           {item.date}
         </p>
 
-        <h2 className="text-xl font-semibold text-[#2f241f] [font-family:var(--font-playfair)]">
+        <h3 className="mt-3 text-[1.55rem] font-semibold leading-snug text-[#30241e] [font-family:var(--font-playfair)] sm:text-[1.7rem]">
           {item.dish}
-        </h2>
+        </h3>
 
-        <p className="text-[15px] leading-7 text-[#6b5645]">
+        <p className="mt-4 text-[15px] leading-7 text-[#725d4e]">
           {item.notes}
         </p>
 
         {item.links?.length > 0 && (
-          <div className="flex flex-wrap gap-2 pt-1">
+          <div className="mt-5 border-t border-[#eee5dc] pt-5">
             {item.links.map((link) => (
-              <ExternalCTA key={link.href} href={link.href}>
+              <ExternalTextLink key={link.href} href={link.href}>
                 {link.label}
-              </ExternalCTA>
+              </ExternalTextLink>
             ))}
           </div>
         )}
@@ -96,221 +181,261 @@ function MealCard({ item }) {
   );
 }
 
+function EssentialCard({ number, title, children, href, linkLabel }) {
+  return (
+    <div className="flex h-full flex-col rounded-[1.5rem] border border-[#eadfd4] bg-[#fffdf9] p-6">
+      <span className="text-xs font-semibold tracking-[0.22em] text-[#ad8c6d]">
+        {number}
+      </span>
+
+      <h3 className="mt-4 text-xl font-semibold text-[#30241e] [font-family:var(--font-playfair)]">
+        {title}
+      </h3>
+
+      <p className="mt-3 flex-1 text-sm leading-7 text-[#735f50]">
+        {children}
+      </p>
+
+      <div className="mt-6">
+        <InternalTextLink href={href}>{linkLabel}</InternalTextLink>
+      </div>
+    </div>
+  );
+}
+
 export default function SundayPage() {
-  const gallery = [
-    {
-      src: turkeyImg,
-      dish: "Turkey Sandwich on the Lake",
-      wine: "Bogle Sauvignon Blanc",
-      date: "Sunday Escape",
-      notes:
-        "A relaxed pontoon afternoon with crisp Sauvignon Blanc and a simple turkey sandwich. Proof that great pairings do not need to be complicated to feel memorable.",
-      alt: "Turkey sandwich and white wine on pontoon boat",
-      links: [
-        {
-          label: "Bogle Winery",
-          href: "https://www.boglewinery.com/",
-        },
-      ],
-    },
-    {
-      src: whiteshellsImg,
-      dish: "White Cheddar Shells & Bacon-Wrapped Filet",
-      wine: "Cabernet-Merlot",
-      date: "This Week",
-      notes:
-        "Creamy shells, seared zucchini, and rich beef create a comforting dinner made even better with a smooth red blend.",
-      alt: "Pasta shells zucchini and filet dinner",
-    },
-    {
-      src: clueImg,
-      dish: "CLUE: Wine Lovers Edition",
-      wine: "Cabernet Sauvignon",
-      date: "Game Night",
-      notes:
-        "Sometimes the best pairing is not a meal, but a moment. A cozy evening game paired with a generous pour of Cabernet.",
-      alt: "Wine lovers clue game with red wine",
-    },
-    {
-      src: salmonImg,
-      dish: "Salmon with Asparagus & Rice-Quinoa Blend",
-      wine: "GEN5 Pinot Noir",
-      date: "Last Sunday",
-      notes:
-        "Fresh salmon, tender asparagus, and a bright Pinot Noir create an elegant yet approachable dinner worth repeating.",
-      alt: "Salmon asparagus plated dinner",
-    },
-  ];
+  const archiveItems = gallery.filter((item) => !item.featured);
 
   return (
-    <main className="min-h-screen bg-[#f9f6ef] text-[#4b3f2f]">
+    <main className="min-h-screen overflow-hidden bg-[#f8f4ed] text-[#4a3c31]">
       {/* HERO */}
-      <section className="border-b border-[#e6ddd2] bg-gradient-to-b from-[#fdfaf3] to-[#f9f6ef]">
-        <div className="mx-auto max-w-6xl px-6 py-14 text-center">
-          <p className="text-sm uppercase tracking-[0.24em] text-[#8a7463]">
-            Weekly Lifestyle Series
-          </p>
+      
+<section className="relative border-b border-[#e8ded2]">
+  <div
+    aria-hidden="true"
+    className="absolute -right-24 -top-24 h-72 w-72 rounded-full bg-[#d8bea4]/20 blur-3xl"
+  />
 
-          <h1 className="mt-4 text-4xl font-semibold text-[#2f241f] md:text-6xl [font-family:var(--font-playfair)]">
-            Sunday Pairings
-          </h1>
+  <div className="relative mx-auto max-w-6xl px-6 py-10 text-center sm:py-12">
+    <p className="text-[10px] font-semibold uppercase tracking-[0.3em] text-[#9b7b62] sm:text-[11px]">
+      A Weekly Vino Pairings Journal
+    </p>
 
-          <p className="mx-auto mt-6 max-w-3xl text-[18px] leading-8 text-[#6b5645]">
-            Real meals. Thoughtful wine pairings. Beautiful everyday moments.
-            Shared weekly by Pamela Terrell, creator of Vino Pairings.
-          </p>
+    <h1 className="mx-auto mt-3 max-w-4xl text-4xl font-semibold leading-tight text-[#2e231e] [font-family:var(--font-playfair)] sm:text-5xl lg:text-6xl">
+      Sunday Pairings
+    </h1>
 
-          <div className="mt-8 flex flex-wrap justify-center gap-3">
-            <InternalCTA href="/">Explore Pairings</InternalCTA>
-            <InternalCTA href="/tips">Wine Tips</InternalCTA>
-          </div>
-        </div>
-      </section>
+    <p className="mx-auto mt-4 max-w-2xl text-[16px] leading-7 text-[#715d4f] sm:text-[17px]">
+      Real meals, thoughtful wines, and the little moments that make an
+      ordinary Sunday worth remembering.
+    </p>
 
-      {/* FEATURE */}
-      <section className="mx-auto max-w-7xl px-6 py-14">
-        <div className="overflow-hidden rounded-[2rem] border border-[#d8cfc4] bg-white shadow-md">
-          <div className="relative aspect-[16/7] w-full bg-[#f9f6ef]">
+    <div className="mt-5 flex flex-wrap justify-center gap-x-6 gap-y-2">
+      <InternalTextLink href="/">Explore Wine Pairings</InternalTextLink>
+      <InternalTextLink href="/tips">Wine Tips</InternalTextLink>
+      <InternalTextLink href="/printable-guides">
+        Printable Guides
+      </InternalTextLink>
+    </div>
+  </div>
+</section>
+
+      {/* FEATURED SUNDAY */}
+      <section className="mx-auto max-w-7xl px-5 py-14 sm:px-6 sm:py-20 lg:px-8">
+        <div className="overflow-hidden rounded-[2rem] border border-[#e0d5c8] bg-[#fffdf9] shadow-[0_24px_70px_rgba(69,48,36,0.09)] lg:grid lg:grid-cols-[1.02fr_0.98fr]">
+          {/* Portrait-friendly image */}
+          <div className="relative min-h-[500px] overflow-hidden bg-[#e9e0d4] sm:min-h-[650px] lg:min-h-[760px]">
             <Image
-              src={turkeyImg}
-              alt="Wine and sandwich on pontoon"
+              src={stuffedChickenImg}
+              alt="Stuffed chicken breast with coconut quinoa rice beside a glass and bottle of Kendall-Jackson Chardonnay"
               fill
               priority
               placeholder="blur"
-              className="object-cover"
-              sizes="(min-width: 1280px) 1200px, 100vw"
+              className="object-cover object-center"
+              sizes="(min-width: 1024px) 55vw, 100vw"
             />
+
+            <div className="absolute inset-x-0 bottom-0 h-44 bg-gradient-to-t from-black/45 via-black/10 to-transparent lg:hidden" />
+
+            <div className="absolute bottom-5 left-5 rounded-full border border-white/40 bg-white/90 px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-[#67342f] shadow-sm backdrop-blur lg:hidden">
+              Kendall-Jackson Chardonnay
+            </div>
           </div>
 
-          <div className="px-8 py-10 text-center md:px-14 md:py-12">
-            <p className="mb-3 text-xs uppercase tracking-[0.28em] text-[#8a7463]">
-              This Week&apos;s Mood
-            </p>
+          {/* Editorial copy */}
+          <div className="flex items-center">
+            <div className="px-7 py-12 sm:px-12 sm:py-16 lg:px-14 xl:px-16">
+              <p className="text-[11px] font-semibold uppercase tracking-[0.3em] text-[#9d7a5d]">
+                This Week&apos;s Sunday
+              </p>
 
-            <h2 className="text-4xl font-semibold leading-tight text-[#2f241f] md:text-5xl [font-family:var(--font-playfair)]">
-              Lake Breeze & Sauvignon Blanc
-            </h2>
+              <p className="mt-5 text-sm italic text-[#8b7462]">
+                October · At the table
+              </p>
 
-            <p className="mx-auto mt-5 max-w-3xl text-[19px] leading-9 text-[#6b5645] md:text-[21px]">
-              Lake breeze, bright Sauvignon Blanc, and the reminder that simple
-              pleasures often create the best memories.
-            </p>
+              <h2 className="mt-5 text-4xl font-semibold leading-[1.08] text-[#30231e] [font-family:var(--font-playfair)] sm:text-5xl xl:text-[3.5rem]">
+                Comfort Food &
+                <span className="block text-[#713a34]">Chardonnay</span>
+              </h2>
+
+              <div className="mt-7 h-px w-12 bg-[#c09a77]" />
+
+              <p className="mt-7 text-[17px] leading-8 text-[#725d4e]">
+                A warm stuffed chicken dinner, coconut quinoa rice, and a
+                chilled glass of Kendall-Jackson Chardonnay — the kind of
+                Sunday meal that feels special without asking too much of you.
+              </p>
+
+              <p className="mt-5 text-[15px] leading-7 text-[#806a59]">
+                The Chardonnay&apos;s creamy texture complements the richness
+                of the chicken, while its bright acidity brings freshness back
+                to every bite.
+              </p>
+
+              <div className="mt-8 rounded-2xl border-l-2 border-[#b68865] bg-[#f6efe7] px-6 py-5">
+                <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-[#a07e63]">
+                  The Pairing
+                </p>
+                <p className="mt-2 font-semibold text-[#3f3028]">
+                  Stuffed Chicken Breast
+                  <span className="mx-2 font-normal text-[#b49a84]">×</span>
+                  Kendall-Jackson Chardonnay
+                </p>
+              </div>
+
+              <div className="mt-8">
+                <ExternalTextLink href="https://www.kj.com/">
+                  Visit Kendall-Jackson
+                </ExternalTextLink>
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* GALLERY */}
-      <section className="mx-auto max-w-6xl px-6 pb-14">
+      {/* SUNDAY JOURNAL */}
+      <section className="mx-auto max-w-6xl px-6 pb-16 sm:pb-20">
+        <div className="mb-9 flex flex-col gap-4 border-b border-[#dfd4c8] pb-6 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-[#9a7a61]">
+              From Recent Sundays
+            </p>
+
+            <h2 className="mt-3 text-3xl font-semibold text-[#30241e] [font-family:var(--font-playfair)] sm:text-4xl">
+              The Sunday Journal
+            </h2>
+          </div>
+
+          <p className="max-w-md text-sm leading-7 text-[#826d5c] sm:text-right">
+            Meals, bottles, game nights, lake afternoons, and everything in
+            between.
+          </p>
+        </div>
+
         <div className="grid gap-7 md:grid-cols-2">
-          {gallery.map((item) => (
-            <MealCard key={`${item.dish}-${item.wine}`} item={item} />
+          {archiveItems.map((item, index) => (
+            <MealCard
+              key={`${item.dish}-${item.wine}`}
+              item={item}
+              index={index}
+            />
           ))}
         </div>
       </section>
 
-      {/* SUNDAY ESSENTIALS */}
-      <section className="mx-auto max-w-5xl px-6 pb-14">
-        <div className="rounded-3xl border border-[#d8cfc4] bg-white p-8 shadow-sm">
-          <p className="text-sm uppercase tracking-[0.22em] text-[#8a7463]">
-            Sunday Essentials
+      {/* SUNDAY PHILOSOPHY */}
+      <section className="border-y border-[#e5dacf] bg-[#f1e8de]">
+        <div className="mx-auto max-w-4xl px-6 py-14 text-center sm:py-16">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.3em] text-[#99775c]">
+            A Little Sunday Philosophy
           </p>
 
-          <h2 className="mt-3 text-3xl font-semibold text-[#2f241f] [font-family:var(--font-playfair)]">
-            Simple Ways to Make Wine Feel Effortless
-          </h2>
+          <blockquote className="mx-auto mt-6 max-w-3xl text-2xl font-medium leading-relaxed text-[#3c2d26] [font-family:var(--font-playfair)] sm:text-3xl">
+            “The best pairing is the one that makes an ordinary meal feel like
+            a moment worth remembering.”
+          </blockquote>
 
-          <p className="mt-4 max-w-3xl text-[16px] leading-8 text-[#6b5645]">
-            A relaxed Sunday does not need much. The right opener, a comfortable
-            glass, and a little pairing confidence can make an ordinary meal
-            feel special.
-          </p>
-
-          <div className="mt-7 grid gap-5 md:grid-cols-3">
-            <div className="flex flex-col rounded-2xl bg-[#fdf7ef] p-5">
-              <h3 className="font-semibold text-[#2f241f]">
-                Find the Right Corkscrew
-              </h3>
-
-              <p className="mt-2 flex-1 text-sm leading-7 text-[#6b5645]">
-                Learn the differences between popular corkscrew styles and find
-                an opener that feels comfortable and easy to use.
-              </p>
-
-              <div className="mt-4">
-                <InternalCTA href="/best-corkscrews">
-                  Corkscrew Guide →
-                </InternalCTA>
-              </div>
-            </div>
-
-            <div className="flex flex-col rounded-2xl bg-[#fdf7ef] p-5">
-              <h3 className="font-semibold text-[#2f241f]">
-                Choose a Wine Glass
-              </h3>
-
-              <p className="mt-2 flex-1 text-sm leading-7 text-[#6b5645]">
-                Understand the basic wine glass shapes and what actually matters
-                when choosing glassware for everyday wine.
-              </p>
-
-              <div className="mt-4">
-                <InternalCTA href="/best-wine-glasses">
-                  Wine Glass Guide →
-                </InternalCTA>
-              </div>
-            </div>
-
-            <div className="flex flex-col rounded-2xl bg-[#fdf7ef] p-5">
-              <h3 className="font-semibold text-[#2f241f]">
-                Pair With Confidence
-              </h3>
-
-              <p className="mt-2 flex-1 text-sm leading-7 text-[#6b5645]">
-                Start with a few simple pairing principles and learn why
-                acidity, sweetness, body, and richness can change what works.
-              </p>
-
-              <div className="mt-4">
-                <InternalCTA href="/tips">
-                  Explore Wine Tips →
-                </InternalCTA>
-              </div>
-            </div>
-          </div>
-
-          <div className="mt-8 border-t border-[#e6ddd2] pt-7 text-center">
-            <p className="text-sm leading-7 text-[#8a7463]">
-              Looking for something to keep?
-            </p>
-
-            <Link
-              href="/printable-guides"
-              className="mt-2 inline-block font-semibold text-[#7d4a3d] underline decoration-[#b79579]/60 underline-offset-4 transition hover:text-[#4f2f29]"
-            >
-              Explore Vino Pairings printable guides →
-            </Link>
-          </div>
+          <p className="mt-5 text-sm text-[#8a725f]">— Vino Pairings</p>
         </div>
       </section>
 
-      {/* CTA */}
-      <section className="mx-auto max-w-4xl px-6 pb-20 text-center">
-        <h2 className="text-3xl font-semibold text-[#2f241f] [font-family:var(--font-playfair)]">
-          More Sundays Coming Soon
-        </h2>
+      {/* SUNDAY ESSENTIALS */}
+      <section className="mx-auto max-w-6xl px-6 py-16 sm:py-20">
+        <div className="text-center">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.3em] text-[#9a795f]">
+            Sunday Essentials
+          </p>
 
-        <p className="mx-auto mt-4 max-w-2xl text-[17px] leading-8 text-[#6b5645]">
-          Check back for new meals, wine pairings, hosting inspiration, and
-          beautiful moments from everyday life.
-        </p>
+          <h2 className="mx-auto mt-4 max-w-2xl text-3xl font-semibold text-[#30241e] [font-family:var(--font-playfair)] sm:text-4xl">
+            A Few Things That Make Wine Feel Effortless
+          </h2>
 
-        <div className="mt-6">
-          <Link
-            href="/"
-            className="inline-block rounded-full bg-[#6e2a2a] px-7 py-3 font-semibold text-white transition hover:bg-[#8a3a3a]"
+          <p className="mx-auto mt-5 max-w-2xl text-[16px] leading-8 text-[#776253]">
+            You do not need complicated rules or a cabinet full of accessories.
+            A few useful basics can make choosing, opening, pouring, and pairing
+            wine feel much easier.
+          </p>
+        </div>
+
+        <div className="mt-10 grid gap-5 md:grid-cols-3">
+          <EssentialCard
+            number="01"
+            title="Open It Easily"
+            href="/best-corkscrews"
+            linkLabel="Corkscrew Guide"
           >
-            Explore All Pairings →
-          </Link>
+            Compare popular corkscrew styles and find an opener that feels
+            comfortable, dependable, and easy to use.
+          </EssentialCard>
+
+          <EssentialCard
+            number="02"
+            title="Choose Your Glass"
+            href="/best-wine-glasses"
+            linkLabel="Wine Glass Guide"
+          >
+            Learn which wine glass shapes actually matter and what works well
+            for everyday drinking without overcomplicating it.
+          </EssentialCard>
+
+          <EssentialCard
+            number="03"
+            title="Trust Your Pairing"
+            href="/tips"
+            linkLabel="Explore Wine Tips"
+          >
+            Start with simple principles around acidity, sweetness, body, and
+            richness — then let your own taste do the rest.
+          </EssentialCard>
+        </div>
+
+        <div className="mt-10 text-center">
+          <InternalTextLink href="/printable-guides">
+            Browse Vino Pairings Printable Guides
+          </InternalTextLink>
+        </div>
+      </section>
+
+      {/* FINAL CTA */}
+      <section className="px-6 pb-20 sm:pb-24">
+        <div className="mx-auto max-w-5xl overflow-hidden rounded-[2rem] bg-[#34251f] px-7 py-12 text-center shadow-[0_20px_55px_rgba(45,31,25,0.14)] sm:px-12 sm:py-16">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.3em] text-[#d5b491]">
+            Come Back Next Sunday
+          </p>
+
+          <h2 className="mx-auto mt-4 max-w-2xl text-3xl font-semibold leading-tight text-[#fffaf3] [font-family:var(--font-playfair)] sm:text-4xl">
+            There&apos;s Always Another Bottle,
+            <span className="block">Another Meal, Another Story.</span>
+          </h2>
+
+          <p className="mx-auto mt-5 max-w-xl text-[15px] leading-7 text-[#d7c8bc] sm:text-base">
+            New Sunday pairings will continue to join the journal — real meals,
+            real wines, and ideas you can actually enjoy at home.
+          </p>
+
+          <div className="mt-8">
+            <PrimaryLink href="/">Explore All Wine Pairings</PrimaryLink>
+          </div>
         </div>
       </section>
     </main>
